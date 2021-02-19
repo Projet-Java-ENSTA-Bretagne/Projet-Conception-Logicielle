@@ -25,7 +25,7 @@ public class TCPServer extends Thread{
 
     public TCPServer(int port) {
         this.port = port;
-        maxClients = 10;
+        maxClients = ConfigurationManagement.getInstance().getServerConfiguration().getMaxClients();
     }
 
     public TCPServer(IContext context, HashMap<String, IProtocol> protocols, int port) {

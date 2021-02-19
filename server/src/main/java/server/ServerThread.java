@@ -2,6 +2,7 @@ package server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,17 +24,21 @@ public class ServerThread extends Thread {
 
     public void run() {
         try {
-            String request;
+            String requestString;
             BufferedReader inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintStream outStream = new PrintStream(clientSocket.getOutputStream());
 
             // reading the incoming request
-            request = inStream.readLine();
-            if (request != null) {
-                String[] args = request.split(" ");
-                log.debug("Received command: " + args[0]);
+            requestString = inStream.readLine();
+            if (requestString != null) {
+                JSONObject request = new JSONObject(requestString);
+                log.debug("Received command: " + request.getString("command"));
 
-                tcpServer.getProtocols().get(args[0]).execute(tcpServer.getContext(), inStream, outStream);
+                tcpServer.getProtocols().get(request.getString("command")).
+                        execute(tcpServer.getContext(),
+                                inStream,
+                                outStream,
+                                request);
             }
 
             log.info("Closing server thread");

@@ -10,7 +10,8 @@ public class MainClient {
         TCPClient tcpClient = new TCPClient("localhost", 6666);
 
         if (tcpClient.connectToServer()) {
-            tcpClient.sendRequest("PING");
+            String request = RequestBuilder.buildWithoutData("PING").toString();
+            tcpClient.sendRequest(request);
             tcpClient.disconnectFromServer();
         }
     }
