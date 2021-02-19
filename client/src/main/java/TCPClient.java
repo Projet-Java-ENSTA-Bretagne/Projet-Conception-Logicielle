@@ -1,3 +1,6 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +17,9 @@ public class TCPClient {
     private PrintStream outStream;
     private BufferedReader inStream;
 
+    // Logging
+    private final Logger log = LogManager.getLogger(TCPClient.class);
+
     public TCPClient(String host, int port) {
         this.port = port;
         this.host = host;
@@ -22,31 +28,31 @@ public class TCPClient {
     public boolean connectToServer() {
         boolean ok = false;
         try {
-            System.out.println("Trying to connect to : " + host + ":" + port);
+            log.info("Trying to connect to: " + host + ":" + port);
             serverSocket = new Socket(host, port);
             outStream = new PrintStream(serverSocket.getOutputStream());
             inStream = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             ok = true;
         } catch (UnknownHostException e) {
-            System.err.println("Unknown host : " + e);
+            log.error("Unknown host", e);
         } catch (ConnectException e) {
-            System.err.println("Error during connexion : " + e);
+            log.error("Error during connexion", e);
         } catch (IOException e) {
-            System.err.println("Error during data exchange :  "+ e);
+            log.error("Error during data exchange", e);
         }
-        System.out.println("Connexion successful");
+        log.info("Connexion successful");
 
         return ok;
     }
 
     public void disconnectFromServer() {
         try {
-            System.out.println("[TCPClient] Client : " + serverSocket);
+            log.info("Client : " + serverSocket);
             outStream.close();
             inStream.close();
             serverSocket.close();
         } catch (Exception e) {
-            System.err.println("Error during disconnect...");
+            log.error("Error during disconnect...");
         }
     }
 
@@ -54,16 +60,16 @@ public class TCPClient {
         String serverResponse = null;
         // Trying to send the request
         try {
-            System.out.println("Client request: " + request);
+            log.debug("Client request: " + request);
             outStream.println(request);
             outStream.flush();
-            // Waiting for the server response
+            // Waiting for the main.java.server response
             serverResponse = inStream.readLine();
-            System.out.println("Server response: " + serverResponse);
+            log.debug("Server response: " + serverResponse);
         } catch (UnknownHostException e) {
-            System.err.println("Unknown host : " + e);
+            log.error("Unknown host : " + e);
         } catch (IOException e) {
-            System.err.println("IOException : " + e);
+            log.error("IOException : " + e);
         }
 
         return serverResponse;

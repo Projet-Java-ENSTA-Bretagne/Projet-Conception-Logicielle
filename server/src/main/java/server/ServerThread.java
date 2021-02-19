@@ -1,5 +1,8 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -7,6 +10,8 @@ public class ServerThread extends Thread {
 
     private Socket clientSocket;
     private TCPServer tcpServer;
+
+    private final Logger log = LogManager.getLogger(ServerThread.class);
 
     public ServerThread(Socket clientSocket, TCPServer tcpServer) {
         this.clientSocket = clientSocket;
@@ -20,9 +25,9 @@ public class ServerThread extends Thread {
                     clientSocket.getInputStream(),
                     clientSocket.getOutputStream());
 
-            System.out.println("Server thread done.");
+            log.info("Server thread done.");
         } catch (IOException e) {
-            System.err.println("[ServerThread] Exception");
+            log.error("Exception", e);
         }
     }
 }

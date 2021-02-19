@@ -1,10 +1,14 @@
 package protocols;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import server.IContext;
 
 import java.io.*;
 
 public class ExampleProtocol implements IProtocol {
+
+    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
 
     public void execute(IContext ctx, InputStream inStream, OutputStream outStream) {
         String inputRequest;
@@ -16,17 +20,17 @@ public class ExampleProtocol implements IProtocol {
 
             inputRequest = is.readLine();
             if (inputRequest != null) {
-                System.out.println("Received order : " + inputRequest);
+                log.info("Received order : " + inputRequest);
                 String[] args = inputRequest.split(" ");
 
                 if (args[0].contentEquals("PING")) {
                     valeurExpediee = "PONG";
-                    System.out.println("Answered to server: " + valeurExpediee);
+                    log.info("Answered to server: " + valeurExpediee);
                 }
                 os.println(valeurExpediee);
             }
         } catch (Exception e) {
-            System.err.println("Catched an exception : " + e);
+            log.error("Catched an exception : " + e);
         }
     }
 }

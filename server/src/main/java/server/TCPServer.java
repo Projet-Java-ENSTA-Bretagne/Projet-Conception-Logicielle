@@ -1,5 +1,7 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import protocols.IProtocol;
 
 import java.io.IOException;
@@ -8,17 +10,20 @@ import java.net.Socket;
 
 public class TCPServer extends Thread{
 
-    private static int nbConnexions = 0;
+    private static int nbClients = 0;
 
-    private int maxConnexions;
+    private int maxClients;
     private int port;
     private Socket clientSocket;
     private IContext context;
     private IProtocol protocol;
 
+    // Logging
+    private final Logger log = LogManager.getLogger(TCPServer.class);
+
     public TCPServer(int port) {
         this.port = port;
-        maxConnexions = 10;
+        maxClients = 10;
     }
 
     public TCPServer(IContext context, IProtocol protocol, int port) {
@@ -36,41 +41,41 @@ public class TCPServer extends Thread{
     }
 
     public String toString() {
-        return "[TCPServer] Open on Port: " + port + ", Context: " + context;
+        return "[TCPServer] Open on Port: " + port + ", Context: " + context + ", Nb of clients: " + nbClients;
     }
 
     public void run() {
-        // Creating server socket
+        // Creating main.java.server socket
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(this.port);
         } catch (IOException e) {
-            System.err.println("Cound not listen on port: " + port + ", - " + e);
+            log.error("Could not listen on port: " + port, e);
             System.exit(1);
         }
 
         // Listening to a maximum of maxConnexions at the same time
-        while (nbConnexions <= maxConnexions) {
+        while (nbClients <= maxClients) {
             try {
-                System.out.println("Waiting for a new client to connect.");
+                log.info("Waiting for a new client to connect.");
                 clientSocket = serverSocket.accept();
-                nbConnexions++;
-                System.out.println("Number of clients : " + nbConnexions);
+                nbClients++;
+                log.info("Number of clients : " + nbClients);
             } catch (IOException e) {
-                System.err.println("Accept failed: " + serverSocket.getLocalPort() + ", " + e);
+                log.error("Accept failed: " + serverSocket.getLocalPort(), e);
                 System.exit(1);
             }
             ServerThread st = new ServerThread(clientSocket, this);
             st.start();
         }
-        System.out.println("There are already " + nbConnexions + " clients connected. Reached maximum.");
+        log.warn("There are already " + nbClients + " clients connected. Reached maximum.");
 
-        // Closing properly the server
+        // Closing properly the main.java.server
         try {
             serverSocket.close();
-            nbConnexions--;
+            nbClients--;
         } catch (IOException e) {
-            System.err.println("Could not close the server...");
+            log.error("Could not close the main.java.server...");
         }
     }
 }
