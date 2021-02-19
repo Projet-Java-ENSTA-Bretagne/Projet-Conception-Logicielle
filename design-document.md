@@ -12,6 +12,19 @@ Nous représentons *EnStar.com*, une entreprise de conception d'outils de commun
 
 Nous allons devoir concevoir une app desktop : *EnstarDesktop* qui permet à chaque utilisateur de communiquer avec les autres sur le réseau. Chaque utilisateur est identifié.
 
+## Composition des équipes
+
+**Team Backend**
+
+-   Alexandre FROEHLICH
+-   Erwan AUBRY
+
+**Team Frontend**
+
+*   Guillaume LEINEN
+*   Jean-Noël CLINK
+*   Ayrwan GUILLERMO
+
 ## Points à implémenter
 
 ### FrontEnd Utilisateur
