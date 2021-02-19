@@ -7,6 +7,7 @@ import protocols.IProtocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class TCPServer extends Thread{
 
@@ -16,7 +17,8 @@ public class TCPServer extends Thread{
     private int port;
     private Socket clientSocket;
     private IContext context;
-    private IProtocol protocol;
+    private boolean running;
+    private HashMap<String, IProtocol> protocols;
 
     // Logging
     private final Logger log = LogManager.getLogger(TCPServer.class);
@@ -26,18 +28,23 @@ public class TCPServer extends Thread{
         maxClients = 10;
     }
 
-    public TCPServer(IContext context, IProtocol protocol, int port) {
+    public TCPServer(IContext context, HashMap<String, IProtocol> protocols, int port) {
         this(port);
         this.context = context;
-        this.protocol = protocol;
+        this.protocols = protocols;
     }
 
-    public IProtocol getProtocol() {
-        return this.protocol;
+    public HashMap<String, IProtocol> getProtocols() {
+        return this.protocols;
     }
 
     public IContext getContext() {
         return this.context;
+    }
+
+    public boolean isRunning() { return this.running; }
+    public void setRunning(boolean value) {
+        this.running = value;
     }
 
     public String toString() {
@@ -54,21 +61,25 @@ public class TCPServer extends Thread{
             System.exit(1);
         }
 
-        // Listening to a maximum of maxConnexions at the same time
-        while (nbClients <= maxClients) {
-            try {
-                log.info("Waiting for a new client to connect.");
-                clientSocket = serverSocket.accept();
-                nbClients++;
-                log.info("Number of clients : " + nbClients);
-            } catch (IOException e) {
-                log.error("Accept failed: " + serverSocket.getLocalPort(), e);
-                System.exit(1);
+        this.running = true;
+        while (this.running) {
+            // Listening to a maximum of maxConnexions at the same time
+            while (nbClients <= maxClients) {
+                try {
+                    log.info("Waiting for a new client to connect.");
+                    clientSocket = serverSocket.accept();
+                    nbClients++;
+                    log.info("Number of clients : " + nbClients);
+                } catch (IOException e) {
+                    log.error("Accept failed: " + serverSocket.getLocalPort(), e);
+                    System.exit(1);
+                }
+                ServerThread st = new ServerThread(clientSocket, this);
+                st.start();
             }
-            ServerThread st = new ServerThread(clientSocket, this);
-            st.start();
+            log.warn("There are already " + nbClients + " clients connected. Reached maximum.");
+            while (nbClients > maxClients) {}
         }
-        log.warn("There are already " + nbClients + " clients connected. Reached maximum.");
 
         // Closing properly the main.java.server
         try {

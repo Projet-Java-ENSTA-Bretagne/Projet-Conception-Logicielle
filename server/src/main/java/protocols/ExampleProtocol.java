@@ -10,27 +10,11 @@ public class ExampleProtocol implements IProtocol {
 
     private final Logger log = LogManager.getLogger(ExampleProtocol.class);
 
-    public void execute(IContext ctx, InputStream inStream, OutputStream outStream) {
-        String inputRequest;
-        BufferedReader is = new BufferedReader(new InputStreamReader(inStream));
-        PrintStream os = new PrintStream(outStream);
+    public static String requestName = "PING";
 
-        try {
-            String valeurExpediee = "";
-
-            inputRequest = is.readLine();
-            if (inputRequest != null) {
-                log.info("Received order : " + inputRequest);
-                String[] args = inputRequest.split(" ");
-
-                if (args[0].contentEquals("PING")) {
-                    valeurExpediee = "PONG";
-                    log.info("Answered to server: " + valeurExpediee);
-                }
-                os.println(valeurExpediee);
-            }
-        } catch (Exception e) {
-            log.error("Catched an exception : " + e);
-        }
+    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream) {
+        String valeurExpediee = "PONG";
+        log.info("Answered to server: " + valeurExpediee);
+        outStream.println(valeurExpediee);
     }
 }
