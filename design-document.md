@@ -81,6 +81,8 @@ L'ID utilisateur sera un UUIDv4. Les mdp seront hashés avec BCrypt ou SHA256.
 
 ## Documentation : commandes
 
+Les commandes et les réponses seront formatées en JSON.
+
 ### Client -> Serveur
 
 Une fois loggé, l'id de l'utilisateur ne transite plus, il sera associé au socket crée entre le client et le serveur.
@@ -156,5 +158,3 @@ Codes status :
 *   Thread_id : fil de discussion (MP ou group)
 *   Content : string
 *   (isRead) : "none", "sent", "read"
-
-JSON
