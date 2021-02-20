@@ -154,6 +154,7 @@ Codes status :
 ### Message
 
 *   Date : date
+*   Id: uuid
 *   Sender_id : uuid
 *   Thread_id : fil de discussion (MP ou group)
 *   Content : string

@@ -1,4 +1,5 @@
 import database.DatabaseManager;
+import database.entities.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import protocols.*;
@@ -7,11 +8,12 @@ import server.IContext;
 import server.ServerConfiguration;
 import server.TCPServer;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class MainServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // Setting logging level
         Configurator.setRootLevel(Level.DEBUG);
 
@@ -20,9 +22,12 @@ public class MainServer {
         ServerConfiguration serverConfig = ConfigurationManagement.getInstance().getServerConfiguration();
 
         // Setting up database
-        DatabaseManager.createDatabase("database.db");
-        DatabaseManager.createTables("database.db");
-        DatabaseManager.insertDummyData("database.db");
+        DatabaseManager db = new DatabaseManager("database.db");
+        db.createTables();
+        db.linkDaos();
+
+        User alex = new User("0", "alexandre", "1234", User.Role.ROLE_ADMIN, "0;1");
+        db.getUserDao().create(alex);
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
