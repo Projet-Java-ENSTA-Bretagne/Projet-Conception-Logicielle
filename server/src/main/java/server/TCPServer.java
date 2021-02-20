@@ -32,6 +32,8 @@ public class TCPServer extends Thread{
         this(port);
         this.context = context;
         this.protocols = protocols;
+
+        log.info("Creating new server with " + this.protocols.size() + " protocols");
     }
 
     public HashMap<String, IProtocol> getProtocols() {
@@ -55,6 +57,7 @@ public class TCPServer extends Thread{
         // Creating main.java.server socket
         ServerSocket serverSocket = null;
         try {
+            log.info("Starting server on port: " + port);
             serverSocket = new ServerSocket(this.port);
         } catch (IOException e) {
             log.error("Could not listen on port: " + port, e);

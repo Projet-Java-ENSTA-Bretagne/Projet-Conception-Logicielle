@@ -92,9 +92,9 @@ Une fois loggé, l'id de l'utilisateur ne transite plus, il sera associé au soc
 | connect             | *null*                         | Message envoyé au serveur pour se connecter                  |
 | disconnect          | *null*                         | Message envoyé au serveur pour fermer une connexion          |
 | login               | username, mdp_hashed           | Envoyé au serveur pour authentifier un utilisateur           |
-| createMP            | dest_user_id                   | Créer un fil de discussion entre deux personnes              |
+| createPM            | dest_user_id                   | Créer un fil de discussion entre deux personnes              |
 | createGroup         | group_name, array of user_id   | Créer un fil de discussion entre plusieurs personnes (plus que 2) |
-| sendMP              | dest_user_id, message          | Envoie un message dans un fil de discussion                  |
+| sendPM              | dest_user_id, message          | Envoie un message dans un fil de discussion                  |
 | sendGroup           | group_id, message              | Envoie un message dans un groupe                             |
 | getMPMsg            | dest_user_id, index=0, limit=5 | Récupère les messages d'un fil de discussion                 |
 | getGroupMsg         | group_id, index=0, limit=5     | Récupère les messages d'un groupe                            |
@@ -158,3 +158,11 @@ Codes status :
 *   Thread_id : fil de discussion (MP ou group)
 *   Content : string
 *   (isRead) : "none", "sent", "read"
+
+### Group
+
+*   group_id: uuid
+*   name: string
+*   isPM: boolean
+*   creation_date: date
+*   members: []uuid
