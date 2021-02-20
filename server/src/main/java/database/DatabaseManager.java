@@ -18,7 +18,7 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
 
-    private final Logger log = LogManager.getLogger(DatabaseManagerOld.class);
+    private final Logger log = LogManager.getLogger(DatabaseManager.class);
 
     private String dbURL;
     private ConnectionSource conn;

@@ -26,8 +26,8 @@ public class MainServer {
         db.createTables();
         db.linkDaos();
 
-        User alex = new User("0", "alexandre", "1234", User.Role.ROLE_ADMIN, "0;1");
-        db.getUserDao().create(alex);
+        // User alex = new User("0", "alexandre", "1234", User.Role.ROLE_ADMIN, "0;1");
+        // db.getUserDao().create(alex);
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
