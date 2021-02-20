@@ -22,6 +22,7 @@ public class MainServer {
         // Setting up database
         DatabaseManager.createDatabase("database.db");
         DatabaseManager.createTables("database.db");
+        DatabaseManager.insertDummyData("database.db");
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
