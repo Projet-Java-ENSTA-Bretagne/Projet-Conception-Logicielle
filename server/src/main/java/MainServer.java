@@ -1,3 +1,4 @@
+import database.DatabaseManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import protocols.*;
@@ -17,6 +18,10 @@ public class MainServer {
         // Getting configuration
         ConfigurationManagement.getInstance().fromPath("config.json");
         ServerConfiguration serverConfig = ConfigurationManagement.getInstance().getServerConfiguration();
+
+        // Setting up database
+        DatabaseManager.createDatabase("database.db");
+        DatabaseManager.createTables("database.db");
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
