@@ -1,5 +1,4 @@
 import database.DatabaseManager;
-import database.entities.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import protocols.*;
