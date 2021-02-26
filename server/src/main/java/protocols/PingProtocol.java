@@ -8,9 +8,9 @@ import server.ResponseBuilder;
 
 import java.io.*;
 
-public class ExampleProtocol implements IProtocol {
+public class PingProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(PingProtocol.class);
 
     public static String requestName = "PING";
 

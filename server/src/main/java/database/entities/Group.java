@@ -3,6 +3,7 @@ package database.entities;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -32,5 +33,35 @@ public class Group {
         this.isPM = isPM;
         this.creationDate = creationDate;
         this.members = members;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isThisAPM() {
+        return isPM;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public String getMembers() {
+        return members;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject res = new JSONObject();
+        res.put("id",               this.getId());
+        res.put("name",             this.getName());
+        res.put("is_pm",            this.isThisAPM());
+        res.put("creation_date",    this.getCreationDate().toString());
+        res.put("members",          this.getMembers());
+        return res;
     }
 }

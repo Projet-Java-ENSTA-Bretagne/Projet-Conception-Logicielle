@@ -28,7 +28,7 @@ public class MainServer {
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
-        protocols.put(ExampleProtocol.requestName,              new ExampleProtocol());
+        protocols.put(PingProtocol.requestName,              new PingProtocol());
         protocols.put(LoginProtocol.requestName,                new LoginProtocol());
         protocols.put(CreateGroupProtocol.requestName,          new CreateGroupProtocol());
         protocols.put(SendGroupProtocol.requestName,            new SendGroupProtocol());

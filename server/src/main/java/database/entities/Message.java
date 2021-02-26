@@ -2,6 +2,7 @@ package database.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -35,5 +36,40 @@ public class Message {
         this.date = date;
         this.content = content;
         this.isRead = isRead;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getSenderID() {
+        return senderID;
+    }
+
+    public String getGroupID() {
+        return groupID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean hasBeenRead() {
+        return isRead;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject res = new JSONObject();
+        res.put("id",           this.getId());
+        res.put("sender_id",    this.getSenderID());
+        res.put("group_id",     this.getGroupID());
+        res.put("date",         this.getDate().toString());
+        res.put("content",      this.getContent());
+        res.put("is_read",      this.hasBeenRead());
+        return res;
     }
 }
