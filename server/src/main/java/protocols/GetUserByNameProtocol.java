@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 public class GetUserByNameProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(GetUserByNameProtocol.class);
 
     public static String requestName = "getUserByName";
 

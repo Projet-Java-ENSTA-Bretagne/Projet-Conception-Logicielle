@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 public class CreateGroupProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(CreateGroupProtocol.class);
 
     public static String requestName = "createGroup";
 

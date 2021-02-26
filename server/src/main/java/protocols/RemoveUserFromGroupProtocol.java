@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 public class RemoveUserFromGroupProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(RemoveUserFromGroupProtocol.class);
 
     public static String requestName = "removeUserFromGroup";
 

@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 public class SendGroupProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(SendGroupProtocol.class);
 
     public static String requestName = "sendPM";
 

@@ -10,7 +10,7 @@ import java.io.PrintStream;
 
 public class LoginProtocol implements IProtocol {
 
-    private final Logger log = LogManager.getLogger(ExampleProtocol.class);
+    private final Logger log = LogManager.getLogger(LoginProtocol.class);
 
     public static String requestName = "login";
 
