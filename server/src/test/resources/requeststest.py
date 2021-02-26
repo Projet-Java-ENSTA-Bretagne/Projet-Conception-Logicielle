@@ -3,8 +3,8 @@
 
 import socket
 
-host = "localhost"
-port = 6666
+host = "ieta-docs.ddns.net"
+port = 60000
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((host, port))
