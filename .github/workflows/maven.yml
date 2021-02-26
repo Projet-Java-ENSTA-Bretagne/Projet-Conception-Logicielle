@@ -28,6 +28,3 @@ jobs:
       
     - name: Run coverage
       run: mvn -B verify -P coverage --no-transfer-progress
-      
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
