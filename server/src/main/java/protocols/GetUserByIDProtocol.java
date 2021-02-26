@@ -36,17 +36,10 @@ public class GetUserByIDProtocol implements IProtocol {
             ResponseBuilder.sendDeniedError(outStream, request, "There is no user with the id : " + id);
             return;
         }
+
         User matchedUser = matchingUsers.get(0);
-
-        JSONObject userJSON = new JSONObject();
-        userJSON.put("id", matchedUser.getId());
-        userJSON.put("name", matchedUser.getName());
-        userJSON.put("password", matchedUser.getPassword());
-        userJSON.put("role", matchedUser.getRole().toString());
-        userJSON.put("blacklist", matchedUser.getBlacklist());
-
         // then tell the user everything went ok and sending the data
         outStream.println(ResponseBuilder.buildData(
-                request, ResponseBuilder.StatusCode.OK, userJSON));
+                request, ResponseBuilder.StatusCode.OK, matchedUser.toJSON()));
     }
 }

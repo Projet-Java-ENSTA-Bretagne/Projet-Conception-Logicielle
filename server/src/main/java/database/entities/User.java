@@ -3,6 +3,7 @@ package database.entities;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.json.JSONObject;
 
 @DatabaseTable(tableName = "users")
 public class User {
@@ -75,5 +76,15 @@ public class User {
 
     public void setBlacklist(String blacklist) {
         this.blacklist = blacklist;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject res = new JSONObject();
+        res.put("id",           this.getId());
+        res.put("name",         this.getName());
+        res.put("password",     this.getPassword());
+        res.put("role",         this.getRole().toString());
+        res.put("blacklist",    this.getBlacklist());
+        return res;
     }
 }
