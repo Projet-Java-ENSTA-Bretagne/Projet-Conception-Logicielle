@@ -70,10 +70,10 @@ L'ID utilisateur sera un UUIDv4. Les mdp seront hashés avec BCrypt ou SHA256.
 
 ### A rendre chaque semaine
 
--   [ ] User-stories : sprint en cours avec revue courte
+-   [x] User-stories : sprint en cours avec revue courte
 -   [ ] Photo des cartes CRC
--   [ ] Résultat des tests unitaires : fichier XML exporté par JUnit
--   [ ] Un exécutable de l'application
+-   [x] Résultat des tests unitaires : fichier XML exporté par JUnit
+-   [x] Un exécutable de l'application
 -   [ ] Diagramme de classe
 -   [ ] Documentation
 
