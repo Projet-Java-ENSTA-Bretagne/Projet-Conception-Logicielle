@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <Console name="SlowConsole" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"  pattern="%highlight{%d{HH:mm} %-5level %logger{36} - %msg%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=blue, DEBUG=green bold, TRACE=white}"/>
+        </Console>
+        <File name="File" fileName="logs.txt">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <!--<logger name="server" level="ALL" additivity="false">
+            <appender-ref ref="SlowConsole"/>
+        </logger>-->
+        <Root level="ALL">
+            <appender-ref ref="SlowConsole"/>
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+</Configuration>

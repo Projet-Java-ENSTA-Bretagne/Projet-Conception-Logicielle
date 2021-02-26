@@ -28,6 +28,7 @@ public class MainServer {
 
         // User alex = new User("0", "alexandre", "1234", User.Role.ROLE_ADMIN, "0;1");
         // db.getUserDao().create(alex);
+        // System.out.println(db.getUserDao().queryForId("0").getName());
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();

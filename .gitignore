@@ -9,6 +9,8 @@
 # Log file
 *.log
 
+logs.txt
+
 # BlueJ files
 *.ctxt
 
