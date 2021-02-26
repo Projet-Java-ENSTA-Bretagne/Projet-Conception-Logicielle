@@ -1,8 +1,6 @@
-package server;
+package database;
 
 import database.entities.User;
-
-import java.security.Permission;
 
 public class SecurityManager {
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class ServerThread extends Thread {
 
@@ -34,11 +35,16 @@ public class ServerThread extends Thread {
                 JSONObject request = new JSONObject(requestString);
                 log.debug("Received command: " + request.getString("command"));
 
-                tcpServer.getProtocols().get(request.getString("command")).
-                        execute(tcpServer.getContext(),
-                                inStream,
-                                outStream,
-                                request);
+                try {
+                    tcpServer.getProtocols().get(request.getString("command")).
+                            execute(tcpServer.getContext(),
+                                    inStream,
+                                    outStream,
+                                    request);
+                } catch (SQLException e) {
+                    log.error(e);
+                    ResponseBuilder.sendServerError(outStream, request, e.toString());
+                }
             }
 
             log.info("Closing server thread");

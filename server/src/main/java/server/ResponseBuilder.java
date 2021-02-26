@@ -2,6 +2,8 @@ package server;
 
 import org.json.JSONObject;
 
+import java.io.PrintStream;
+
 public class ResponseBuilder {
     public enum StatusCode {
         OK,
@@ -22,5 +24,15 @@ public class ResponseBuilder {
         res.put("data", data);
 
         return res;
+    }
+
+    public static void sendServerError(PrintStream outStream, JSONObject request, String errorMessage) {
+        JSONObject response = buildMessage(request, StatusCode.SERVER_ERROR, errorMessage);
+        outStream.println(response.toString());
+    }
+
+    public static void sendDeniedError(PrintStream outStream, JSONObject request, String errorMessage) {
+        JSONObject response = buildMessage(request, StatusCode.DENIED, errorMessage);
+        outStream.println(response.toString());
     }
 }

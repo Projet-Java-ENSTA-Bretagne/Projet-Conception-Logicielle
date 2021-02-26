@@ -2,10 +2,7 @@ import database.DatabaseManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import protocols.*;
-import server.ConfigurationManagement;
-import server.IContext;
-import server.ServerConfiguration;
-import server.TCPServer;
+import server.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -42,7 +39,7 @@ public class MainServer {
         protocols.put(RemoveUserFromGroupProtocol.requestName,  new RemoveUserFromGroupProtocol());
         protocols.put(BlockUserProtocol.requestName,            new BlockUserProtocol());
 
-        TCPServer server = new TCPServer(new IContext() {}, protocols, serverConfig.getPort());
+        TCPServer server = new TCPServer(new DatabaseContext(db), protocols, serverConfig.getPort());
         server.start();
     }
 

@@ -1,4 +1,4 @@
-package server;
+package database;
 
 public class UnauthorizedException extends Exception {
     public UnauthorizedException(String errorMessage) {
