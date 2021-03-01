@@ -29,5 +29,11 @@ jobs:
     - name: Run coverage
       run: mvn -B verify -P coverage --no-transfer-progress --file server/pom.xml
       
+    - name: Run test
+      run: mvn test --file server/pom.xml
+      
+    - name: Run cobertura
+      run: mvn cobertura:cobertura --file server/pom.xml
+      
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
