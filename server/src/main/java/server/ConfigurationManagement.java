@@ -31,10 +31,29 @@ public class ConfigurationManagement {
         this.configurationPath = "config.json";
         try {
             this.jsonObject = new JSONObject(Files.readString(Paths.get(configurationPath)));
+            this.serverConfiguration = ServerConfiguration.fromJsonObject(this.jsonObject);
+        } catch (IOException e) {
+            initConfigFile();
+        }
+
+    }
+
+    public void initConfigFile()
+    {
+        this.serverConfiguration = new ServerConfiguration("localhost", 6666, 10);
+        jsonObject = new JSONObject();
+        jsonObject.put("maxClients", serverConfiguration.getMaxClients());
+        jsonObject.put("port", serverConfiguration.getPort());
+        jsonObject.put("host", serverConfiguration.getHost());
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(this.configurationPath);
+            writer.write(jsonObject.toString(4));
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.serverConfiguration = ServerConfiguration.fromJsonObject(this.jsonObject);
+
     }
 
     /**
