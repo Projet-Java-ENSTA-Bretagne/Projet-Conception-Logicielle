@@ -3,11 +3,18 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
 
 public class LoginController {
 
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private Label enstarLabel;
+
+    @FXML
+    private Label welcomeLabel;
 
     @FXML
     private JFXTextField usernameField;

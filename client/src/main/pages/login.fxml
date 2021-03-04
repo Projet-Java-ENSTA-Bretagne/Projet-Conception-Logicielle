@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="cssfile.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
    <children>
       <HBox alignment="CENTER" layoutX="27.0" layoutY="44.0" prefHeight="313.0" prefWidth="504.0" spacing="50.0">
          <children>
@@ -20,9 +20,9 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="63.0" prefWidth="374.0">
                      <children>
-                        <Label text="Bienvenue !">
+                        <Label fx:id="welcomeLabel" text="Bienvenue !">
                            <font>
-                              <Font name="Garamond Bold" size="24.0" />
+                              <Font size="24.0" />
                            </font>
                         </Label>
                         <Label text="Connecte toi vite ! " />
@@ -47,14 +47,14 @@
             </VBox>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
                <children>
-                  <Label alignment="CENTER" text="ENSTAR">
+                  <Label fx:id="enstarLabel" alignment="CENTER" text="ENSTAR">
                      <font>
-                        <Font name="Sansation" size="32.0" />
+                        <Font size="32.0" />
                      </font>
                   </Label>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@logo.png" />
+                        <Image url="@../resources/logo.png" />
                      </image>
                   </ImageView>
                </children>

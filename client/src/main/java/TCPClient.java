@@ -32,6 +32,7 @@ public class TCPClient {
             serverSocket = new Socket(host, port);
             outStream = new PrintStream(serverSocket.getOutputStream());
             inStream = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+            log.info("Connexion successful");
             ok = true;
         } catch (UnknownHostException e) {
             log.error("Unknown host", e);
@@ -40,7 +41,6 @@ public class TCPClient {
         } catch (IOException e) {
             log.error("Error during data exchange", e);
         }
-        log.info("Connexion successful");
 
         return ok;
     }
