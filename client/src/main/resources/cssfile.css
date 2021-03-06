@@ -1,6 +1,19 @@
+/* Main CSS stylesheet */
+
+
+/* Defining the Sansation font (for all pages/scenes) */
 @font-face {
     font-family: 'Sansation';
     src: url('Sansation_Bold.ttf');
+}
+
+
+
+/* Login page */
+
+#welcomeLabel {
+    -fx-font-family: 'Garamond';
+    -fx-font-weight: bold;
 }
 
 #enstarLabel {
@@ -8,7 +21,74 @@
     -fx-font-weight: bold;
 }
 
-#welcomeLabel {
-    -fx-font-family: 'Garamond';
+
+
+/* Home page */
+
+#backgroundAnchorPane {
+    -fx-background-color: rgba(0, 80, 0, 0.2); /* very light green */
+}
+
+#backgroundVBox {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#topLayerHBox {
+    -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple 90 */
+}
+
+#discussionMenuLabel {
+    -fx-font-family: 'Sansation';
     -fx-font-weight: bold;
 }
+
+#disconnectButton {
+    -fx-font-family: 'Helvetica';
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+#discussionScrollPane .scroll-bar:horizontal {
+    -fx-pref-height: 18px;
+}
+
+#discussionScrollPane .scroll-bar:horizontal .thumb {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+
+#discussionScrollPane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgb(230, 230, 230); /* light gray */
+}
+
+#discussionScrollPane .scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
+}
+
+#discussionScrollPane .scroll-bar:horizontal .track {
+    -fx-background-color: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+}
+
+#discussionHBox {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+
+#joinGroupLabel {
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold;
+}
+
+
+
+/* Group Settings page */
+
+#doneButton {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+
+
+/* Group Visualizer page */
+
+/* ... */

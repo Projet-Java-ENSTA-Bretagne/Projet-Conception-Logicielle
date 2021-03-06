@@ -1,20 +1,8 @@
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.Label;
 
 public class LoginController {
-
-    @FXML
-    private AnchorPane anchorPane;
-
-    @FXML
-    private Label enstarLabel;
-
-    @FXML
-    private Label welcomeLabel;
 
     @FXML
     private JFXTextField usernameField;
@@ -22,18 +10,13 @@ public class LoginController {
     @FXML
     private JFXPasswordField passwordField;
 
-    @FXML
-    private JFXButton login;
-
-    @FXML
-    private JFXButton showPasswordButton;
     private String password;
 
     @FXML
     void makeLogin() {
-        if(usernameField.getText().equals("test")&&passwordField.getText().equals("test"))
-        {
+        if (usernameField.getText().equals("test") && passwordField.getText().equals("test")) {
             System.out.println("Welcome");
+            MainController.switchToHomeScene();
         }
     }
 
@@ -49,5 +32,4 @@ public class LoginController {
         passwordField.setText(password);
         passwordField.setPromptText("Password");
     }
-
 }
