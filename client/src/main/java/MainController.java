@@ -47,7 +47,7 @@ public class MainController {
         Parent homeRoot = FXMLLoader.load(homeURL);
         homeScene = new Scene(homeRoot, 659, 402);
 
-        mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to stage
+        mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to main stage
         setCurrentScene("");
     }
 

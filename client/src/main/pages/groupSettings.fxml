@@ -100,33 +100,21 @@
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="portTextField" prefHeight="25.0" prefWidth="146.0" promptText="6666" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                      <padding>
                         <Insets right="50.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupNameTextField" prefHeight="25.0" prefWidth="146.0" promptText="ENSTAR" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                      <padding>
                         <Insets right="50.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupIdTextField" prefHeight="25.0" prefWidth="146.0" promptText="1" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                      <padding>
                         <Insets right="50.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 50 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                      <padding>
                         <Insets right="50.0" />
                      </padding>

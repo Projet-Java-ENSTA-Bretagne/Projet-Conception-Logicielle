@@ -14,6 +14,16 @@ import javafx.scene.image.Image;
 public class HomeController {
 
     @FXML
+    void initialize() {
+        System.out.println("init home controller");
+
+        // just in case
+        discussionScrollPane = new ScrollPane();
+        discussionHBox = new HBox();
+        discussionScrollPane.setContent(discussionHBox);
+    }
+
+    @FXML
     private static ScrollPane discussionScrollPane;
 
     public static ScrollPane getDiscussionScrollPane() {
@@ -31,6 +41,7 @@ public class HomeController {
 
     @FXML
     void actionDisconnectButton() {
+        System.out.println("deconnexion");
         MainController.switchToLoginScene();
     }
 
@@ -52,12 +63,14 @@ public class HomeController {
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
         Scene scene = new Scene(groupSettingsRoot, 400, 375);
 
-        Stage secondaryStage = new Stage(); // stage for GroupSettings
+        Stage secondaryStage = new Stage(); // new stage for GroupSettings
         secondaryStage.getIcons().add(new Image("settings-icon.png"));
         secondaryStage.setTitle("Group Settings");
         secondaryStage.setScene(scene);
         secondaryStage.initModality(Modality.APPLICATION_MODAL);
+
         setCurrentGroupSettingsStage(secondaryStage);
+
         secondaryStage.show();
     }
 

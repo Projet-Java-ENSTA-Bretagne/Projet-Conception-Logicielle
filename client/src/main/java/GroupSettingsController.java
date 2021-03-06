@@ -5,13 +5,20 @@ public class GroupSettingsController {
 
     @FXML
     void initialize() {
-        // interesting FXML feature
         System.out.println("init group settings");
+
+        operationType = "joinGroup";
+        ipAddress = "";
+        port = 0;
+        groupName = "";
+        groupId = 0;
+        groupStatus = "public";
+        groupDescription = "";
     }
 
     /* ------------- 1st toggle group ------------- */
 
-    private String operationType = "joinGroup";
+    private String operationType;
 
     public void setOperationType(String operationType) {
         this.operationType = operationType;
@@ -34,7 +41,7 @@ public class GroupSettingsController {
     @FXML
     private JFXTextField ipAddressTextField;
 
-    private String ipAddress = "";
+    private String ipAddress;
 
     @FXML
     private JFXTextField portTextField;
@@ -44,7 +51,7 @@ public class GroupSettingsController {
     @FXML
     private JFXTextField groupNameTextField;
 
-    private String groupName = "";
+    private String groupName;
 
     @FXML
     private JFXTextField groupIdTextField;
@@ -53,7 +60,7 @@ public class GroupSettingsController {
 
     /* ------------- 2nd toggle group ------------- */
 
-    private String groupStatus = "public";
+    private String groupStatus;
 
     public void setGroupStatus(String groupStatus) {
         this.groupStatus = groupStatus;
@@ -76,7 +83,7 @@ public class GroupSettingsController {
     @FXML
     private JFXTextField groupDescriptionTextField;
 
-    private String groupDescription = "";
+    private String groupDescription;
 
     @FXML
     void actionDoneButton() {
@@ -106,6 +113,7 @@ public class GroupSettingsController {
             System.out.printf("\nDescription du groupe : %s\n", groupDescription);
 
             HomeController.getCurrentGroupSettingsStage().close();
+            HomeController.setCurrentGroupSettingsStage(null);
         }
         catch (Exception e) {
             System.out.println("Parametrage invalide !\n" + e);

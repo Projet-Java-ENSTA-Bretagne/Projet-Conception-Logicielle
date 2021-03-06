@@ -1,5 +1,4 @@
-/* Main CSS stylesheet */
-
+/* ================ Main CSS stylesheet ================ */
 
 /* Defining the Sansation font (for all pages/scenes) */
 @font-face {
@@ -7,9 +6,7 @@
     src: url('Sansation_Bold.ttf');
 }
 
-
-
-/* Login page */
+/* ---------------- Login page ---------------- */
 
 #welcomeLabel {
     -fx-font-family: 'Garamond';
@@ -18,24 +15,18 @@
 
 #enstarLabel {
     -fx-font-family: 'Sansation';
-    -fx-font-weight: bold;
 }
 
-
-
-/* Home page */
-
-#backgroundAnchorPane {
-    -fx-background-color: rgba(0, 80, 0, 0.2); /* very light green */
-}
-
-#backgroundVBox {
+/* login button */
+#login:hover {
     -fx-border-color: black;
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
+/* ---------------- Home page ---------------- */
+
 #topLayerHBox {
-    -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple 90 */
+    -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
 }
 
 #discussionMenuLabel {
@@ -49,24 +40,56 @@
     -fx-font-style: italic;
 }
 
+#disconnectButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#joinOrCreateGroupButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#discussionScrollPane:hover {
+    -fx-border-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
 #discussionScrollPane .scroll-bar:horizontal {
     -fx-pref-height: 18px;
 }
 
+/* defining the "thumb" of the scrollbar (= the scrollable button) */
 #discussionScrollPane .scroll-bar:horizontal .thumb {
     -fx-background-color: #d6d6c2; /* light gray */
 }
-
 #discussionScrollPane .scroll-bar:horizontal .thumb:hover {
     -fx-background-color: rgb(230, 230, 230); /* light gray */
 }
-
 #discussionScrollPane .scroll-bar:horizontal .thumb:pressed {
     -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
 }
 
+/* defining the color of background of the scrollbar (background of the scrollbar = "track") */
 #discussionScrollPane .scroll-bar:horizontal .track {
     -fx-background-color: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+}
+
+/* hiding the left/right arrows of the scrollbar */
+#discussionScrollPane .scroll-bar:horizontal .decrement-button {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:horizontal .decrement-button .decrement-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:horizontal .increment-button {
+    -fx-pref-width: 0px;
+}
+#discussionScrollPane .scroll-bar:horizontal .increment-button .increment-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
 }
 
 #discussionHBox {
@@ -78,17 +101,13 @@
     -fx-font-weight: bold;
 }
 
+/* ---------------- Group Settings page ---------------- */
 
-
-/* Group Settings page */
-
-#doneButton {
+#doneButton:hover {
     -fx-border-color: black;
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
-
-
-/* Group Visualizer page */
+/* ---------------- Group Visualizer page ---------------- */
 
 /* ... */
