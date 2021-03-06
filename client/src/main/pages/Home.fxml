@@ -26,7 +26,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Deconnexion" textFill="WHITE" />
+                        <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Déconnexion" textFill="WHITE" />
                      </children>
                   </HBox>
                   <HBox id="rightHBoxMenu" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">

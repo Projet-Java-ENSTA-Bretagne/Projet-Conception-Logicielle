@@ -1,6 +1,4 @@
 import javafx.fxml.FXML;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.ScrollPane;
 import javafx.stage.Modality;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,32 +7,22 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.io.File;
+import java.util.ArrayList;
+
 import javafx.scene.image.Image;
 
 public class HomeController {
 
+    private static ArrayList<String> groupNameList = new ArrayList<>();
+
+    public static ArrayList<String> getGroupNameList() {
+        return groupNameList;
+    }
+
     @FXML
     void initialize() {
         System.out.println("init home controller");
-
-        // just in case
-        discussionScrollPane = new ScrollPane();
-        discussionHBox = new HBox();
-        discussionScrollPane.setContent(discussionHBox);
-    }
-
-    @FXML
-    private static ScrollPane discussionScrollPane;
-
-    public static ScrollPane getDiscussionScrollPane() {
-        return discussionScrollPane;
-    }
-
-    @FXML
-    private static HBox discussionHBox;
-
-    public static HBox getDiscussionHBox() {
-        return discussionHBox;
+        currentGroupSettingsStage = null;
     }
 
     //
@@ -45,7 +33,7 @@ public class HomeController {
         MainController.switchToLoginScene();
     }
 
-    private static Stage currentGroupSettingsStage = null;
+    private static Stage currentGroupSettingsStage;
 
     public static Stage getCurrentGroupSettingsStage() {
         return currentGroupSettingsStage;

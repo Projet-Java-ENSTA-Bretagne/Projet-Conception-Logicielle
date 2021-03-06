@@ -35,7 +35,6 @@
 }
 
 #disconnectButton {
-    -fx-font-family: 'Helvetica';
     -fx-font-size: 13px;
     -fx-font-style: italic;
 }
@@ -47,11 +46,6 @@
 
 #joinOrCreateGroupButton:hover {
     -fx-border-color: white;
-    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
-}
-
-#discussionScrollPane:hover {
-    -fx-border-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
@@ -97,7 +91,6 @@
 }
 
 #joinGroupLabel {
-    -fx-font-family: 'Helvetica';
     -fx-font-weight: bold;
 }
 
@@ -110,4 +103,32 @@
 
 /* ---------------- Group Visualizer page ---------------- */
 
-/* ... */
+#groupVisualizerAnchorPane {
+    -fx-background-color: white;
+    -fx-border-color: rgba(169, 169, 169, 0.8); /* dark gray */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+#groupVisualizerAnchorPane:hover {
+    -fx-border-color: #80e5ff; /* faded light blue */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+
+#openGroupButton {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: linear-gradient(to right, #8000ff, #400080);
+}
+#openGroupButton:hover {
+    -fx-border-color: #8000ff; /* slightly faded blue-purple */
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#leaveGroupButton {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: linear-gradient(to right, #400080, #8000ff, #400080);
+}
+#leaveGroupButton:hover {
+    -fx-border-color: #8000ff; /* slightly faded blue-purple */
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}

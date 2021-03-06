@@ -1,11 +1,18 @@
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import java.io.File;
+import java.net.URL;
 
 public class GroupSettingsController {
 
     @FXML
     void initialize() {
-        System.out.println("init group settings");
+        System.out.println("init group settings controller");
 
         operationType = "joinGroup";
         ipAddress = "";
@@ -27,13 +34,13 @@ public class GroupSettingsController {
     @FXML
     void actionJoinGroupRadioButton() {
         setOperationType("joinGroup");
-        System.out.println("join");
+        System.out.println(operationType);
     }
 
     @FXML
     void actionCreateGroupRadioButton() {
         setOperationType("createGroup");
-        System.out.println("create");
+        System.out.println(operationType);
     }
 
     /* -------------------------------------------- */
@@ -69,13 +76,13 @@ public class GroupSettingsController {
     @FXML
     void actionPublicRadioButton() {
         setGroupStatus("public");
-        System.out.println("public");
+        System.out.println(groupStatus);
     }
 
     @FXML
     void actionPrivateRadioButton() {
         setGroupStatus("private");
-        System.out.println("private");
+        System.out.println(groupStatus);
     }
 
     /* -------------------------------------------- */
@@ -84,6 +91,14 @@ public class GroupSettingsController {
     private JFXTextField groupDescriptionTextField;
 
     private String groupDescription;
+
+    private static int nbCreatedGroups = 0;
+
+    private static HBox discussionHBox = null;
+
+    public static HBox getDiscussionHBox() {
+        return discussionHBox;
+    }
 
     @FXML
     void actionDoneButton() {
@@ -98,7 +113,7 @@ public class GroupSettingsController {
             String wholeDescription = groupDescriptionTextField.getText();
             if ((wholeDescription != null) && (wholeDescription.length() > 0)) {
                 // be **careful** when you're using the substring function ...
-                groupDescription = wholeDescription.substring(0, Math.min(wholeDescription.length(), 50));
+                groupDescription = wholeDescription.substring(0, Math.min(wholeDescription.length(), 40));
             }
             else {
                 groupDescription = "";
@@ -114,6 +129,33 @@ public class GroupSettingsController {
 
             HomeController.getCurrentGroupSettingsStage().close();
             HomeController.setCurrentGroupSettingsStage(null);
+
+            /* ---------------------------------------------------------- */
+
+            // adding new group visualizer
+
+            nbCreatedGroups += 1;
+
+            URL groupVisualizerURL = new File("src/main/pages/groupVisualizer.fxml").toURI().toURL();
+            FXMLLoader groupVisualizerLoader = new FXMLLoader(groupVisualizerURL);
+            GroupVisualizerController groupVisualizerController = new GroupVisualizerController(nbCreatedGroups);
+            groupVisualizerLoader.setController(groupVisualizerController);
+            AnchorPane groupVisualizerRoot = groupVisualizerLoader.load();
+
+            // as an example for now --> the "lookup" method is OP
+            JFXButton openGroupButton = (JFXButton) groupVisualizerRoot.lookup("#openGroupButton");
+            openGroupButton.setOnAction(e -> System.out.printf("\nBouton \"OPEN\" appuye, groupNumber = %d", groupVisualizerController.getGroupNumber()));
+
+            JFXButton leaveGroupButton = (JFXButton) groupVisualizerRoot.lookup("#leaveGroupButton");
+            leaveGroupButton.setOnAction(e -> System.out.printf("\nBouton \"LEAVE\" appuye, groupNumber = %d", groupVisualizerController.getGroupNumber()));
+
+            if (nbCreatedGroups == 1) {
+                discussionHBox = (HBox) MainController.getHomeScene().lookup("#discussionHBox");
+                discussionHBox.setSpacing(40); // 1 cm = 40 px, et scrollbarHeight = 18 px (d'où v2 = 58 = 40 + 18)
+                discussionHBox.setPadding(new Insets(40, 40, 58, 40));
+            }
+
+            discussionHBox.getChildren().add(groupVisualizerRoot);
         }
         catch (Exception e) {
             System.out.println("Parametrage invalide !\n" + e);

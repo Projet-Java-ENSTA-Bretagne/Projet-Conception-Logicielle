@@ -33,7 +33,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Operation :" textAlignment="CENTER">
+                  <Label text="Opération :" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -77,8 +77,14 @@
                            <toggleGroup>
                               <ToggleGroup fx:id="group1" />
                            </toggleGroup>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
                         </JFXRadioButton>
-                        <JFXRadioButton id="createGroupRadioButton" onAction="#actionCreateGroupRadioButton" text="CREER GROUPE" textAlignment="CENTER" toggleGroup="$group1" />
+                        <JFXRadioButton id="createGroupRadioButton" onAction="#actionCreateGroupRadioButton" text="CRÉER GROUPE" textAlignment="CENTER" toggleGroup="$group1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></JFXRadioButton>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
@@ -87,8 +93,14 @@
                            <toggleGroup>
                               <ToggleGroup fx:id="group2" />
                            </toggleGroup>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
                         </JFXRadioButton>
-                        <JFXRadioButton id="privateRadioButton" onAction="#actionPrivateRadioButton" text="PRIVE" textAlignment="CENTER" toggleGroup="$group2" />
+                        <JFXRadioButton id="privateRadioButton" onAction="#actionPrivateRadioButton" text="PRIVÉ" textAlignment="CENTER" toggleGroup="$group2">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></JFXRadioButton>
                      </children>
                   </VBox>
                   <JFXTextField fx:id="ipAddressTextField" prefHeight="25.0" prefWidth="146.0" promptText="127.0.0.1" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -96,27 +108,27 @@
                         <Insets />
                      </opaqueInsets>
                      <padding>
-                        <Insets right="50.0" />
+                        <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="portTextField" prefHeight="25.0" prefWidth="146.0" promptText="6666" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <padding>
-                        <Insets right="50.0" />
+                        <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
-                  <JFXTextField fx:id="groupNameTextField" prefHeight="25.0" prefWidth="146.0" promptText="ENSTAR" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <JFXTextField fx:id="groupNameTextField" prefHeight="25.0" prefWidth="146.0" promptText="&lt; 14-15 car" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <padding>
-                        <Insets right="50.0" />
+                        <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupIdTextField" prefHeight="25.0" prefWidth="146.0" promptText="1" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <padding>
-                        <Insets right="50.0" />
+                        <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
-                  <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 50 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 40 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <padding>
-                        <Insets right="50.0" />
+                        <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
                </children>
