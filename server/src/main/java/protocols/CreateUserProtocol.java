@@ -62,8 +62,22 @@ public class CreateUserProtocol implements IProtocol {
             return;
         }
 
+        // checking of double uuid
+        String uuid = UUID.randomUUID().toString();
+
+        boolean doubleuuid = true;
+        while (doubleuuid)
+        {
+            matchingUsers = userDao.queryBuilder().
+                    where().in("id", uuid).query();
+            if(matchingUsers.size() == 0) doubleuuid = false;
+            else uuid = UUID.randomUUID().toString();
+        }
+
+
+
         // then we create the new user
-        User newUser = new User(UUID.randomUUID().toString(), username, password, role, "");
+        User newUser = new User(uuid, username, password, role, "");
         userDao.create(newUser);
 
         // then tell the user everything went ok

@@ -61,8 +61,19 @@ public class CreateGroupProtocol implements IProtocol {
             return;
         }
 
+        String uuid = UUID.randomUUID().toString();
+
+        boolean doubleuuid = true;
+        while (doubleuuid)
+        {
+            matchingGroups = groupDao.queryBuilder().
+                    where().in("id", uuid).query();
+            if(matchingGroups.size() == 0) doubleuuid = false;
+            else uuid = UUID.randomUUID().toString();
+        }
+
         // then we create the new group
-        Group newGroup = new Group(UUID.randomUUID().toString(),groupname, userid.length() <= 2, new Date(), userid.join(","));
+        Group newGroup = new Group(uuid,groupname, userid.length() <= 2, new Date(), userid.join(","));
         groupDao.create(newGroup);
 
         // then tell the user everything went ok
