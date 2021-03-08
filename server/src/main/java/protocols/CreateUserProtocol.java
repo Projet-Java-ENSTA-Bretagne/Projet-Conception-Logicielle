@@ -25,11 +25,30 @@ public class CreateUserProtocol implements IProtocol {
 
     public static String requestName = "createUser";
 
+    /**
+     * Function allow to execute the command createUser send by a client.
+     *
+     * Example of request send by the client :
+     *
+     * {
+     *   "command" : "createUser",
+     *   "args" : {
+     *     "username" : "cookiehacker",
+     *     "password" : "cookie"
+     *   }
+     * }
+     *
+     * @param ctx : The context
+     * @param inStream : The input stream of the client
+     * @param outStream : The output stream of the server
+     * @param request : The request of the client
+     * @throws SQLException
+     */
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
-        JSONObject data = request.getJSONObject("data");
+        JSONObject data = request.getJSONObject("args");
         String username = data.getString("username");
         String password = data.getString("password");
-        User.Role role = User.Role.valueOf(data.getString("role"));
+        User.Role role = User.Role.ROLE_USER;
 
         Dao<User, String> userDao = ((DatabaseContext) ctx).getDatabaseManager().getUserDao();
 
