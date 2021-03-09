@@ -21,9 +21,27 @@ public class GetUserByIDProtocol implements IProtocol {
 
     public static String requestName = "getUserByID";
 
+    /**
+     * Function allow to execute the command getUserByID send by a client.
+     *
+     * Example of request send by the client :
+     *
+     * {
+     *     "command" : "getUserByID",
+     *     "args" : {
+     *         "user_id" : "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
+     *     }
+     * }
+     *
+     * @param ctx : The context
+     * @param inStream : The input stream of the client
+     * @param outStream : The output stream of the server
+     * @param request : The request of the client
+     * @throws SQLException
+     */
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
-        JSONObject data = request.getJSONObject("data");
-        String id = data.getString("id");
+        JSONObject data = request.getJSONObject("args");
+        String id = data.getString("user_id");
 
         Dao<User, String> userDao = ((DatabaseContext) ctx).getDatabaseManager().getUserDao();
 
