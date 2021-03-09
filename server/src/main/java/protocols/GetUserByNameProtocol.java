@@ -20,9 +20,27 @@ public class GetUserByNameProtocol implements IProtocol {
 
     public static String requestName = "getUserByName";
 
+    /**
+     * Function allow to execute the command getUserByName send by a client.
+     *
+     * Example of request send by the client :
+     *
+     * {
+     *     "command" : "getUserByName",
+     *     "args" : {
+     *         "user_name" : "cookiehacker"
+     *     }
+     * }
+     *
+     * @param ctx : The context
+     * @param inStream : The input stream of the client
+     * @param outStream : The output stream of the server
+     * @param request : The request of the client
+     * @throws SQLException
+     */
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
-        JSONObject data = request.getJSONObject("data");
-        String name = data.getString("name");
+        JSONObject data = request.getJSONObject("args");
+        String name = data.getString("user_name");
 
         Dao<User, String> userDao = ((DatabaseContext) ctx).getDatabaseManager().getUserDao();
 
