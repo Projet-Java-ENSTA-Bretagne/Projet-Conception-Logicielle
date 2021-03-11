@@ -6,7 +6,7 @@ public class LoginController {
 
     @FXML
     void initialize() {
-        System.out.println("init login controller");
+        System.out.println("Initializing login controller");
 
         nbSuccessfulLogins = 0;
 
@@ -75,11 +75,11 @@ public class LoginController {
                 setPassword(currentPasswordText);
                 allowedToChangePassword = false;
 
-                System.out.printf("\nNew username : %s", username);
-                System.out.printf("\nNew password : %s\n", password);
+                System.out.printf("\nNew username : \"%s\"", username);
+                System.out.printf("\nNew password : \"%s\"\n", password);
             }
 
-            System.out.println("Welcome !");
+            System.out.println("\nWelcome !");
             MainController.switchToHomeScene();
         }
 

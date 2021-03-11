@@ -2,25 +2,22 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class GroupSettingsController {
 
     @FXML
     void initialize() {
-        System.out.println("init group settings controller");
+        System.out.println("Initializing group settings controller");
 
         operationType = "joinGroup";
-        ipAddress = "";
-        port = 0;
-        groupName = "";
-        groupId = 0;
         groupStatus = "public";
-        groupDescription = "";
     }
 
     /* ------------- 1st toggle group ------------- */
@@ -48,12 +45,12 @@ public class GroupSettingsController {
     @FXML
     private JFXTextField ipAddressTextField;
 
-    private String ipAddress;
+    private String serverIpAddress;
 
     @FXML
     private JFXTextField portTextField;
 
-    private int port;
+    private int serverPort;
 
     @FXML
     private JFXTextField groupNameTextField;
@@ -92,72 +89,125 @@ public class GroupSettingsController {
 
     private String groupDescription;
 
-    private static int nbCreatedGroups = 0;
-
-    private static HBox discussionHBox = null;
-
-    public static HBox getDiscussionHBox() {
-        return discussionHBox;
-    }
-
     @FXML
     void actionDoneButton() {
         System.out.println("\nVous venez d'appuyer sur le bouton \"DONE\"");
 
+        boolean parametersAreValid = true;
+
         try {
-            ipAddress = ipAddressTextField.getText();
-            port = Integer.parseInt(portTextField.getText());
-            groupName = groupNameTextField.getText();
+            serverIpAddress = ipAddressTextField.getText();
+            if ((serverIpAddress == null) || (serverIpAddress.length() == 0)) {
+                parametersAreValid = false;
+            }
+
+            serverPort = Integer.parseInt(portTextField.getText());
+            if (serverPort <= 0) {
+                parametersAreValid = false;
+            }
+
+            String wholeGroupName = groupNameTextField.getText();
+            if ((wholeGroupName == null) || (wholeGroupName.length() == 0)) {
+                parametersAreValid = false;
+            }
+            else {
+                // the group name has to be less than 15 characters
+                groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 15));
+
+                // here we check if the group name already exists
+                ArrayList<GroupVisualizerObject> groupObjectList = HomeController.getGroupObjectList();
+                for (GroupVisualizerObject groupVisualizerObject : groupObjectList) {
+                    String otherGroupName = groupVisualizerObject.getController().getGroupName();
+                    if (groupName.equals(otherGroupName)) {
+                        parametersAreValid = false;
+                        System.out.printf("\nLe nom de groupe \"%s\" existe deja !\n", groupName);
+                        break;
+                    }
+                }
+            }
+
             groupId = Integer.parseInt(groupIdTextField.getText());
+            if (groupId <= 0) {
+                parametersAreValid = false;
+            }
 
             String wholeDescription = groupDescriptionTextField.getText();
             if ((wholeDescription != null) && (wholeDescription.length() > 0)) {
-                // be **careful** when you're using the substring function ...
+                // the group description has to be less than 40 characters
                 groupDescription = wholeDescription.substring(0, Math.min(wholeDescription.length(), 40));
             }
             else {
-                groupDescription = "";
+                groupDescription = "[Aucune description]";
             }
 
-            System.out.printf("\nType de l'operation : %s", operationType);
-            System.out.printf("\nAdresse IP du serveur : %s", ipAddress);
-            System.out.printf("\nPort du serveur : %d", port);
-            System.out.printf("\nNom du groupe : %s", groupName);
-            System.out.printf("\nID du groupe : %d", groupId);
-            System.out.printf("\nStatut du groupe : %s", groupStatus);
-            System.out.printf("\nDescription du groupe : %s\n", groupDescription);
+            if (parametersAreValid) {
+                System.out.printf("\nType de l'operation : \"%s\"", operationType);
+                System.out.printf("\nAdresse IP du serveur : \"%s\"", serverIpAddress);
+                System.out.printf("\nPort du serveur : %d", serverPort);
+                System.out.printf("\nNom du groupe : \"%s\"", groupName);
+                System.out.printf("\nID du groupe : %d", groupId);
+                System.out.printf("\nStatut du groupe : \"%s\"", groupStatus);
+                System.out.printf("\nDescription du groupe : \"%s\"\n", groupDescription);
 
-            HomeController.getCurrentGroupSettingsStage().close();
-            HomeController.setCurrentGroupSettingsStage(null);
+                HomeController.getCurrentGroupSettingsStage().close();
+                HomeController.setCurrentGroupSettingsStage(null);
 
-            /* ---------------------------------------------------------- */
+                /* ---------------------------------------------------------- */
 
-            // adding new group visualizer
+                // adding new group visualizer/thumbnail
 
-            nbCreatedGroups += 1;
+                HomeController.setNbCreatedGroups(HomeController.getNbCreatedGroups() + 1);
+                HomeController.setNbGroupsYouAreStillPartOf(HomeController.getNbGroupsYouAreStillPartOf() + 1);
 
-            URL groupVisualizerURL = new File("src/main/pages/groupVisualizer.fxml").toURI().toURL();
-            FXMLLoader groupVisualizerLoader = new FXMLLoader(groupVisualizerURL);
-            GroupVisualizerController groupVisualizerController = new GroupVisualizerController(nbCreatedGroups);
-            groupVisualizerLoader.setController(groupVisualizerController);
-            AnchorPane groupVisualizerRoot = groupVisualizerLoader.load();
+                URL groupVisualizerURL = new File("src/main/pages/groupVisualizer.fxml").toURI().toURL();
+                FXMLLoader groupVisualizerLoader = new FXMLLoader(groupVisualizerURL);
+                GroupVisualizerController groupVisualizerController = new GroupVisualizerController(groupName, groupStatus, groupDescription);
+                groupVisualizerLoader.setController(groupVisualizerController);
+                Parent groupVisualizerRoot = groupVisualizerLoader.load();
 
-            // as an example for now --> the "lookup" method is OP
-            JFXButton openGroupButton = (JFXButton) groupVisualizerRoot.lookup("#openGroupButton");
-            openGroupButton.setOnAction(e -> System.out.printf("\nBouton \"OPEN\" appuye, groupNumber = %d", groupVisualizerController.getGroupNumber()));
+                JFXButton openGroupButton = (JFXButton) groupVisualizerRoot.lookup("#openGroupButton");
+                openGroupButton.setOnAction(e -> groupVisualizerController.actionOpenGroupButton());
 
-            JFXButton leaveGroupButton = (JFXButton) groupVisualizerRoot.lookup("#leaveGroupButton");
-            leaveGroupButton.setOnAction(e -> System.out.printf("\nBouton \"LEAVE\" appuye, groupNumber = %d", groupVisualizerController.getGroupNumber()));
+                JFXButton leaveGroupButton = (JFXButton) groupVisualizerRoot.lookup("#leaveGroupButton");
+                leaveGroupButton.setOnAction(e -> {
+                    try {
+                        groupVisualizerController.actionLeaveGroupButton();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                });
 
-            if (nbCreatedGroups == 1) {
-                discussionHBox = (HBox) MainController.getHomeScene().lookup("#discussionHBox");
-                discussionHBox.setSpacing(40); // 1 cm = 40 px, et scrollbarHeight = 18 px (d'où v2 = 58 = 40 + 18)
-                discussionHBox.setPadding(new Insets(40, 40, 58, 40));
+                // this seems to be the only way to get the **NOT-NULL** discussion HBox from the Home scene
+                if (HomeController.getNbCreatedGroups() == 1) {
+                    HomeController.setDiscussionHBox((HBox) MainController.getHomeScene().lookup("#discussionHBox"));
+                }
+
+                Label groupNameLabel = (Label) groupVisualizerRoot.lookup("#groupNameLabel");
+                groupNameLabel.setText(groupName);
+
+                Label groupStatusLabel = (Label) groupVisualizerRoot.lookup("#groupStatusLabel");
+                if (groupStatus.equals("public")) {
+                    groupStatusLabel.setText("Groupe public");
+                }
+                else if (groupStatus.equals("private")) {
+                    groupStatusLabel.setText("Groupe privé");
+                }
+
+                Label groupDescriptionLabel = (Label) groupVisualizerRoot.lookup("#groupDescriptionLabel");
+                groupDescriptionLabel.setText(groupDescription);
+
+                HomeController.getDiscussionHBox().getChildren().add(groupVisualizerRoot);
+
+                GroupVisualizerObject groupVisualizerObject = new GroupVisualizerObject(groupVisualizerController, groupVisualizerRoot);
+                HomeController.getGroupObjectList().add(groupVisualizerObject);
             }
 
-            discussionHBox.getChildren().add(groupVisualizerRoot);
+            else {
+                System.out.println("Parametrage invalide !");
+            }
         }
         catch (Exception e) {
+            parametersAreValid = false;
             System.out.println("Parametrage invalide !\n" + e);
         }
     }

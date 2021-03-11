@@ -47,7 +47,10 @@
                </children></HBox>
             <ScrollPane id="discussionScrollPane" fx:id="discussionScrollPane" hbarPolicy="AS_NEEDED" prefHeight="362.0" prefWidth="659.0" vbarPolicy="NEVER">
                <content>
-                  <HBox id="discussionHBox" fx:id="discussionHBox" opacity="0.62" prefHeight="362.0" prefWidth="659.0" />
+                  <HBox id="discussionHBox" fx:id="discussionHBox" opacity="0.62" prefHeight="362.0" prefWidth="659.0" spacing="40.0">
+                     <padding>
+                        <Insets bottom="58.0" left="40.0" right="40.0" top="40.0" />
+                     </padding></HBox>
                </content>
             </ScrollPane>
          </children>

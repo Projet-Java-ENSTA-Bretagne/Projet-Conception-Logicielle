@@ -132,3 +132,15 @@
     -fx-border-color: #8000ff; /* slightly faded blue-purple */
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
+
+/* ---------------- Group Visualizer page ---------------- */
+
+#yesButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#noButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}

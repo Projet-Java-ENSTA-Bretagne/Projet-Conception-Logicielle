@@ -1,4 +1,5 @@
 import javafx.fxml.FXML;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,15 +14,65 @@ import javafx.scene.image.Image;
 
 public class HomeController {
 
-    private static ArrayList<String> groupNameList = new ArrayList<>();
+    private static ArrayList<GroupVisualizerObject> groupObjectList = new ArrayList<>();
 
-    public static ArrayList<String> getGroupNameList() {
-        return groupNameList;
+    public static ArrayList<GroupVisualizerObject> getGroupObjectList() {
+        return groupObjectList;
+    }
+
+    public static void deleteGroupByName(String nameOfTheGroupToDelete) {
+        for (GroupVisualizerObject groupVisualizerObject : getGroupObjectList()) {
+            String groupName = groupVisualizerObject.getController().getGroupName();
+
+            if (groupName.equals(nameOfTheGroupToDelete)) {
+                Parent groupVisualizerRoot = groupVisualizerObject.getRoot();
+                discussionHBox.getChildren().remove(groupVisualizerRoot);
+                nbGroupsYouAreStillPartOf -= 1;
+                System.out.printf("\nNombre total de groupes restants : %d\n", nbGroupsYouAreStillPartOf);
+                return;
+            }
+        }
+
+        // just in case (but should theoretically never happen)
+        System.out.printf("\nThe group name \"%s\" does not exist !\n", nameOfTheGroupToDelete);
+    }
+
+    private static HBox discussionHBox;
+
+    public static HBox getDiscussionHBox() {
+        return discussionHBox;
+    }
+
+    public static void setDiscussionHBox(HBox newDiscussionHBox) {
+        discussionHBox = newDiscussionHBox;
+    }
+
+    // number of created **or joined** groups
+    private static int nbCreatedGroups;
+
+    public static int getNbCreatedGroups() {
+        return nbCreatedGroups;
+    }
+
+    public static void setNbCreatedGroups(int newNbCreatedGroups) {
+        nbCreatedGroups = newNbCreatedGroups;
+    }
+
+    private static int nbGroupsYouAreStillPartOf;
+
+    public static int getNbGroupsYouAreStillPartOf() {
+        return nbGroupsYouAreStillPartOf;
+    }
+
+    public static void setNbGroupsYouAreStillPartOf(int newNbGroupsYouAreStillPartOf) {
+        nbGroupsYouAreStillPartOf = newNbGroupsYouAreStillPartOf;
     }
 
     @FXML
     void initialize() {
-        System.out.println("init home controller");
+        System.out.println("Initializing home controller");
+        discussionHBox = null;
+        nbCreatedGroups = 0;
         currentGroupSettingsStage = null;
     }
 
@@ -29,7 +80,7 @@ public class HomeController {
 
     @FXML
     void actionDisconnectButton() {
-        System.out.println("deconnexion");
+        System.out.println("\nDeconnexion");
         MainController.switchToLoginScene();
     }
 
@@ -41,6 +92,16 @@ public class HomeController {
 
     public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
         currentGroupSettingsStage = groupSettingsStage;
+    }
+
+    private static Stage currentConfirmLeaveGroupStage;
+
+    public static Stage getCurrentConfirmLeaveGroupStage() {
+        return currentConfirmLeaveGroupStage;
+    }
+
+    public static void setCurrentConfirmLeaveGroupStage(Stage newCurrentConfirmLeaveGroupStage) {
+        currentConfirmLeaveGroupStage = newCurrentConfirmLeaveGroupStage;
     }
 
     @FXML
