@@ -54,6 +54,9 @@ public class Group {
     public String getMembers() {
         return members;
     }
+    public void setMembers(String value) {
+        this.members = value;
+    }
 
     public JSONObject toJSON() {
         JSONObject res = new JSONObject();

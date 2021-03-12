@@ -22,7 +22,7 @@ public class LoginProtocol implements IProtocol {
     public static String requestName = "login";
 
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
-        JSONObject data = request.getJSONObject("data");
+        JSONObject data = request.getJSONObject("args");
         String username = data.getString("username");
         String password = data.getString("password");
 
@@ -30,7 +30,7 @@ public class LoginProtocol implements IProtocol {
 
         // check if user exist
         List<User> matchingUsers = userDao.queryBuilder().where().
-                in("name", username).and().in("password", password).
+                eq("name", username).and().eq("password", password).
                 query();
 
         // if there is already a user

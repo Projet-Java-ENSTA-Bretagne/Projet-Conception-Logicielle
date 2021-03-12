@@ -1,5 +1,6 @@
 package server;
 
+import database.UserNotLoggedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -44,6 +45,9 @@ public class ServerThread extends Thread {
                 } catch (SQLException e) {
                     log.error(e);
                     ResponseBuilder.sendServerError(outStream, request, e.toString());
+                } catch (UserNotLoggedException e) {
+                    log.warn(e);
+                    ResponseBuilder.sendDeniedError(outStream, request, e.toString());
                 }
             }
 

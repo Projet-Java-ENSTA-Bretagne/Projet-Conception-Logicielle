@@ -2,6 +2,7 @@ package protocols;
 
 import com.j256.ormlite.dao.Dao;
 import database.SecurityManager;
+import database.UserNotLoggedException;
 import database.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,17 +22,17 @@ public class BlockUserProtocol implements IProtocol {
 
     public static String requestName = "blockUser";
 
-    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
-        JSONObject data = request.getJSONObject("data");
+    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException, UserNotLoggedException {
+        JSONObject data = request.getJSONObject("args");
         String id = data.getString("id");
 
         Dao<User, String> userDao = ((DatabaseContext) ctx).getDatabaseManager().getUserDao();
 
         // check if user exist
         List<User> matchingUsers = userDao.queryBuilder().
-                where().in("id", id).query();
+                where().eq("id", id).query();
 
-        // if there is already a user
+        // if the user doesn't exist
         if (matchingUsers.size() == 0) {
             ResponseBuilder.sendDeniedError(outStream, request, "There is no user with the id: " + id);
             return;

@@ -33,9 +33,11 @@ public class SecurityManager {
         return this.loggedIn;
     }
 
-    public User getLoggedUser() {
+    public User getLoggedUser() throws UserNotLoggedException {
         // security if the user is note logged in
-        if (!this.isUserLoggedIn()) { return null; }
+        if (!this.isUserLoggedIn()) {
+            throw new UserNotLoggedException("An user needs to be logged in in order to do that");
+        }
 
         return this.loggedUser;
     }
