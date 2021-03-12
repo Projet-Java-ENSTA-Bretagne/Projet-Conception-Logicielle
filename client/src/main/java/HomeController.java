@@ -26,22 +26,29 @@ public class HomeController {
 
     public static void deleteGroupByName(String nameOfTheGroupToDelete) {
         for (GroupVisualizerObject groupVisualizerObject : getGroupObjectList()) {
-            String groupName = groupVisualizerObject.getController().getGroupName();
+            GroupVisualizerController groupVisualizerController = groupVisualizerObject.getController();
+            String groupName = groupVisualizerController.getGroupName();
 
             if (groupName.equals(nameOfTheGroupToDelete)) {
                 Parent groupVisualizerRoot = groupVisualizerObject.getRoot();
                 discussionHBox.getChildren().remove(groupVisualizerRoot);
+
+                groupVisualizerController = null;
+                groupVisualizerRoot = null;
+                groupVisualizerObject = null;
+
                 nbGroupsYouAreStillPartOf -= 1;
                 System.out.println("");
                 log.debug("Vous venez de quitter le groupe \"" + groupName + "\"");
                 log.debug("Nombre total de groupes restants : " + nbGroupsYouAreStillPartOf + "\n");
+
                 return;
             }
         }
 
         // just in case (but should theoretically never happen)
         System.out.println("");
-        log.warn("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
+        log.error("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
     }
 
     private static HBox discussionHBox;
@@ -80,7 +87,9 @@ public class HomeController {
         log.info("Initializing home controller\n");
         discussionHBox = null;
         nbCreatedGroups = 0;
+        nbGroupsYouAreStillPartOf = 0;
         currentGroupSettingsStage = null;
+        currentConfirmLeaveGroupStage = null;
     }
 
     //

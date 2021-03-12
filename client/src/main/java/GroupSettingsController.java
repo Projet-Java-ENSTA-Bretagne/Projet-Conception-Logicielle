@@ -36,13 +36,13 @@ public class GroupSettingsController {
     @FXML
     void actionJoinGroupRadioButton() {
         setOperationType("joinGroup");
-        log.debug(operationType);
+        log.debug("Operation type : " + operationType);
     }
 
     @FXML
     void actionCreateGroupRadioButton() {
         setOperationType("createGroup");
-        log.debug(operationType);
+        log.debug("Operation type : " + operationType);
     }
 
     /* -------------------------------------------- */
