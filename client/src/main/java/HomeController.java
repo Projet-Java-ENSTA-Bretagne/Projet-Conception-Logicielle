@@ -1,3 +1,5 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -9,10 +11,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.io.File;
 import java.util.ArrayList;
-
 import javafx.scene.image.Image;
 
 public class HomeController {
+
+    // Logging
+    private static final Logger log = LogManager.getLogger(HomeController.class);
 
     private static ArrayList<GroupVisualizerObject> groupObjectList = new ArrayList<>();
 
@@ -28,13 +32,16 @@ public class HomeController {
                 Parent groupVisualizerRoot = groupVisualizerObject.getRoot();
                 discussionHBox.getChildren().remove(groupVisualizerRoot);
                 nbGroupsYouAreStillPartOf -= 1;
-                System.out.printf("\nNombre total de groupes restants : %d\n", nbGroupsYouAreStillPartOf);
+                System.out.println("");
+                log.debug("Vous venez de quitter le groupe \"" + groupName + "\"");
+                log.debug("Nombre total de groupes restants : " + nbGroupsYouAreStillPartOf + "\n");
                 return;
             }
         }
 
         // just in case (but should theoretically never happen)
-        System.out.printf("\nThe group name \"%s\" does not exist !\n", nameOfTheGroupToDelete);
+        System.out.println("");
+        log.warn("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
     }
 
     private static HBox discussionHBox;
@@ -70,7 +77,7 @@ public class HomeController {
 
     @FXML
     void initialize() {
-        System.out.println("Initializing home controller");
+        log.info("Initializing home controller\n");
         discussionHBox = null;
         nbCreatedGroups = 0;
         currentGroupSettingsStage = null;
@@ -80,7 +87,7 @@ public class HomeController {
 
     @FXML
     void actionDisconnectButton() {
-        System.out.println("\nDeconnexion");
+        log.info("Deconnexion");
         MainController.switchToLoginScene();
     }
 
@@ -106,7 +113,7 @@ public class HomeController {
 
     @FXML
     void joinOrCreateGroup() throws IOException {
-        System.out.println("\nVous venez d'appuyer sur le bouton \"Join or create group\"");
+        log.info("Vous venez d'appuyer sur le bouton \"Join or create group\"");
 
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);

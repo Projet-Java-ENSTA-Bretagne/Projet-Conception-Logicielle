@@ -1,3 +1,5 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
@@ -12,9 +14,12 @@ import java.util.ArrayList;
 
 public class GroupSettingsController {
 
+    // Logging
+    private final Logger log = LogManager.getLogger(GroupSettingsController.class);
+
     @FXML
     void initialize() {
-        System.out.println("Initializing group settings controller");
+        log.info("Initializing group settings controller");
 
         operationType = "joinGroup";
         groupStatus = "public";
@@ -31,13 +36,13 @@ public class GroupSettingsController {
     @FXML
     void actionJoinGroupRadioButton() {
         setOperationType("joinGroup");
-        System.out.println(operationType);
+        log.debug(operationType);
     }
 
     @FXML
     void actionCreateGroupRadioButton() {
         setOperationType("createGroup");
-        System.out.println(operationType);
+        log.debug(operationType);
     }
 
     /* -------------------------------------------- */
@@ -73,13 +78,13 @@ public class GroupSettingsController {
     @FXML
     void actionPublicRadioButton() {
         setGroupStatus("public");
-        System.out.println(groupStatus);
+        log.debug("Group status : " + groupStatus);
     }
 
     @FXML
     void actionPrivateRadioButton() {
         setGroupStatus("private");
-        System.out.println(groupStatus);
+        log.debug("Group status : " + groupStatus);
     }
 
     /* -------------------------------------------- */
@@ -91,7 +96,7 @@ public class GroupSettingsController {
 
     @FXML
     void actionDoneButton() {
-        System.out.println("\nVous venez d'appuyer sur le bouton \"DONE\"");
+        log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
 
         boolean parametersAreValid = true;
 
@@ -120,7 +125,7 @@ public class GroupSettingsController {
                     String otherGroupName = groupVisualizerObject.getController().getGroupName();
                     if (groupName.equals(otherGroupName)) {
                         parametersAreValid = false;
-                        System.out.printf("\nLe nom de groupe \"%s\" existe deja !\n", groupName);
+                        log.error("Le nom de groupe \"" + groupName + "\" existe deja !\n");
                         break;
                     }
                 }
@@ -133,21 +138,22 @@ public class GroupSettingsController {
 
             String wholeDescription = groupDescriptionTextField.getText();
             if ((wholeDescription != null) && (wholeDescription.length() > 0)) {
-                // the group description has to be less than 40 characters
-                groupDescription = wholeDescription.substring(0, Math.min(wholeDescription.length(), 40));
+                // the group description has to be less than 30 characters
+                groupDescription = wholeDescription.substring(0, Math.min(wholeDescription.length(), 30));
             }
             else {
                 groupDescription = "[Aucune description]";
             }
 
             if (parametersAreValid) {
-                System.out.printf("\nType de l'operation : \"%s\"", operationType);
-                System.out.printf("\nAdresse IP du serveur : \"%s\"", serverIpAddress);
-                System.out.printf("\nPort du serveur : %d", serverPort);
-                System.out.printf("\nNom du groupe : \"%s\"", groupName);
-                System.out.printf("\nID du groupe : %d", groupId);
-                System.out.printf("\nStatut du groupe : \"%s\"", groupStatus);
-                System.out.printf("\nDescription du groupe : \"%s\"\n", groupDescription);
+                System.out.println("");
+                log.debug("Type de l'operation : \"" + operationType + "\"");
+                log.debug("Adresse IP du serveur : \"" + serverIpAddress + "\"");
+                log.debug("Port du serveur : " + serverPort);
+                log.debug("Nom du groupe : \"" + groupName + "\"");
+                log.debug("ID du groupe : " + groupId);
+                log.debug("Statut du groupe : \"" + groupStatus + "\"");
+                log.debug("Description du groupe : \"" + groupDescription + "\"\n");
 
                 HomeController.getCurrentGroupSettingsStage().close();
                 HomeController.setCurrentGroupSettingsStage(null);
@@ -161,7 +167,8 @@ public class GroupSettingsController {
 
                 URL groupVisualizerURL = new File("src/main/pages/groupVisualizer.fxml").toURI().toURL();
                 FXMLLoader groupVisualizerLoader = new FXMLLoader(groupVisualizerURL);
-                GroupVisualizerController groupVisualizerController = new GroupVisualizerController(groupName, groupStatus, groupDescription);
+                GroupVisualizerController groupVisualizerController = new GroupVisualizerController(groupName, groupStatus, groupDescription,
+                                                                          operationType, serverIpAddress, serverPort, groupId);
                 groupVisualizerLoader.setController(groupVisualizerController);
                 Parent groupVisualizerRoot = groupVisualizerLoader.load();
 
@@ -200,15 +207,25 @@ public class GroupSettingsController {
 
                 GroupVisualizerObject groupVisualizerObject = new GroupVisualizerObject(groupVisualizerController, groupVisualizerRoot);
                 HomeController.getGroupObjectList().add(groupVisualizerObject);
+
+                System.out.println("");
+                if (operationType.equals("joinGroup")) {
+                    log.debug("Vous venez de rejoindre le groupe \"" + groupName + "\" !\n");
+                }
+                else if (operationType.equals("createGroup")) {
+                    log.debug("Vous venez de creer le groupe \"" + groupName + "\" !\n");
+                }
             }
 
             else {
-                System.out.println("Parametrage invalide !");
+                System.out.println("");
+                log.error("Parametrage invalide !\n");
             }
         }
         catch (Exception e) {
-            parametersAreValid = false;
-            System.out.println("Parametrage invalide !\n" + e);
+            parametersAreValid = false; // just in case
+            System.out.println("");
+            log.error("Parametrage invalide ! Erreur : " + e + "\n");
         }
     }
 

@@ -126,7 +126,7 @@
                         <Insets right="39.0" />
                      </padding>
                   </JFXTextField>
-                  <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 40 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 30 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <padding>
                         <Insets right="39.0" />
                      </padding>

@@ -1,3 +1,5 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,6 +10,9 @@ import java.io.File;
 import javafx.scene.image.Image;
 
 public class MainController {
+
+    // Logging
+    private static final Logger log = LogManager.getLogger(MainController.class);
 
     private static Stage mainStage;
     private static Scene loginScene;
@@ -61,7 +66,7 @@ public class MainController {
         }
 
         else {
-            System.out.println("Already in login scene");
+            log.warn("Already in login scene !");
         }
     }
 
@@ -75,7 +80,7 @@ public class MainController {
         }
 
         else {
-            System.out.println("Already in home scene");
+            log.warn("Already in home scene !");
         }
     }
 

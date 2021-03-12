@@ -1,12 +1,18 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 
 public class LoginController {
 
+    // Logging
+    private static final Logger log = LogManager.getLogger(LoginController.class);
+
     @FXML
     void initialize() {
-        System.out.println("Initializing login controller");
+        System.out.println("");
+        log.info("Initializing login controller");
 
         nbSuccessfulLogins = 0;
 
@@ -75,16 +81,18 @@ public class LoginController {
                 setPassword(currentPasswordText);
                 allowedToChangePassword = false;
 
-                System.out.printf("\nNew username : \"%s\"", username);
-                System.out.printf("\nNew password : \"%s\"\n", password);
+                System.out.println("\n");
+                log.debug("New username : \"" + username + "\"");
+                log.debug("New password : \"" + password + "\"\n");
             }
 
-            System.out.println("\nWelcome !");
+            log.info("Welcome !");
             MainController.switchToHomeScene();
         }
 
         else {
-            System.out.println("\nInvalid username or password. Please try again");
+            System.out.println("\n");
+            log.error("Invalid username or password. Please try again !\n");
         }
 
         System.out.flush();
