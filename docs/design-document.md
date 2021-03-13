@@ -108,7 +108,8 @@ Une fois loggé, l'id de l'utilisateur ne transite plus, il sera associé au soc
 ```json
 {
     "command": "getUserByID",
-    "args": ["uuid"]
+    "args": ["uuid"],
+    "token": "aedfslsfgsdfgdg.skfdjflsgjz.zezasmfgld"
 }
 ```
 

@@ -1,19 +1,15 @@
 package protocols;
 
-import com.j256.ormlite.dao.Dao;
-import database.entities.User;
+import database.SecurityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import server.DatabaseContext;
 import server.IContext;
 import server.ResponseBuilder;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
 
 public class CheckTokenProtocol implements IProtocol {
 
@@ -41,6 +37,14 @@ public class CheckTokenProtocol implements IProtocol {
             return;
         }
 
-        ResponseBuilder.forRequest(request, outStream).ok("Token valid");
+        if (!SecurityManager.getInstance().isTokenValid(token)) {
+            ResponseBuilder.forRequest(request, outStream).tokenError("Token not valid");
+            return;
+        }
+
+        JSONObject data = new JSONObject();
+        data.put("message", "The token is valid");
+        data.put("token", token);
+        ResponseBuilder.forRequest(request, outStream).okWithData(data);
     }
 }

@@ -6,6 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import database.entities.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import server.ConfigurationManagement;
 import server.ServerConfiguration;
 
@@ -13,6 +16,9 @@ public class SecurityManager {
 
     private boolean loggedIn = false;
     private User loggedUser;
+
+    /* Logger */
+    Logger log = LogManager.getLogger(SecurityManager.class);
 
     /** private constructor */
     private SecurityManager() {}
@@ -66,21 +72,32 @@ public class SecurityManager {
         }
     }
 
-    public DecodedJWT checkToken(String token)
-    {
+    public DecodedJWT decodeJWT(String token) throws JWTVerificationException {
+        ConfigurationManagement configurationManagement = new ConfigurationManagement();
+        ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
+        Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getTokenKey());
+
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("ensta-bretagne")
+                .build();
+
+        return verifier.verify(token);
+    }
+
+    public boolean isTokenValid(String token) {
         try {
-            ConfigurationManagement configurationManagement = new ConfigurationManagement();
-            ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
-            Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getTokenKey());
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("auth0")
-                    .build();
-            return verifier.verify(token);
-        }
-        catch (JWTVerificationException exception)
-        {
-            exception.printStackTrace();
-            return null;
+            // decoding the token
+            DecodedJWT decodedJWT = decodeJWT(token);
+
+            JSONObject payload = new JSONObject(decodedJWT.getPayload());
+            String userID = payload.getString("user_id");
+
+            // TODO: add other checks
+
+            return true;
+        } catch (JWTVerificationException e) {
+            log.warn(e.toString());
+            return false;
         }
     }
 }
