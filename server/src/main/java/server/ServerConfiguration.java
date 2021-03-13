@@ -6,18 +6,21 @@ public class ServerConfiguration {
     private String host;
     private int port;
     private int maxClients;
+    private String masterKey;
 
-    public ServerConfiguration(String host, int port, int maxClients) {
+    public ServerConfiguration(String host, int port, int maxClients, String masterKey) {
         this.host = host;
         this.maxClients = maxClients;
         this.port = port;
+        this.masterKey = masterKey;
     }
 
     public static ServerConfiguration fromJsonObject(JSONObject jsonObject) {
         return new ServerConfiguration(
                 jsonObject.getString("host"),
                 jsonObject.getInt("port"),
-                jsonObject.getInt("maxClients")
+                jsonObject.getInt("maxClients"),
+                jsonObject.getString("masterKey")
         );
     }
 
@@ -43,6 +46,14 @@ public class ServerConfiguration {
 
     public void setMaxClients(int maxClients) {
         this.maxClients = maxClients;
+    }
+
+    public String getMasterKey() {
+        return masterKey;
+    }
+
+    public void setMasterKey(String masterKey) {
+        this.masterKey = masterKey;
     }
 
     @Override

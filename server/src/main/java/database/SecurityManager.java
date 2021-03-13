@@ -1,6 +1,13 @@
 package database;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import database.entities.User;
+import server.ConfigurationManagement;
+import server.ServerConfiguration;
 
 public class SecurityManager {
 
@@ -56,6 +63,24 @@ public class SecurityManager {
         // comparing roles to check if the user can do it
         if (this.loggedUser.getRole().compareTo(requiredRole) < 0) {
             throw new UnauthorizedException("Role not high enough to perform action");
+        }
+    }
+
+    public DecodedJWT checkToken(String token)
+    {
+        try {
+            ConfigurationManagement configurationManagement = new ConfigurationManagement();
+            ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
+            Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getMasterKey());
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("auth0")
+                    .build();
+            return verifier.verify(token);
+        }
+        catch (JWTVerificationException exception)
+        {
+            exception.printStackTrace();
+            return null;
         }
     }
 }

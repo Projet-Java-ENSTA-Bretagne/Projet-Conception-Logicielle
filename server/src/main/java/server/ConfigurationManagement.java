@@ -40,11 +40,16 @@ public class ConfigurationManagement {
 
     public void initConfigFile()
     {
-        this.serverConfiguration = new ServerConfiguration("localhost", 6666, 10);
+        this.serverConfiguration = new ServerConfiguration(
+                "localhost",
+                6666,
+                10,
+                "e91b4dde46300f3afdbf72128cc5258f24e56a3f24b63519b4fb7a0a24f96488226f7739633857af76e6ac30bae59972ea16d2e54da06b11c28b1465ece201e5");
         jsonObject = new JSONObject();
         jsonObject.put("maxClients", serverConfiguration.getMaxClients());
         jsonObject.put("port", serverConfiguration.getPort());
         jsonObject.put("host", serverConfiguration.getHost());
+        jsonObject.put("masterKey", serverConfiguration.getMasterKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(this.configurationPath);
@@ -118,6 +123,7 @@ public class ConfigurationManagement {
         jsonObject.put("maxClients", serverConfiguration.getMaxClients());
         jsonObject.put("port", serverConfiguration.getPort());
         jsonObject.put("host", serverConfiguration.getHost());
+        jsonObject.put("masterKey",serverConfiguration.getMasterKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(this.configurationPath);
@@ -138,6 +144,7 @@ public class ConfigurationManagement {
         jsonData.put("maxClients", serverConfiguration.getMaxClients());
         jsonData.put("port", serverConfiguration.getPort());
         jsonData.put("host", serverConfiguration.getHost());
+        jsonData.put("masterKey", serverConfiguration.getMasterKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(filePath);
