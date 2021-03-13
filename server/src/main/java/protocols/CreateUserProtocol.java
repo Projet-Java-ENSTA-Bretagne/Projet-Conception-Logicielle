@@ -8,6 +8,7 @@ import database.DatabaseManager;
 import database.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bouncycastle.util.encoders.Hex;
 import org.json.JSONObject;
 import server.DatabaseContext;
 import server.IContext;
@@ -15,6 +16,9 @@ import server.ResponseBuilder;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -77,10 +81,21 @@ public class CreateUserProtocol implements IProtocol {
 
 
         // then we create the new user
-        User newUser = new User(uuid, username, password, role, "");
-        userDao.create(newUser);
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            String sha512pass = new String(Hex.encode(hash));
 
-        // then tell the user everything went ok
-        ResponseBuilder.forRequest(request, outStream).ok("User successfully created");
+            User newUser = new User(uuid, username, sha512pass, role, "");
+            userDao.create(newUser);
+
+            // then tell the user everything went ok
+            ResponseBuilder.forRequest(request, outStream).ok("User successfully created");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            ResponseBuilder.forRequest(request, outStream).serverError("Encoding error in SHA-512");
+        }
+
+
     }
 }
