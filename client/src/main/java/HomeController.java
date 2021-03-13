@@ -18,20 +18,22 @@ public class HomeController {
     // Logging
     private static final Logger log = LogManager.getLogger(HomeController.class);
 
-    private static ArrayList<GroupVisualizerObject> groupObjectList = new ArrayList<>();
+    private static ArrayList<GroupVisualizerObject> groupVisualizerObjectList;
 
-    public static ArrayList<GroupVisualizerObject> getGroupObjectList() {
-        return groupObjectList;
+    public static ArrayList<GroupVisualizerObject> getGroupVisualizerObjectList() {
+        return groupVisualizerObjectList;
     }
 
     public static void deleteGroupByName(String nameOfTheGroupToDelete) {
-        for (GroupVisualizerObject groupVisualizerObject : getGroupObjectList()) {
+        for (GroupVisualizerObject groupVisualizerObject : groupVisualizerObjectList) {
             GroupVisualizerController groupVisualizerController = groupVisualizerObject.getController();
             String groupName = groupVisualizerController.getGroupName();
 
             if (groupName.equals(nameOfTheGroupToDelete)) {
                 Parent groupVisualizerRoot = groupVisualizerObject.getRoot();
                 discussionHBox.getChildren().remove(groupVisualizerRoot);
+
+                groupVisualizerObjectList.remove(groupVisualizerObject);
 
                 groupVisualizerController = null;
                 groupVisualizerRoot = null;
@@ -86,6 +88,7 @@ public class HomeController {
     void initialize() {
         log.info("Initializing home controller\n");
         discussionHBox = null;
+        groupVisualizerObjectList = new ArrayList<>();
         nbCreatedGroups = 0;
         nbGroupsYouAreStillPartOf = 0;
         currentGroupSettingsStage = null;

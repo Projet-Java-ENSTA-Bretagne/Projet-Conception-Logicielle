@@ -120,7 +120,7 @@ public class GroupSettingsController {
                 groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 15));
 
                 // here we check if the group name already exists
-                ArrayList<GroupVisualizerObject> groupObjectList = HomeController.getGroupObjectList();
+                ArrayList<GroupVisualizerObject> groupObjectList = HomeController.getGroupVisualizerObjectList();
                 for (GroupVisualizerObject groupVisualizerObject : groupObjectList) {
                     String otherGroupName = groupVisualizerObject.getController().getGroupName();
                     if (groupName.equals(otherGroupName)) {
@@ -206,7 +206,7 @@ public class GroupSettingsController {
                 HomeController.getDiscussionHBox().getChildren().add(groupVisualizerRoot);
 
                 GroupVisualizerObject groupVisualizerObject = new GroupVisualizerObject(groupVisualizerController, groupVisualizerRoot);
-                HomeController.getGroupObjectList().add(groupVisualizerObject);
+                HomeController.getGroupVisualizerObjectList().add(groupVisualizerObject);
 
                 System.out.println("");
                 if (operationType.equals("joinGroup")) {
