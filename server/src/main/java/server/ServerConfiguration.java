@@ -6,13 +6,13 @@ public class ServerConfiguration {
     private String host;
     private int port;
     private int maxClients;
-    private String masterKey;
+    private String tokenKey;
 
     public ServerConfiguration(String host, int port, int maxClients, String masterKey) {
         this.host = host;
         this.maxClients = maxClients;
         this.port = port;
-        this.masterKey = masterKey;
+        this.tokenKey = masterKey;
     }
 
     public static ServerConfiguration fromJsonObject(JSONObject jsonObject) {
@@ -20,7 +20,7 @@ public class ServerConfiguration {
                 jsonObject.getString("host"),
                 jsonObject.getInt("port"),
                 jsonObject.getInt("maxClients"),
-                jsonObject.getString("masterKey")
+                jsonObject.getString("tokenKey")
         );
     }
 
@@ -48,12 +48,12 @@ public class ServerConfiguration {
         this.maxClients = maxClients;
     }
 
-    public String getMasterKey() {
-        return masterKey;
+    public String getTokenKey() {
+        return tokenKey;
     }
 
-    public void setMasterKey(String masterKey) {
-        this.masterKey = masterKey;
+    public void setTokenKey(String tokenKey) {
+        this.tokenKey = tokenKey;
     }
 
     @Override

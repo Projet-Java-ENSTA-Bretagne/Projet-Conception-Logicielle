@@ -71,7 +71,7 @@ public class SecurityManager {
         try {
             ConfigurationManagement configurationManagement = new ConfigurationManagement();
             ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
-            Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getMasterKey());
+            Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getTokenKey());
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("auth0")
                     .build();

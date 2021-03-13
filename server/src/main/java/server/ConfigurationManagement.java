@@ -49,7 +49,7 @@ public class ConfigurationManagement {
         jsonObject.put("maxClients", serverConfiguration.getMaxClients());
         jsonObject.put("port", serverConfiguration.getPort());
         jsonObject.put("host", serverConfiguration.getHost());
-        jsonObject.put("masterKey", serverConfiguration.getMasterKey());
+        jsonObject.put("tokenKey", serverConfiguration.getTokenKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(this.configurationPath);
@@ -123,7 +123,7 @@ public class ConfigurationManagement {
         jsonObject.put("maxClients", serverConfiguration.getMaxClients());
         jsonObject.put("port", serverConfiguration.getPort());
         jsonObject.put("host", serverConfiguration.getHost());
-        jsonObject.put("masterKey",serverConfiguration.getMasterKey());
+        jsonObject.put("tokenKey",serverConfiguration.getTokenKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(this.configurationPath);
@@ -144,7 +144,7 @@ public class ConfigurationManagement {
         jsonData.put("maxClients", serverConfiguration.getMaxClients());
         jsonData.put("port", serverConfiguration.getPort());
         jsonData.put("host", serverConfiguration.getHost());
-        jsonData.put("masterKey", serverConfiguration.getMasterKey());
+        jsonData.put("tokenKey", serverConfiguration.getTokenKey());
         FileWriter writer = null;
         try {
             writer = new FileWriter(filePath);
