@@ -11,7 +11,7 @@ client.connect((host, port))
 
 req = """{
           'command': 'getUserByID',
-          'data': {
+          'args': {
               'id': '45fabc9a-83f2-4069-83ad-529740094efc'
           }
       }"""

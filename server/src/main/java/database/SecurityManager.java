@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import server.ConfigurationManagement;
 import server.ServerConfiguration;
 
+import java.util.Base64;
+
 public class SecurityManager {
 
     private boolean loggedIn = false;
@@ -86,17 +88,17 @@ public class SecurityManager {
 
     public boolean isTokenValid(String token) {
         try {
-            // decoding the token
+            // testing the validity of the token
             DecodedJWT decodedJWT = decodeJWT(token);
 
-            JSONObject payload = new JSONObject(decodedJWT.getPayload());
-            String userID = payload.getString("user_id");
+            String payload = new String(Base64.getDecoder().decode(decodedJWT.getPayload()));
+            log.info(payload);
 
             // TODO: add other checks
 
             return true;
         } catch (JWTVerificationException e) {
-            log.warn(e.toString());
+            log.warn("Error while verifying the token: " + e.toString());
             return false;
         }
     }
