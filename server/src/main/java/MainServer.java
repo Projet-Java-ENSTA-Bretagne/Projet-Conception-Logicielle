@@ -28,7 +28,7 @@ public class MainServer {
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
-        protocols.put(PingProtocol.requestName,              new PingProtocol());
+        protocols.put(PingProtocol.requestName,                 new PingProtocol());
         protocols.put(LoginProtocol.requestName,                new LoginProtocol());
         protocols.put(CreateGroupProtocol.requestName,          new CreateGroupProtocol());
         protocols.put(SendGroupProtocol.requestName,            new SendGroupProtocol());
@@ -38,6 +38,7 @@ public class MainServer {
         protocols.put(CreateUserProtocol.requestName,           new CreateUserProtocol());
         protocols.put(RemoveUserFromGroupProtocol.requestName,  new RemoveUserFromGroupProtocol());
         protocols.put(BlockUserProtocol.requestName,            new BlockUserProtocol());
+        protocols.put(CheckTokenProtocol.requestName,           new CheckTokenProtocol());
 
         TCPServer server = new TCPServer(new DatabaseContext(db), protocols, serverConfig.getPort());
         server.start();

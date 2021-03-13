@@ -103,6 +103,7 @@ Une fois loggé, l'id de l'utilisateur ne transite plus, il sera associé au soc
 | createUser          | username, mdp_hashed           | Crée un utilisateur à partir d'un nom et d'un mot de passe hashé |
 | removeUserFromGroup | group_id, user_id              | Retire un utilisateur d'un groupe                            |
 | blockUser           | user_id                        | Ajoute un utilisateur à une blocklist                        |
+| checkToken          |                                | Recupère le token envoyé et vérifie si il est bien valide    |
 
 ```json
 {
