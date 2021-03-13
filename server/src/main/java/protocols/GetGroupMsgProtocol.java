@@ -54,7 +54,7 @@ public class GetGroupMsgProtocol implements IProtocol {
 
         if(matchingGroups.size() == 0)
         {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no group with the ID: " + group_id);
+            ResponseBuilder.forRequest(request, outStream).notFoundError("There is no group with the ID: " + group_id);
             return;
         }
 
@@ -87,7 +87,6 @@ public class GetGroupMsgProtocol implements IProtocol {
 
         System.out.println(jsonObject.toString(2));
 
-        outStream.println(ResponseBuilder.buildData(
-                request, ResponseBuilder.StatusCode.OK, jsonObject));
+        ResponseBuilder.forRequest(request, outStream).okWithData(jsonObject);
     }
 }

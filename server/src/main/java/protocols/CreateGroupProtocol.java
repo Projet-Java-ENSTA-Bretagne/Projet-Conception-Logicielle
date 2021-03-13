@@ -57,7 +57,8 @@ public class CreateGroupProtocol implements IProtocol {
 
         // if there is already a group
         if(matchingGroups.size() > 0) {
-            ResponseBuilder.sendDeniedError(outStream,request,"There is already a group with the name : " + groupname);
+            ResponseBuilder.forRequest(request, outStream).
+                    deniedError("There is already a group with the name : " + groupname);
             return;
         }
 
@@ -77,7 +78,6 @@ public class CreateGroupProtocol implements IProtocol {
         groupDao.create(newGroup);
 
         // then tell the user everything went ok
-        outStream.println(ResponseBuilder.buildMessage(request, ResponseBuilder.StatusCode.OK, "Group successfully created"));
-
+        ResponseBuilder.forRequest(request, outStream).ok("Group successfully created");
     }
 }

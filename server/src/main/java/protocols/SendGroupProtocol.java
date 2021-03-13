@@ -38,7 +38,7 @@ public class SendGroupProtocol implements IProtocol {
 
         // check that the group already exists
         if (matchingGroups.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no group with the id: " + groupId);
+            ResponseBuilder.forRequest(request, outStream).deniedError("There is no group with the id: " + groupId);
             return;
         }
 
@@ -55,6 +55,6 @@ public class SendGroupProtocol implements IProtocol {
         messagesDao.create(newMsg);
 
         // telling the user that everything went fine
-        outStream.println(ResponseBuilder.buildMessage(request, ResponseBuilder.StatusCode.OK, "Message successfully sent with id: " + newMsg.getId()));
+        ResponseBuilder.forRequest(request, outStream).ok("Message successfully sent with id: " + newMsg.getId());
     }
 }

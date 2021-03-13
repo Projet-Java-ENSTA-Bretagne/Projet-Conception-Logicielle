@@ -38,13 +38,16 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
         List<Group> matchingGroups = groupDao.queryBuilder().
                 where().eq("id", groupId).query();
 
+        // Creating the response builder
+        ResponseBuilder resBuilder = ResponseBuilder.forRequest(request, outStream);
+
         // if the user doesn't exist
         if (matchingUsers.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no user with the id: " + userId);
+            resBuilder.notFoundError("There is no user with the id: " + userId);
             return;
         }
         if (matchingGroups.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no group with the id: " + groupId);
+            resBuilder.notFoundError("There is no group with the id: " + groupId);
             return;
         }
 
@@ -56,7 +59,7 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
 
         // if the user wasn't in the group
         if (!removed) {
-            ResponseBuilder.sendDeniedError(outStream, request, "The user " + userId + " doesn't belong to the group " + groupId);
+            resBuilder.deniedError("The user " + userId + " doesn't belong to the group " + groupId);
             return;
         }
 
@@ -64,6 +67,6 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
         groupToChange.setMembers(String.join(";", membersList));
 
         // say to the user that everything went fine
-        outStream.println(ResponseBuilder.buildMessage(request, ResponseBuilder.StatusCode.OK, "The user " + userId + " has been successfully removed from the group " + groupId + "."));
+        resBuilder.ok("The user " + userId + " has been successfully removed from the group " + groupId + ".");
     }
 }

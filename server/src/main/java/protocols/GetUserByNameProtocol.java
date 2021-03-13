@@ -50,13 +50,12 @@ public class GetUserByNameProtocol implements IProtocol {
 
         // if there is already a user
         if (matchingUsers.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no user with the name: " + name);
+            ResponseBuilder.forRequest(request, outStream).notFoundError("There is no user with the name: " + name);
             return;
         }
 
         User matchedUser = matchingUsers.get(0);
         // then tell the user everything went ok and sending the data
-        outStream.println(ResponseBuilder.buildData(
-                request, ResponseBuilder.StatusCode.OK, matchedUser.toJSON()));
+        ResponseBuilder.forRequest(request, outStream).okWithData(matchedUser.toJSON());
     }
 }

@@ -126,6 +126,7 @@ Codes status :
 *   OK : succès
 *   DENIED : réfusé (permissions, user deja existant, blacklisté…)
 *   NOT_FOUND : user/group id non trouvé
+*   TOKEN_ERROR : utilisateur non loggé, mauvais token (expiré ou altéré)
 *   SERVER_ERROR : (try catch) + msg
 
 ```json
@@ -167,3 +168,32 @@ Codes status :
 *   isPM: boolean
 *   creation_date: date
 *   members: []uuid
+
+## Sécurité
+
+### Authentification des commandes
+
+En plus d'avoir un socket ouvert entre le client et le serveur, les commandes seront authentifiées à l'aide d'un token JWT (https://jwt.io).
+
+Exemple de token : 
+
+```jwt
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+```
+
+La première partie est le header, la deuxième est le payload, la 3e est la signature.
+
+Pour encoder/decoder/vérifier l'authenticité des token on va utiliser la bibliothèque "java-jwt" par "auth0".
+
+### Séquence de connexion et requête
+
+```sequence
+Client -> Server: Login\n(username, hashed_mdp)
+Note over Server: Check login/pass\ncombo
+Server -> Client: Results + Token
+Note over Client: ...
+Client -> Server: Makes a request\n(token + args)
+Note over Server: Checks token\nvalidity
+Server -> Client: Returns the result
+```
+

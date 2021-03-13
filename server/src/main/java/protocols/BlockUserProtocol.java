@@ -34,7 +34,7 @@ public class BlockUserProtocol implements IProtocol {
 
         // if the user doesn't exist
         if (matchingUsers.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is no user with the id: " + id);
+            ResponseBuilder.forRequest(request, outStream).notFoundError("There is no user with the id: " + id);
             return;
         }
 
@@ -44,6 +44,6 @@ public class BlockUserProtocol implements IProtocol {
         userDao.update(currentUser);
 
         // say to the user that everything went fine
-        outStream.println(ResponseBuilder.buildMessage(request, ResponseBuilder.StatusCode.OK, "The user " + id + " has been successfully blocked."));
+        ResponseBuilder.forRequest(request, outStream).ok("The user " + id + " has been successfully blocked.");
     }
 }

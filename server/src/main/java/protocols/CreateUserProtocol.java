@@ -58,7 +58,7 @@ public class CreateUserProtocol implements IProtocol {
 
         // if there is already a user
         if (matchingUsers.size() > 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "There is already a user with the name : " + username);
+            ResponseBuilder.forRequest(request, outStream).deniedError("There is already a user with the name : " + username);
             return;
         }
 
@@ -81,6 +81,6 @@ public class CreateUserProtocol implements IProtocol {
         userDao.create(newUser);
 
         // then tell the user everything went ok
-        outStream.println(ResponseBuilder.buildMessage(request, ResponseBuilder.StatusCode.OK, "User successfully created"));
+        ResponseBuilder.forRequest(request, outStream).ok("User successfully created");
     }
 }

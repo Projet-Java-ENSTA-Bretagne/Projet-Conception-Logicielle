@@ -15,12 +15,24 @@ import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ *
+ */
 public class LoginProtocol implements IProtocol {
 
+    /* The protocol logger instance */
     private final Logger log = LogManager.getLogger(LoginProtocol.class);
 
     public static String requestName = "login";
 
+    /**
+     *
+     * @param ctx Le contexte du serveur
+     * @param inStream Le stream d'entrée client
+     * @param outStream Le stream de sortie vers le client
+     * @param request La requête émise par le client
+     * @throws SQLException Retourne une erreur sql si il y a un soucis avec la base de données
+     */
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
         JSONObject data = request.getJSONObject("args");
         String username = data.getString("username");
@@ -35,14 +47,13 @@ public class LoginProtocol implements IProtocol {
 
         // if there is already a user
         if (matchingUsers.size() == 0) {
-            ResponseBuilder.sendDeniedError(outStream, request, "Wrong username/password combinaison");
+            ResponseBuilder.forRequest(request, outStream).deniedError("Wrong username/password combinaison");
             return;
         }
 
         User matchedUser = matchingUsers.get(0);
         SecurityManager.getInstance().setLoggedUser(matchedUser);
         // then tell the user everything went ok and sending the data
-        outStream.println(ResponseBuilder.buildMessage(
-                request, ResponseBuilder.StatusCode.OK, "Successfully logged in."));
+        ResponseBuilder.forRequest(request, outStream).ok("Successfully logged in.");
     }
 }

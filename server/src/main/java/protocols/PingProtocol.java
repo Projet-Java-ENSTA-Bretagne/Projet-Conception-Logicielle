@@ -15,8 +15,7 @@ public class PingProtocol implements IProtocol {
     public static String requestName = "PING";
 
     public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) {
-        String returnValue = ResponseBuilder.buildMessage(
-                request,
+        String returnValue = ResponseBuilder.forRequest(request, outStream).buildMessage(
                 ResponseBuilder.StatusCode.OK,
                 "PONG").toString();
 

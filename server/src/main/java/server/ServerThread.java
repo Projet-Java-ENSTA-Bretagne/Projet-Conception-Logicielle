@@ -44,10 +44,10 @@ public class ServerThread extends Thread {
                                     request);
                 } catch (SQLException e) {
                     log.error(e);
-                    ResponseBuilder.sendServerError(outStream, request, e.toString());
+                    ResponseBuilder.forRequest(request, outStream).serverError(e.toString());
                 } catch (UserNotLoggedException e) {
                     log.warn(e);
-                    ResponseBuilder.sendDeniedError(outStream, request, e.toString());
+                    ResponseBuilder.forRequest(request, outStream).deniedError(e.toString());
                 }
             }
 
