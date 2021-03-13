@@ -33,8 +33,8 @@ public class CreateUserProtocol implements IProtocol {
      * {
      *   "command" : "createUser",
      *   "args" : {
-     *     "username" : "cookiehacker",
-     *     "password" : "cookie"
+     *     "username" : "john",
+     *     "password" : "dough"
      *   }
      * }
      *
