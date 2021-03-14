@@ -13,9 +13,9 @@ public class MainClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        MainController.setMainStage(primaryStage);
-        MainController.initializeScenes();
-        MainController.switchToLoginScene();
+        pageManagement.MainController.setMainStage(primaryStage);
+        pageManagement.MainController.initializeScenes();
+        pageManagement.MainController.switchToLoginScene();
     }
 
     public static void main(String[] args) {
@@ -25,9 +25,9 @@ public class MainClient extends Application {
         launch(args);
 
         /*
-        TCPClient tcpClient = new TCPClient("localhost", 6666);
+        networking.TCPClient tcpClient = new networking.TCPClient("localhost", 6666);
         if (tcpClient.connectToServer()) {
-            String request = RequestBuilder.buildWithoutData("PING").toString();
+            String request = networking.RequestBuilder.buildWithoutData("PING").toString();
             tcpClient.sendRequest(request);
             tcpClient.disconnectFromServer();
         }
