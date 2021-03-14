@@ -1,3 +1,5 @@
+package pageManagement;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
@@ -48,7 +50,7 @@ public class MainController {
         Parent loginRoot = FXMLLoader.load(loginURL);
         loginScene = new Scene(loginRoot, 659, 402);
 
-        URL homeURL = new File("src/main/pages/Home.fxml").toURI().toURL();
+        URL homeURL = new File("src/main/pages/home.fxml").toURI().toURL();
         Parent homeRoot = FXMLLoader.load(homeURL);
         homeScene = new Scene(homeRoot, 659, 402);
 

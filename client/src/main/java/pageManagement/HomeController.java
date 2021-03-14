@@ -1,3 +1,5 @@
+package pageManagement;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXML;
@@ -53,6 +55,7 @@ public class HomeController {
         log.error("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
     }
 
+    @FXML
     private static HBox discussionHBox;
 
     public static HBox getDiscussionHBox() {
@@ -87,6 +90,7 @@ public class HomeController {
     @FXML
     void initialize() {
         log.info("Initializing home controller\n");
+
         discussionHBox = null;
         groupVisualizerObjectList = new ArrayList<>();
         nbCreatedGroups = 0;
@@ -99,6 +103,7 @@ public class HomeController {
 
     @FXML
     void actionDisconnectButton() {
+        System.out.println("");
         log.info("Deconnexion");
         MainController.switchToLoginScene();
     }

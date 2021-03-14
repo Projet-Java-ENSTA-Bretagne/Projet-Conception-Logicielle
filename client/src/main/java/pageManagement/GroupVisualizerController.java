@@ -1,3 +1,5 @@
+package pageManagement;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXButton;
@@ -72,6 +74,7 @@ public class GroupVisualizerController {
 
     @FXML
     void initialize() {
+        System.out.println("");
         log.info("Initializing group visualizer controller, groupName = \"" + getGroupName() + "\"");
     }
 
