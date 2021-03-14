@@ -8,6 +8,7 @@
     <build>
         <plugins>
             <plugin>
+                <!-- Code coverage -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
@@ -26,6 +27,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Compiler utils -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

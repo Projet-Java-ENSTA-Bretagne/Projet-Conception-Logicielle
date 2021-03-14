@@ -39,6 +39,7 @@ public class MainServer {
         protocols.put(RemoveUserFromGroupProtocol.requestName,  new RemoveUserFromGroupProtocol());
         protocols.put(BlockUserProtocol.requestName,            new BlockUserProtocol());
         protocols.put(CheckTokenProtocol.requestName,           new CheckTokenProtocol());
+        protocols.put(GetUserGroupsProtocol.requestName,        new GetUserGroupsProtocol());
 
         TCPServer server = new TCPServer(new DatabaseContext(db), protocols, serverConfig.getPort());
         server.start();
