@@ -27,7 +27,7 @@ public class GroupSettingsController {
         groupStatus = "public";
     }
 
-    /* ------------- 1st toggle group ------------- */
+    /* ------------- 1st toggle group : Operation Type ------------- */
 
     private String operationType;
 
@@ -69,7 +69,7 @@ public class GroupSettingsController {
 
     private int groupId;
 
-    /* ------------- 2nd toggle group ------------- */
+    /* ------------- 2nd toggle group : Group Status ------------- */
 
     private String groupStatus;
 
@@ -78,13 +78,13 @@ public class GroupSettingsController {
     }
 
     @FXML
-    void actionPublicRadioButton() {
+    void actionPublicGroupStatusRadioButton() {
         setGroupStatus("public");
         log.debug("Group status : " + groupStatus);
     }
 
     @FXML
-    void actionPrivateRadioButton() {
+    void actionPrivateGroupStatusRadioButton() {
         setGroupStatus("private");
         log.debug("Group status : " + groupStatus);
     }
@@ -122,9 +122,9 @@ public class GroupSettingsController {
                 groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 15));
 
                 // here we check if the group name already exists
-                ArrayList<GroupVisualizerObject> groupVisualizerObjectList = HomeController.getGroupVisualizerObjectList();
-                for (GroupVisualizerObject groupVisualizerObject : groupVisualizerObjectList) {
-                    String otherGroupName = groupVisualizerObject.getController().getGroupName();
+                ArrayList<GroupThumbnailObject> groupThumbnailObjectList = HomeController.getGroupThumbnailObjectList();
+                for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
+                    String otherGroupName = groupThumbnailObject.getController().getGroupName();
                     if (groupName.equals(otherGroupName)) {
                         parametersAreValid = false;
                         System.out.println("");
@@ -164,44 +164,43 @@ public class GroupSettingsController {
             log.debug("Statut du groupe : \"" + groupStatus + "\"");
             log.debug("Description du groupe : \"" + groupDescription + "\"");
 
-            HomeController.getCurrentGroupSettingsStage().close();
-            HomeController.setCurrentGroupSettingsStage(null);
+            HomeController.closeCurrentGroupSettingsStage();
 
             /* ---------------------------------------------------------- */
 
             // adding new group visualizer/thumbnail
 
-            HomeController.setNbCreatedGroups(HomeController.getNbCreatedGroups() + 1);
-            HomeController.setNbGroupsYouAreStillPartOf(HomeController.getNbGroupsYouAreStillPartOf() + 1);
+            HomeController.incrementNbCreatedGroups();
+            HomeController.incrementNbGroupsYouAreStillPartOf();
 
-            URL groupVisualizerURL = new File("src/main/pages/groupVisualizer.fxml").toURI().toURL();
-            FXMLLoader groupVisualizerLoader = new FXMLLoader(groupVisualizerURL);
-            GroupVisualizerController groupVisualizerController = new GroupVisualizerController(groupName, groupStatus, groupDescription,
-                                                                      operationType, serverIpAddress, serverPort, groupId);
-            groupVisualizerLoader.setController(groupVisualizerController);
-            Parent groupVisualizerRoot = groupVisualizerLoader.load();
+            URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
+            FXMLLoader groupThumbnailLoader = new FXMLLoader(groupVisualizerURL);
+            GroupThumbnailController groupThumbnailController = new GroupThumbnailController(groupName, groupStatus, groupDescription,
+                                                                    operationType, serverIpAddress, serverPort, groupId);
+            groupThumbnailLoader.setController(groupThumbnailController);
+            Parent groupThumbnailRoot = groupThumbnailLoader.load();
 
-            JFXButton openGroupButton = (JFXButton) groupVisualizerRoot.lookup("#openGroupButton");
-            openGroupButton.setOnAction(e -> groupVisualizerController.actionOpenGroupButton());
+            JFXButton openGroupButton = (JFXButton) groupThumbnailRoot.lookup("#openGroupButton");
+            openGroupButton.setOnAction(e -> groupThumbnailController.actionOpenGroupButton());
 
-            JFXButton leaveGroupButton = (JFXButton) groupVisualizerRoot.lookup("#leaveGroupButton");
+            JFXButton leaveGroupButton = (JFXButton) groupThumbnailRoot.lookup("#leaveGroupButton");
             leaveGroupButton.setOnAction(e -> {
                 try {
-                    groupVisualizerController.actionLeaveGroupButton();
+                    groupThumbnailController.actionLeaveGroupButton();
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    log.error("Erreur lors de l'appel au bouton \"LEAVE\" (groupName = \"" + groupName + "\") : " + ioException);
                 }
             });
 
             // this seems to be the only way to get the **NOT-NULL** discussion HBox from the Home scene
             if (HomeController.getNbCreatedGroups() == 1) {
-                HomeController.setDiscussionHBox((HBox) MainController.getHomeScene().lookup("#discussionHBox"));
+                HomeController.initializeGroupThumbnailHBox((HBox) MainController.getHomeScene().lookup("#groupThumbnailHBox"));
             }
 
-            Label groupNameLabel = (Label) groupVisualizerRoot.lookup("#groupNameLabel");
+            Label groupNameLabel = (Label) groupThumbnailRoot.lookup("#groupNameLabel");
             groupNameLabel.setText(groupName);
 
-            Label groupStatusLabel = (Label) groupVisualizerRoot.lookup("#groupStatusLabel");
+            Label groupStatusLabel = (Label) groupThumbnailRoot.lookup("#groupStatusLabel");
             if (groupStatus.equals("public")) {
                 groupStatusLabel.setText("Groupe public");
             }
@@ -209,13 +208,11 @@ public class GroupSettingsController {
                 groupStatusLabel.setText("Groupe privé");
             }
 
-            Label groupDescriptionLabel = (Label) groupVisualizerRoot.lookup("#groupDescriptionLabel");
+            Label groupDescriptionLabel = (Label) groupThumbnailRoot.lookup("#groupDescriptionLabel");
             groupDescriptionLabel.setText(groupDescription);
 
-            HomeController.getDiscussionHBox().getChildren().add(groupVisualizerRoot);
-
-            GroupVisualizerObject groupVisualizerObject = new GroupVisualizerObject(groupVisualizerController, groupVisualizerRoot);
-            HomeController.getGroupVisualizerObjectList().add(groupVisualizerObject);
+            GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
+            HomeController.addGroup(newGroupThumbnailObject);
 
             System.out.println("");
             if (operationType.equals("joinGroup")) {

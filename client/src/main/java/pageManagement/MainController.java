@@ -45,7 +45,7 @@ public class MainController {
         currentScene = scene;
     }
 
-    public static void initializeScenes() throws IOException {
+    public static void initializeMainScenes() throws IOException {
         URL loginURL = new File("src/main/pages/login.fxml").toURI().toURL();
         Parent loginRoot = FXMLLoader.load(loginURL);
         loginScene = new Scene(loginRoot, 659, 402);

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="groupVisualizerAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="262.0" prefWidth="195.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="groupThumbnailAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="262.0" prefWidth="195.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <cursor>
       <Cursor fx:constant="HAND" />
    </cursor>
@@ -24,21 +24,18 @@
                      <image>
                         <Image url="@../resources/defaultGroupIcon-small-size.png" />
                      </image>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
                   </ImageView>
                   <VBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="118.0">
                      <HBox.margin>
                         <Insets left="16.0" />
                      </HBox.margin>
                      <children>
-                        <Label fx:id="groupNameLabel" text="GROUP NAME" textAlignment="CENTER">
+                        <Label id="groupNameLabel" text="GROUP NAME" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
-                        <Label fx:id="groupStatusLabel" text="Group status" textAlignment="CENTER">
+                        <Label id="groupStatusLabel" text="Group status" textAlignment="CENTER">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -54,10 +51,7 @@
             </ImageView>
             <VBox alignment="CENTER" prefHeight="75.0" prefWidth="195.0">
                <children>
-                  <Label fx:id="groupDescriptionLabel" text="Group description" textAlignment="CENTER">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
+                  <Label id="groupDescriptionLabel" text="Group description" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets top="4.0" />
                      </VBox.margin>
@@ -67,12 +61,12 @@
                   </Label>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="14.0">
                      <children>
-                        <JFXButton fx:id="openGroupButton" buttonType="RAISED" ripplerFill="#cb9ff2b2" text="OPEN" textAlignment="CENTER">
+                        <JFXButton id="openGroupButton" buttonType="RAISED" ripplerFill="#cb9ff2b2" text="OPEN" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets bottom="5.0" />
                            </HBox.margin>
                         </JFXButton>
-                        <JFXButton fx:id="leaveGroupButton" buttonType="RAISED" ripplerFill="#cb9ff2b2" text="LEAVE" textAlignment="CENTER">
+                        <JFXButton id="leaveGroupButton" buttonType="RAISED" ripplerFill="#cb9ff2b2" text="LEAVE" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets bottom="5.0" />
                            </HBox.margin>
@@ -81,6 +75,7 @@
                   </HBox>
                </children>
             </VBox>
-         </children></VBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

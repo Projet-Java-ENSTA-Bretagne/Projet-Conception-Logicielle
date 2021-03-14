@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -19,7 +20,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="groupNameLabel" text="&quot;GROUP NAME&quot; ?" textAlignment="CENTER">
+                  <Label id="groupNameLabel" text="&quot;GROUP NAME&quot; ?" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -27,19 +28,24 @@
                </children>
                <padding>
                   <Insets left="19.0" top="15.0" />
-               </padding></VBox>
+               </padding>
+            </VBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="75.0" prefWidth="300.0" spacing="15.0">
                <children>
-                  <JFXButton fx:id="noButton" buttonType="RAISED" prefHeight="30.0" prefWidth="55.0" ripplerFill="#2bdfff" text="Non" />
-                  <JFXButton fx:id="yesButton" buttonType="RAISED" prefHeight="30.0" prefWidth="55.0" ripplerFill="#f22714" text="Oui" />
+                  <JFXButton id="noButton" buttonType="RAISED" prefHeight="30.0" prefWidth="55.0" ripplerFill="#2bdfff" text="Non" />
+                  <JFXButton id="yesButton" buttonType="RAISED" prefHeight="30.0" prefWidth="55.0" ripplerFill="#f22714" text="Oui" />
                </children>
                <VBox.margin>
                   <Insets right="19.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="15.0" />
-               </padding></HBox>
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
 </AnchorPane>

@@ -20,28 +20,33 @@ public class HomeController {
     // Logging
     private static final Logger log = LogManager.getLogger(HomeController.class);
 
-    private static ArrayList<GroupVisualizerObject> groupVisualizerObjectList;
+    private static ArrayList<GroupThumbnailObject> groupThumbnailObjectList;
 
-    public static ArrayList<GroupVisualizerObject> getGroupVisualizerObjectList() {
-        return groupVisualizerObjectList;
+    public static ArrayList<GroupThumbnailObject> getGroupThumbnailObjectList() {
+        return groupThumbnailObjectList;
+    }
+
+    public static void addGroup(GroupThumbnailObject groupThumbnailObject) {
+        groupThumbnailHBox.getChildren().add(groupThumbnailObject.getRoot());
+        groupThumbnailObjectList.add(groupThumbnailObject);
     }
 
     public static void deleteGroupByName(String nameOfTheGroupToDelete) {
-        for (GroupVisualizerObject groupVisualizerObject : groupVisualizerObjectList) {
-            GroupVisualizerController groupVisualizerController = groupVisualizerObject.getController();
-            String groupName = groupVisualizerController.getGroupName();
+        for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
+            GroupThumbnailController groupThumbnailController = groupThumbnailObject.getController();
+            String groupName = groupThumbnailController.getGroupName();
 
             if (groupName.equals(nameOfTheGroupToDelete)) {
-                Parent groupVisualizerRoot = groupVisualizerObject.getRoot();
-                discussionHBox.getChildren().remove(groupVisualizerRoot);
+                Parent groupThumbnailRoot = groupThumbnailObject.getRoot();
+                groupThumbnailHBox.getChildren().remove(groupThumbnailRoot);
 
-                groupVisualizerObjectList.remove(groupVisualizerObject);
+                groupThumbnailObjectList.remove(groupThumbnailObject);
 
-                groupVisualizerController = null;
-                groupVisualizerRoot = null;
-                groupVisualizerObject = null;
+                groupThumbnailController = null;
+                groupThumbnailRoot = null;
+                groupThumbnailObject = null;
 
-                nbGroupsYouAreStillPartOf -= 1;
+                decrementNbGroupsYouAreStillPartOf();
                 System.out.println("");
                 log.debug("Vous venez de quitter le groupe \"" + groupName + "\"");
                 log.debug("Nombre total de groupes restants : " + nbGroupsYouAreStillPartOf + "\n");
@@ -55,15 +60,14 @@ public class HomeController {
         log.error("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
     }
 
-    @FXML
-    private static HBox discussionHBox;
+    private static HBox groupThumbnailHBox;
 
-    public static HBox getDiscussionHBox() {
-        return discussionHBox;
+    public static HBox getGroupThumbnailHBox() {
+        return groupThumbnailHBox;
     }
 
-    public static void setDiscussionHBox(HBox newDiscussionHBox) {
-        discussionHBox = newDiscussionHBox;
+    public static void initializeGroupThumbnailHBox(HBox newGroupThumbnailHBox) {
+        groupThumbnailHBox = newGroupThumbnailHBox;
     }
 
     // number of created **or joined** groups
@@ -73,26 +77,27 @@ public class HomeController {
         return nbCreatedGroups;
     }
 
-    public static void setNbCreatedGroups(int newNbCreatedGroups) {
-        nbCreatedGroups = newNbCreatedGroups;
+    // nbCreatedGroups can only increase
+    public static void incrementNbCreatedGroups() {
+        nbCreatedGroups += 1;
     }
 
     private static int nbGroupsYouAreStillPartOf;
 
-    public static int getNbGroupsYouAreStillPartOf() {
-        return nbGroupsYouAreStillPartOf;
+    public static void incrementNbGroupsYouAreStillPartOf() {
+        nbGroupsYouAreStillPartOf += 1;
     }
 
-    public static void setNbGroupsYouAreStillPartOf(int newNbGroupsYouAreStillPartOf) {
-        nbGroupsYouAreStillPartOf = newNbGroupsYouAreStillPartOf;
+    public static void decrementNbGroupsYouAreStillPartOf() {
+        nbGroupsYouAreStillPartOf -= 1;
     }
 
     @FXML
     void initialize() {
         log.info("Initializing home controller\n");
 
-        discussionHBox = null;
-        groupVisualizerObjectList = new ArrayList<>();
+        groupThumbnailHBox = null;
+        groupThumbnailObjectList = new ArrayList<>();
         nbCreatedGroups = 0;
         nbGroupsYouAreStillPartOf = 0;
         currentGroupSettingsStage = null;
@@ -110,22 +115,24 @@ public class HomeController {
 
     private static Stage currentGroupSettingsStage;
 
-    public static Stage getCurrentGroupSettingsStage() {
-        return currentGroupSettingsStage;
-    }
-
     public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
         currentGroupSettingsStage = groupSettingsStage;
     }
 
-    private static Stage currentConfirmLeaveGroupStage;
-
-    public static Stage getCurrentConfirmLeaveGroupStage() {
-        return currentConfirmLeaveGroupStage;
+    public static void closeCurrentGroupSettingsStage() {
+        currentGroupSettingsStage.close();
+        setCurrentGroupSettingsStage(null);
     }
 
-    public static void setCurrentConfirmLeaveGroupStage(Stage newCurrentConfirmLeaveGroupStage) {
-        currentConfirmLeaveGroupStage = newCurrentConfirmLeaveGroupStage;
+    private static Stage currentConfirmLeaveGroupStage;
+
+    public static void setCurrentConfirmLeaveGroupStage(Stage confirmLeaveGroupStage) {
+        currentConfirmLeaveGroupStage = confirmLeaveGroupStage;
+    }
+
+    public static void closeCurrentConfirmLeaveGroupStage() {
+        currentConfirmLeaveGroupStage.close();
+        setCurrentConfirmLeaveGroupStage(null);
     }
 
     @FXML
@@ -136,15 +143,16 @@ public class HomeController {
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
         Scene scene = new Scene(groupSettingsRoot, 400, 375);
 
-        Stage secondaryStage = new Stage(); // new stage for GroupSettings
-        secondaryStage.getIcons().add(new Image("settings-icon.png"));
-        secondaryStage.setTitle("Group Settings");
-        secondaryStage.setScene(scene);
-        secondaryStage.initModality(Modality.APPLICATION_MODAL);
+        Stage currentGroupSettingsStage = new Stage();
+        currentGroupSettingsStage.getIcons().add(new Image("settings-icon.png"));
+        currentGroupSettingsStage.setTitle("Group Settings");
+        currentGroupSettingsStage.setScene(scene);
+        currentGroupSettingsStage.initModality(Modality.APPLICATION_MODAL);
+        currentGroupSettingsStage.setOnCloseRequest(e -> setCurrentGroupSettingsStage(null));
 
-        setCurrentGroupSettingsStage(secondaryStage);
+        setCurrentGroupSettingsStage(currentGroupSettingsStage);
 
-        secondaryStage.show();
+        currentGroupSettingsStage.show();
     }
 
     //

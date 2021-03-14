@@ -16,10 +16,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 // class handling the group thumbnails that will be added to the Home page
-public class GroupVisualizerController {
+public class GroupThumbnailController {
 
     // Logging
-    private final Logger log = LogManager.getLogger(GroupVisualizerController.class);
+    private final Logger log = LogManager.getLogger(GroupThumbnailController.class);
 
     private String groupName;
     private String groupStatus;
@@ -58,9 +58,9 @@ public class GroupVisualizerController {
         return groupId;
     }
 
-    public GroupVisualizerController(String groupName, String groupStatus, String groupDescription,
-                                     String operationType, String serverIpAddress,
-                                     int serverPort, int groupId) {
+    public GroupThumbnailController(String groupName, String groupStatus, String groupDescription,
+                                    String operationType, String serverIpAddress,
+                                    int serverPort, int groupId) {
 
         this.groupName = groupName;
         this.groupStatus = groupStatus;
@@ -75,7 +75,7 @@ public class GroupVisualizerController {
     @FXML
     void initialize() {
         System.out.println("");
-        log.info("Initializing group visualizer controller, groupName = \"" + getGroupName() + "\"");
+        log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
     }
 
     // /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
@@ -105,15 +105,16 @@ public class GroupVisualizerController {
         JFXButton noButton = (JFXButton) confirmLeaveGroupRoot.lookup("#noButton");
         noButton.setOnAction(e -> confirmLeaveGroupController.actionNoButton());
 
-        Stage secondaryStage = new Stage(); // new stage for ConfirmLeaveGroup page
-        secondaryStage.getIcons().add(new Image("question-mark.png"));
-        secondaryStage.setTitle("Confirmation");
-        secondaryStage.setScene(scene);
-        secondaryStage.initModality(Modality.APPLICATION_MODAL);
+        Stage currentConfirmLeaveGroupStage = new Stage();
+        currentConfirmLeaveGroupStage.getIcons().add(new Image("question-mark.png"));
+        currentConfirmLeaveGroupStage.setTitle("Confirmation");
+        currentConfirmLeaveGroupStage.setScene(scene);
+        currentConfirmLeaveGroupStage.initModality(Modality.APPLICATION_MODAL);
+        currentConfirmLeaveGroupStage.setOnCloseRequest(e -> HomeController.setCurrentConfirmLeaveGroupStage(null));
 
-        HomeController.setCurrentConfirmLeaveGroupStage(secondaryStage);
+        HomeController.setCurrentConfirmLeaveGroupStage(currentConfirmLeaveGroupStage);
 
-        secondaryStage.show();
+        currentConfirmLeaveGroupStage.show();
     }
 
     //

@@ -27,19 +27,14 @@ public class ConfirmLeaveGroupController {
     // /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
     public void actionYesButton() {
         log.info("Bouton \"Oui\" appuye (confirmLeaveGroup), groupName = \"" + getGroupName() + "\"");
-
-        HomeController.getCurrentConfirmLeaveGroupStage().close();
-        HomeController.setCurrentConfirmLeaveGroupStage(null);
-
+        HomeController.closeCurrentConfirmLeaveGroupStage();
         HomeController.deleteGroupByName(getGroupName());
     }
 
     // /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
     public void actionNoButton() {
         log.info("Bouton \"Non\" appuye (confirmLeaveGroup), groupName = \"" + getGroupName() + "\"");
-
-        HomeController.getCurrentConfirmLeaveGroupStage().close();
-        HomeController.setCurrentConfirmLeaveGroupStage(null);
+        HomeController.closeCurrentConfirmLeaveGroupStage();
     }
 
     //

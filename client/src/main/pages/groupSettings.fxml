@@ -69,44 +69,40 @@
                      </font>
                   </Label>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="3.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
                      <children>
-                        <JFXRadioButton id="joinGroupRadioButton" onAction="#actionJoinGroupRadioButton" selected="true" text="REJOINDRE GROUPE" textAlignment="CENTER">
+                        <JFXRadioButton onAction="#actionJoinGroupRadioButton" selected="true" text="REJOINDRE GROUPE" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
                            <toggleGroup>
-                              <ToggleGroup fx:id="group1" />
+                              <ToggleGroup fx:id="operationTypeToggleGroup" />
                            </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton onAction="#actionCreateGroupRadioButton" text="CRÉER GROUPE" textAlignment="CENTER" toggleGroup="$operationTypeToggleGroup">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </JFXRadioButton>
-                        <JFXRadioButton id="createGroupRadioButton" onAction="#actionCreateGroupRadioButton" text="CRÉER GROUPE" textAlignment="CENTER" toggleGroup="$group1">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></JFXRadioButton>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
-                        <JFXRadioButton id="publicRadioButton" onAction="#actionPublicRadioButton" selected="true" text="PUBLIC" textAlignment="CENTER">
+                        <JFXRadioButton onAction="#actionPublicGroupStatusRadioButton" selected="true" text="PUBLIC" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
                            <toggleGroup>
-                              <ToggleGroup fx:id="group2" />
+                              <ToggleGroup fx:id="groupStatusToggleGroup" />
                            </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton onAction="#actionPrivateGroupStatusRadioButton" text="PRIVÉ" textAlignment="CENTER" toggleGroup="$groupStatusToggleGroup">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </JFXRadioButton>
-                        <JFXRadioButton id="privateRadioButton" onAction="#actionPrivateRadioButton" text="PRIVÉ" textAlignment="CENTER" toggleGroup="$group2">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></JFXRadioButton>
                      </children>
                   </VBox>
                   <JFXTextField fx:id="ipAddressTextField" prefHeight="25.0" prefWidth="146.0" promptText="127.0.0.1" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
                      <padding>
                         <Insets right="39.0" />
                      </padding>
@@ -132,9 +128,6 @@
                      </padding>
                   </JFXTextField>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </GridPane>
             <VBox alignment="CENTER" prefHeight="45.0" prefWidth="400.0">
                <children>

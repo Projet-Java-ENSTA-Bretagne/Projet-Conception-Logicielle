@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.LoginController">
    <children>
       <HBox alignment="CENTER" layoutX="27.0" layoutY="44.0" prefHeight="313.0" prefWidth="504.0" spacing="50.0">
          <children>
@@ -20,7 +21,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="63.0" prefWidth="374.0">
                      <children>
-                        <Label fx:id="welcomeLabel" text="Bienvenue !">
+                        <Label id="welcomeLabel" text="Bienvenue !">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -36,10 +37,10 @@
                   <AnchorPane prefHeight="28.0" prefWidth="382.0">
                      <children>
                         <JFXPasswordField fx:id="passwordField" layoutY="1.0" prefHeight="26.0" prefWidth="374.0" promptText="Password" />
-                        <JFXButton fx:id="showPassword" alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="336.0" layoutY="1.0" onMousePressed="#unmaskPassword" onMouseReleased="#maskPassword" pickOnBounds="false" prefHeight="24.0" prefWidth="24.0" style="-fx-graphic: url('eye-icon.png');" text="Button" />
+                        <JFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="336.0" layoutY="1.0" onMousePressed="#unmaskPassword" onMouseReleased="#maskPassword" pickOnBounds="false" prefHeight="24.0" prefWidth="24.0" style="-fx-graphic: url('eye-icon.png');" text="Button" />
                      </children>
                   </AnchorPane>
-                  <JFXButton fx:id="login" buttonType="RAISED" contentDisplay="CENTER" onAction="#makeLogin" ripplerFill="#f20000" text="Login" />
+                  <JFXButton id="loginButton" buttonType="RAISED" contentDisplay="CENTER" onAction="#makeLogin" ripplerFill="#f20000" text="Login" />
                </children>
                <padding>
                   <Insets top="25.0" />
@@ -47,7 +48,7 @@
             </VBox>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
                <children>
-                  <Label fx:id="enstarLabel" alignment="CENTER" text="ENSTAR">
+                  <Label id="enstarLabel" alignment="CENTER" text="ENSTAR">
                      <font>
                         <Font size="32.0" />
                      </font>
@@ -68,4 +69,7 @@
          </padding>
       </HBox>
    </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
 </AnchorPane>

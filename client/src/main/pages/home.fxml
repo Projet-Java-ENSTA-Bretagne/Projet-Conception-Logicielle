@@ -10,15 +10,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="backgroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.HomeController">
    <children>
-      <VBox id="backgroundVBox" fx:id="backgroundVBox" alignment="CENTER" prefHeight="402.0" prefWidth="659.0">
+      <VBox alignment="CENTER" prefHeight="402.0" prefWidth="659.0">
          <children>
             <HBox id="topLayerHBox" alignment="CENTER" prefHeight="40.0" prefWidth="631.0">
                <children>
-                  <HBox id="leftHBoxMenu" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
                      <children>
-                        <Label id="discussionMenuLabel" text="DISCUSSIONS" textAlignment="CENTER" textFill="WHITE">
+                        <Label id="menuLabel" text="DISCUSSIONS" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -29,7 +29,7 @@
                         <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Déconnexion" textFill="WHITE" />
                      </children>
                   </HBox>
-                  <HBox id="rightHBoxMenu" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
                      <opaqueInsets>
                         <Insets right="50.0" />
                      </opaqueInsets>
@@ -43,14 +43,17 @@
                               <Insets right="15.0" />
                            </HBox.margin>
                         </Label>
-                     </children></HBox>
-               </children></HBox>
-            <ScrollPane id="discussionScrollPane" fx:id="discussionScrollPane" hbarPolicy="AS_NEEDED" prefHeight="362.0" prefWidth="659.0" vbarPolicy="NEVER">
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <ScrollPane id="groupThumbnailScrollPane" hbarPolicy="AS_NEEDED" prefHeight="362.0" prefWidth="659.0" vbarPolicy="NEVER">
                <content>
-                  <HBox id="discussionHBox" fx:id="discussionHBox" opacity="0.62" prefHeight="362.0" prefWidth="659.0" spacing="40.0">
+                  <HBox id="groupThumbnailHBox" opacity="0.62" prefHeight="362.0" prefWidth="659.0" spacing="40.0">
                      <padding>
                         <Insets bottom="58.0" left="40.0" right="40.0" top="40.0" />
-                     </padding></HBox>
+                     </padding>
+                  </HBox>
                </content>
             </ScrollPane>
          </children>

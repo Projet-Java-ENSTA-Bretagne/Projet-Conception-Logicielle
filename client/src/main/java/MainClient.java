@@ -12,9 +12,9 @@ public class MainClient extends Application {
     private static final Logger log = LogManager.getLogger(MainClient.class);
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        pageManagement.MainController.setMainStage(primaryStage);
-        pageManagement.MainController.initializeScenes();
+    public void start(Stage mainStage) throws IOException {
+        pageManagement.MainController.setMainStage(mainStage);
+        pageManagement.MainController.initializeMainScenes();
         pageManagement.MainController.switchToLoginScene();
     }
 

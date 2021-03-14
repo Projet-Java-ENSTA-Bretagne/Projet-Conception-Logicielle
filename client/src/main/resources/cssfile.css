@@ -17,8 +17,7 @@
     -fx-font-family: 'Sansation';
 }
 
-/* login button */
-#login:hover {
+#loginButton:hover {
     -fx-border-color: black;
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
@@ -29,7 +28,8 @@
     -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
 }
 
-#discussionMenuLabel {
+/* "DISCUSSIONS" label */
+#menuLabel {
     -fx-font-family: 'Sansation';
     -fx-font-weight: bold;
 }
@@ -49,44 +49,44 @@
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
-#discussionScrollPane .scroll-bar:horizontal {
+#groupThumbnailScrollPane .scroll-bar:horizontal {
     -fx-pref-height: 18px;
 }
 
 /* defining the "thumb" of the scrollbar (= the scrollable button) */
-#discussionScrollPane .scroll-bar:horizontal .thumb {
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb {
     -fx-background-color: #d6d6c2; /* light gray */
 }
-#discussionScrollPane .scroll-bar:horizontal .thumb:hover {
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb:hover {
     -fx-background-color: rgb(230, 230, 230); /* light gray */
 }
-#discussionScrollPane .scroll-bar:horizontal .thumb:pressed {
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb:pressed {
     -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
 }
 
 /* defining the color of background of the scrollbar (background of the scrollbar = "track") */
-#discussionScrollPane .scroll-bar:horizontal .track {
+#groupThumbnailScrollPane .scroll-bar:horizontal .track {
     -fx-background-color: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
 }
 
 /* hiding the left/right arrows of the scrollbar */
-#discussionScrollPane .scroll-bar:horizontal .decrement-button {
+#groupThumbnailScrollPane .scroll-bar:horizontal .decrement-button {
     -fx-pref-width: 0px;
     -fx-background-color: Transparent;
 }
-#discussionScrollPane .scroll-bar:horizontal .decrement-button .decrement-arrow {
+#groupThumbnailScrollPane .scroll-bar:horizontal .decrement-button .decrement-arrow {
     -fx-pref-width: 0px;
     -fx-background-color: Transparent;
 }
-#discussionScrollPane .scroll-bar:horizontal .increment-button {
+#groupThumbnailScrollPane .scroll-bar:horizontal .increment-button {
     -fx-pref-width: 0px;
 }
-#discussionScrollPane .scroll-bar:horizontal .increment-button .increment-arrow {
+#groupThumbnailScrollPane .scroll-bar:horizontal .increment-button .increment-arrow {
     -fx-pref-width: 0px;
     -fx-background-color: Transparent;
 }
 
-#discussionHBox {
+#groupThumbnailHBox {
     -fx-background-color: #d6d6c2; /* light gray */
 }
 
@@ -101,14 +101,14 @@
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
-/* ---------------- Group Visualizer page ---------------- */
+/* ---------------- Group Thumbnail page ---------------- */
 
-#groupVisualizerAnchorPane {
+#groupThumbnailAnchorPane {
     -fx-background-color: white;
     -fx-border-color: rgba(169, 169, 169, 0.8); /* dark gray */
     -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
 }
-#groupVisualizerAnchorPane:hover {
+#groupThumbnailAnchorPane:hover {
     -fx-border-color: #80e5ff; /* faded light blue */
     -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
 }
