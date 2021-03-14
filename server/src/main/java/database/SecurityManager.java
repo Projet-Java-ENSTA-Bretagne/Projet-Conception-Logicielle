@@ -3,6 +3,7 @@ package database;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import database.entities.User;
@@ -12,7 +13,8 @@ import org.json.JSONObject;
 import server.ConfigurationManagement;
 import server.ServerConfiguration;
 
-import java.util.Base64;
+import java.sql.Timestamp;
+import java.util.*;
 
 public class SecurityManager {
 
@@ -71,6 +73,35 @@ public class SecurityManager {
         // comparing roles to check if the user can do it
         if (this.loggedUser.getRole().compareTo(requiredRole) < 0) {
             throw new UnauthorizedException("Role not high enough to perform action");
+        }
+    }
+
+    public String createJWT(User user)
+    {
+        try {
+            ConfigurationManagement configurationManagement = new ConfigurationManagement();
+            ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
+            Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getTokenKey());
+
+            Calendar calendar = Calendar.getInstance();
+            Date now = calendar.getTime();
+            calendar.add(Calendar.HOUR, 24);
+            Date end = calendar.getTime();
+
+            HashMap<String, String> payload = new HashMap<>();
+            payload.put("user_id", user.getId());
+
+            return JWT.create()
+                    .withIssuer("Ensta-Bretagne")
+                    .withIssuedAt(new Timestamp(now.getTime()))
+                    .withExpiresAt(new Timestamp(end.getTime()))
+                    .withPayload(payload)
+                    .sign(algorithm);
+        }
+        catch (JWTCreationException exception)
+        {
+            log.error("Error while the creation of token: " + exception.toString());
+            return "";
         }
     }
 

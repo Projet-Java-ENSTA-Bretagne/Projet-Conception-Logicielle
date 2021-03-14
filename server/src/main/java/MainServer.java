@@ -1,4 +1,6 @@
 import database.DatabaseManager;
+import database.SecurityManager;
+import database.entities.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import protocols.*;
@@ -25,6 +27,9 @@ public class MainServer {
         // User alex = new User("0", "alexandre", "1234", User.Role.ROLE_ADMIN, "0;1");
         // db.getUserDao().create(alex);
         // System.out.println(db.getUserDao().queryForId("0").getName());
+
+        User cookie = new User("0", "cookie", "1234", User.Role.ROLE_ADMIN, "0;1");
+        SecurityManager.getInstance().createJWT(cookie);
 
         // Setup protocols
         HashMap<String, IProtocol> protocols = new HashMap<>();
