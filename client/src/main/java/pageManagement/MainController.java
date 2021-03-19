@@ -12,6 +12,9 @@ import java.io.File;
 import javafx.scene.image.Image;
 
 public class MainController {
+    /**
+     * Class handling the switches between the main scenes (Login, Home).
+     */
 
     // Logging
     private static final Logger log = LogManager.getLogger(MainController.class);
@@ -46,6 +49,13 @@ public class MainController {
     }
 
     public static void initializeMainScenes() throws IOException {
+        /**
+         * Loads the 2 main FXML files (login, home), so that the associated scenes
+         * can be easily reused throughout the code.
+         * @param void
+         * @return void
+         */
+
         URL loginURL = new File("src/main/pages/login.fxml").toURI().toURL();
         Parent loginRoot = FXMLLoader.load(loginURL);
         loginScene = new Scene(loginRoot, 659, 402);
@@ -59,6 +69,12 @@ public class MainController {
     }
 
     public static void switchToLoginScene() {
+        /**
+         * Switches to the Login scene. If already in the Login scene, nothing is done.
+         * @param void
+         * @return void
+         */
+
         if (!getCurrentScene().equals("login")) {
             setCurrentScene("login");
 
@@ -73,6 +89,12 @@ public class MainController {
     }
 
     public static void switchToHomeScene() {
+        /**
+         * Switches to the Home scene. If already in the Home scene, nothing is done.
+         * @param void
+         * @return void
+         */
+
         if (!getCurrentScene().equals("home")) {
             setCurrentScene("home");
 

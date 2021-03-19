@@ -11,6 +11,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class TCPClient {
+    /**
+     * Class describing the behaviour of the TCP client that will be associated with each user.
+     */
 
     private int port;
     private String host;
@@ -22,11 +25,23 @@ public class TCPClient {
     private final Logger log = LogManager.getLogger(TCPClient.class);
 
     public TCPClient(String host, int port) {
+        /**
+         * Constructor of the TCPCLient class.
+         * @param host IP address of the host/server
+         * @param port Port number of the host/server
+         */
+
         this.port = port;
         this.host = host;
     }
 
     public boolean connectToServer() {
+        /**
+         * Connects the TCP client to the server.
+         * @param void
+         * @return Boolean indicating if the connection to the server was succesful
+         */
+
         boolean ok = false;
         try {
             log.info("Trying to connect to: " + host + ":" + port);
@@ -47,6 +62,12 @@ public class TCPClient {
     }
 
     public void disconnectFromServer() {
+        /**
+         * Disconnects the client from the server.
+         * @param void
+         * @return void
+         */
+
         try {
             log.info("Client : " + serverSocket);
             outStream.close();
@@ -58,7 +79,14 @@ public class TCPClient {
     }
 
     public String sendRequest(String request) {
+        /**
+         * Sends a given request to the server.
+         * @param request The request to send
+         * @return The server's response to the client's request
+         */
+
         String serverResponse = null;
+
         // Trying to send the request
         try {
             log.debug("Client request: " + request);

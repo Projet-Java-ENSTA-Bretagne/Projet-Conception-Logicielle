@@ -7,12 +7,21 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 
 public class LoginController {
+    /**
+     * Class handling the JavaFX objects from the Login scene (defined in login.fxml).
+     */
 
     // Logging
     private static final Logger log = LogManager.getLogger(LoginController.class);
 
     @FXML
     void initialize() {
+        /**
+         * Method that is executed right before "login.fxml" is loaded.
+         * @param void
+         * @return void
+         */
+
         System.out.println("");
         log.info("Initializing login controller");
 
@@ -57,6 +66,15 @@ public class LoginController {
 
     @FXML
     void makeLogin() {
+        /**
+         * Action linked to the "Login" JFXButton.
+         * Checks if the username and the password entries are valid, then
+         * tries to connect to the server.
+         * @param void
+         * @return void
+         * TODO : Link this method to network
+         */
+
         if (nbSuccessfulLogins == 0) {
             allowedToChangeUsername = true;
             allowedToChangePassword = true;
@@ -107,6 +125,13 @@ public class LoginController {
 
     @FXML
     void unmaskPassword() {
+        /**
+         * Action that is executed when the eye icon/JFXButton is clicked.
+         * Unmasks the current password entry.
+         * @param void
+         * @return void
+         */
+
         currentPasswordEntry = passwordField.getText();
         passwordField.clear();
         passwordField.setPromptText(currentPasswordEntry);
@@ -114,6 +139,13 @@ public class LoginController {
 
     @FXML
     void maskPassword() {
+        /**
+         * Action that is executed when the eye icon/JFXButton is released.
+         * Masks the current password entry.
+         * @param void
+         * @return void
+         */
+
         passwordField.setText(currentPasswordEntry);
         passwordField.setPromptText("Password");
     }

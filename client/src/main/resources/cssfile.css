@@ -1,6 +1,6 @@
 /* ================ Main CSS stylesheet ================ */
 
-/* Defining the Sansation font (for all pages/scenes) */
+/* Defining the Sansation font */
 @font-face {
     font-family: 'Sansation';
     src: url('Sansation_Bold.ttf');
@@ -133,7 +133,7 @@
     -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
 }
 
-/* ---------------- Group Visualizer page ---------------- */
+/* ---------------- ConfirmLeaveGroup page ---------------- */
 
 #yesButton:hover {
     -fx-border-color: black;

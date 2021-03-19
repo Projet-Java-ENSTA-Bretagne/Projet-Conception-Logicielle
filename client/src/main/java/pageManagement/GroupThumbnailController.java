@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 // class handling the group thumbnails that will be added to the Home page
 public class GroupThumbnailController {
+    /**
+     * Class handling the JavaFX objects from the Group Thumbnails (defined in groupThumbnail.fxml).
+     */
 
     // Logging
     private final Logger log = LogManager.getLogger(GroupThumbnailController.class);
@@ -74,19 +77,44 @@ public class GroupThumbnailController {
 
     @FXML
     void initialize() {
+        /**
+         * Method that is executed right before "groupThumbnail.fxml" is loaded.
+         * @param void
+         * @return void
+         */
+
         System.out.println("");
         log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
     }
 
     // /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
     public void actionOpenGroupButton() {
+        /**
+         * Action linked to the "OPEN" JFXButton.
+         * Opens the discussion scene associated with the chosen group. Loads the message
+         * from that same group.
+         * @param void
+         * @return void
+         * TODO : Link this method to network
+         * TODO : Link this method to the associated Discussion scene
+         */
+
         log.info("Bouton \"OPEN\" appuye, groupName = \"" + getGroupName() + "\"");
 
-        // --> cf. Guillaume
+        // --> opens Discussion scene [TO DO]
     }
 
     // /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
     public void actionLeaveGroupButton() throws IOException {
+        /**
+         * Action linked to the "LEAVE" JFXButton.
+         * Leaves the chosen group chat. Will open a new ConfirmLeaveGroup window/stage to
+         * check if you really want to leave the group (since it's an irreversible action).
+         * @throws IOException
+         * @param void
+         * @return void
+         */
+
         log.info("Bouton \"LEAVE\" appuye, groupName = \"" + getGroupName() + "\"");
 
         URL confirmLeaveGroupURL = new File("src/main/pages/confirmLeaveGroup.fxml").toURI().toURL();
