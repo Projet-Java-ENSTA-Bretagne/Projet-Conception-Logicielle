@@ -93,6 +93,77 @@
 #joinGroupLabel {
     -fx-font-weight: bold;
 }
+/* ---------------- Discussion page ------------------- */
+
+#topLayerHBox {
+    -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
+}
+
+/* "DISCUSSIONS" label */
+#menuLabel {
+    -fx-font-family: 'Sansation';
+    -fx-font-weight: bold;
+}
+
+#disconnectButton {
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+#disconnectButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#joinOrCreateGroupButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#discussionScrollPane .scroll-bar:vertical {
+    -fx-pref-height: 18px;
+}
+
+/* defining the "thumb" of the scrollbar (= the scrollable button) */
+#discussionScrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+#discussionScrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgb(230, 230, 230); /* light gray */
+}
+#discussionScrollPane .scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
+}
+
+/* defining the color of background of the scrollbar (background of the scrollbar = "track") */
+#discussionScrollPane .scroll-bar:vertical .track {
+    -fx-background-color: linear-gradient(to top, red, orange, yellow, green, cyan, blue, violet);
+}
+
+/* hiding the left/right arrows of the scrollbar */
+#discussionScrollPane .scroll-bar:vertical .decrement-button {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:vertical .decrement-button .decrement-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:vertical .increment-button {
+    -fx-pref-width: 0px;
+}
+#discussionScrollPane .scroll-bar:vertical .increment-button .increment-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+
+#discussionVBox {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+
+#joinGroupLabel {
+    -fx-font-weight: bold;
+}
 
 /* ---------------- Group Settings page ---------------- */
 
