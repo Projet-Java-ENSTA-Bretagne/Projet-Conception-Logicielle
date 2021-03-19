@@ -64,7 +64,10 @@ public class LoginProtocol implements IProtocol {
             User matchedUser = matchingUsers.get(0);
             SecurityManager.getInstance().setLoggedUser(matchedUser);
             // then tell the user everything went ok and sending the data
-            ResponseBuilder.forRequest(request, outStream).ok("Successfully logged in.");
+            JSONObject res = new JSONObject();
+            res.put("message", "Successfully logged in.");
+            res.put("user_id", matchedUser.getId());
+            ResponseBuilder.forRequest(request, outStream).okWithData(res);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             ResponseBuilder.forRequest(request, outStream).serverError("Error when encoding password for verification");
