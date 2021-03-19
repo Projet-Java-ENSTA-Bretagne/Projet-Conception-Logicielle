@@ -24,6 +24,8 @@ public class ProtocolTestingHelper {
         // 1. Creating context
         DatabaseManager dm = new DatabaseManager("database.db");
         context = new DatabaseContext(dm);
+        dm.createTables();
+        dm.linkDaos();
 
         // 2. Creating input and output streams
         inStream = new BufferedReader(new StringReader(""));

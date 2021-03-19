@@ -1,16 +1,8 @@
 package protocols;
 
-import database.DatabaseManager;
 import database.UserNotLoggedException;
 import junit.framework.TestCase;
 import org.json.JSONObject;
-import server.DatabaseContext;
-import server.IContext;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.StringReader;
 import java.sql.SQLException;
 
 public class PingProtocolTest extends TestCase {
