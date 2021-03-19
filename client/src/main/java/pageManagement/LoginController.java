@@ -6,22 +6,18 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 
+/**
+ * Class handling the JavaFX objects from the Login scene (defined in login.fxml).
+ */
 public class LoginController {
-    /**
-     * Class handling the JavaFX objects from the Login scene (defined in login.fxml).
-     */
-
     // Logging
     private static final Logger log = LogManager.getLogger(LoginController.class);
 
+    /**
+     * Method that is executed right before "login.fxml" is loaded.
+     */
     @FXML
     void initialize() {
-        /**
-         * Method that is executed right before "login.fxml" is loaded.
-         * @param void
-         * @return void
-         */
-
         System.out.println("");
         log.info("Initializing login controller");
 
@@ -64,17 +60,15 @@ public class LoginController {
 
     private static int nbSuccessfulLogins;
 
+    /**
+     * Action linked to the "Login" JFXButton.
+     * Checks if the username and the password entries are valid, then
+     * tries to connect to the server.
+     *
+     * TODO : Link this method to network
+     */
     @FXML
     void makeLogin() {
-        /**
-         * Action linked to the "Login" JFXButton.
-         * Checks if the username and the password entries are valid, then
-         * tries to connect to the server.
-         * @param void
-         * @return void
-         * TODO : Link this method to network
-         */
-
         if (nbSuccessfulLogins == 0) {
             allowedToChangeUsername = true;
             allowedToChangePassword = true;
@@ -123,29 +117,23 @@ public class LoginController {
         System.out.flush();
     }
 
+    /**
+     * Action that is executed when the eye icon/JFXButton is clicked.
+     * Unmasks the current password entry.
+     */
     @FXML
     void unmaskPassword() {
-        /**
-         * Action that is executed when the eye icon/JFXButton is clicked.
-         * Unmasks the current password entry.
-         * @param void
-         * @return void
-         */
-
         currentPasswordEntry = passwordField.getText();
         passwordField.clear();
         passwordField.setPromptText(currentPasswordEntry);
     }
 
+    /**
+     * Action that is executed when the eye icon/JFXButton is released.
+     * Masks the current password entry.
+     */
     @FXML
     void maskPassword() {
-        /**
-         * Action that is executed when the eye icon/JFXButton is released.
-         * Masks the current password entry.
-         * @param void
-         * @return void
-         */
-
         passwordField.setText(currentPasswordEntry);
         passwordField.setPromptText("Password");
     }

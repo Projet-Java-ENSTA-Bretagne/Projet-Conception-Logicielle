@@ -15,11 +15,10 @@ import java.io.File;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 
+/**
+ * Class handling the JavaFX objects from the Home scene (defined in home.fxml).
+ */
 public class HomeController {
-    /**
-     * Class handling the JavaFX objects from the Home scene (defined in home.fxml).
-     */
-
     // Logging
     private static final Logger log = LogManager.getLogger(HomeController.class);
 
@@ -30,24 +29,22 @@ public class HomeController {
         return groupThumbnailObjectList;
     }
 
+    /**
+     * Adds a group (thumbnail) to the Home page.
+     *
+     * @param groupThumbnailObject The group (thumbnail) object to add
+     */
     public static void addGroup(GroupThumbnailObject groupThumbnailObject) {
-        /**
-         * Adds a group (thumbnail) to the Home page.
-         * @param groupThumbnailObject The group (thumbnail) object to add
-         * @return void
-         */
-
         groupThumbnailHBox.getChildren().add(groupThumbnailObject.getRoot());
         groupThumbnailObjectList.add(groupThumbnailObject);
     }
 
+    /**
+     * Deletes a group thumbnail from the Home page.
+     *
+     * @param nameOfTheGroupToDelete The name of the group to delete
+     */
     public static void deleteGroupByName(String nameOfTheGroupToDelete) {
-        /**
-         * Deletes a group thumbnail from the Home page.
-         * @param nameOfTheGroupToDelete The name of the group to delete
-         * @return void
-         */
-
         for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
             GroupThumbnailController groupThumbnailController = groupThumbnailObject.getController();
             String groupName = groupThumbnailController.getGroupName();
@@ -104,14 +101,11 @@ public class HomeController {
         nbGroupsYouAreStillPartOf -= 1;
     }
 
+    /**
+     * Method that is executed right before "home.fxml" is loaded.
+     */
     @FXML
     void initialize() {
-        /**
-         * Method that is executed right before "home.fxml" is loaded.
-         * @param void
-         * @return void
-         */
-
         log.info("Initializing home controller\n");
 
         groupThumbnailHBox = null;
@@ -124,16 +118,14 @@ public class HomeController {
 
     //
 
+    /**
+     * Action linked to the "Déconnexion" JFXButton.
+     * Disconnects from the server, leaves the Home page, then switches to the Login scene.
+     *
+     * TODO : Link this method to network
+     */
     @FXML
     void actionDisconnectButton() {
-        /**
-         * Action linked to the "Déconnexion" JFXButton.
-         * Disconnects from the server, leaves the Home page, then switches to the Login scene.
-         * @param void
-         * @return void
-         * TODO : Link this method to network
-         */
-
         System.out.println("");
         log.info("Deconnexion");
         MainController.switchToLoginScene();
@@ -161,18 +153,16 @@ public class HomeController {
         setCurrentConfirmLeaveGroupStage(null);
     }
 
+    /**
+     * Action linked to the "join or create group" icon/JFXButton.
+     * Opens a new GroupSettings stage, where it's possible to configurate
+     * the settings of the group you want to join/create.
+     *
+     * @throws IOException If error when FXMLLoader.load() is called
+     * TODO : Link this method to network
+     */
     @FXML
     void joinOrCreateGroup() throws IOException {
-        /**
-         * Action linked to the "join or create group" icon/JFXButton.
-         * Opens a new GroupSettings stage, where it's possible to configurate
-         * the settings of the group you want to join/create.
-         * @throws IOException
-         * @param void
-         * @return void
-         * TODO : Link this method to network
-         */
-
         log.info("Vous venez d'appuyer sur le bouton \"Join or create group\"");
 
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();

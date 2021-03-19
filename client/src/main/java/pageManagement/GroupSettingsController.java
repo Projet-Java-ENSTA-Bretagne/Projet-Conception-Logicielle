@@ -14,23 +14,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Class handling the JavaFX objects from the GroupSettings secondary stage (defined
+ * in groupSettings.fxml).
+ */
 public class GroupSettingsController {
-    /**
-     * Class handling the JavaFX objects from the GroupSettings secondary stage (defined
-     * in groupSettings.fxml).
-     */
-
     // Logging
     private final Logger log = LogManager.getLogger(GroupSettingsController.class);
 
+    /**
+     * Method that is executed right before "groupSettings.fxml" is loaded.
+     */
     @FXML
     void initialize() {
-        /**
-         * Method that is executed right before "groupSettings.fxml" is loaded.
-         * @param void
-         * @return void
-         */
-
         log.info("Initializing group settings controller");
 
         operationType = "joinGroup";
@@ -106,17 +102,17 @@ public class GroupSettingsController {
 
     private String groupDescription;
 
+    /**
+     * Action linked to the "DONE" JFXButton.
+     * Checks if the group settings are valid, then, according to the chosen
+     * operation type, creates a new group or connects the current tcpClient
+     * to the desired group chat.
+     *
+     * @throws IOException If error when FXMLLoader.load() is called
+     * TODO : Link this method to network
+     */
     @FXML
     void actionDoneButton() throws IOException {
-        /**
-         * Action linked to the "DONE" JFXButton.
-         * Checks if the group settings are valid, then, according to the chosen
-         * operation type, creates a new group or connects the current tcpClient
-         * to the desired group chat.
-         * @throws IOException
-         * TODO : Link this method to network
-         */
-
         log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
 
         boolean parametersAreValid = true;

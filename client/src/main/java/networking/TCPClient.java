@@ -10,11 +10,10 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Class describing the behaviour of the TCP client that will be associated with each user.
+ */
 public class TCPClient {
-    /**
-     * Class describing the behaviour of the TCP client that will be associated with each user.
-     */
-
     private int port;
     private String host;
     private Socket serverSocket;
@@ -24,25 +23,25 @@ public class TCPClient {
     // Logging
     private final Logger log = LogManager.getLogger(TCPClient.class);
 
+    /**
+     * Constructor of the TCPCLient class.
+     *
+     * @param host IP address of the host/server
+     * @param port Port number of the host/server
+     */
     public TCPClient(String host, int port) {
-        /**
-         * Constructor of the TCPCLient class.
-         * @param host IP address of the host/server
-         * @param port Port number of the host/server
-         */
-
         this.port = port;
         this.host = host;
     }
 
+    /**
+     * Connects the TCP client to the server.
+     *
+     * @return Boolean indicating if the connection to the server was succesful
+     */
     public boolean connectToServer() {
-        /**
-         * Connects the TCP client to the server.
-         * @param void
-         * @return Boolean indicating if the connection to the server was succesful
-         */
-
         boolean ok = false;
+
         try {
             log.info("Trying to connect to: " + host + ":" + port);
             serverSocket = new Socket(host, port);
@@ -61,13 +60,10 @@ public class TCPClient {
         return ok;
     }
 
+    /**
+     * Disconnects the client from the server.
+     */
     public void disconnectFromServer() {
-        /**
-         * Disconnects the client from the server.
-         * @param void
-         * @return void
-         */
-
         try {
             log.info("Client : " + serverSocket);
             outStream.close();
@@ -78,13 +74,13 @@ public class TCPClient {
         }
     }
 
+    /**
+     * Sends a given request to the server.
+     *
+     * @param request The request to send
+     * @return        The server's response to the client's request
+     */
     public String sendRequest(String request) {
-        /**
-         * Sends a given request to the server.
-         * @param request The request to send
-         * @return The server's response to the client's request
-         */
-
         String serverResponse = null;
 
         // Trying to send the request
