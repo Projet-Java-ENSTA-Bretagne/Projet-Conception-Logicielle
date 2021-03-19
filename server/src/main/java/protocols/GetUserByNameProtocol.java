@@ -56,6 +56,9 @@ public class GetUserByNameProtocol implements IProtocol {
 
         User matchedUser = matchingUsers.get(0);
         // then tell the user everything went ok and sending the data
-        ResponseBuilder.forRequest(request, outStream).okWithData(matchedUser.toJSON());
+        JSONObject response = new JSONObject();
+        response.put("user", matchedUser.toJSON());
+        response.put("message", "Data for user: " + name);
+        ResponseBuilder.forRequest(request, outStream).okWithData(response);
     }
 }
