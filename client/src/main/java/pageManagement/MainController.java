@@ -22,6 +22,7 @@ public class MainController {
     private static Scene loginScene;
     private static Scene homeScene;
     private static String currentScene;
+    private static Scene discussionScene;
 
     public static Stage getMainStage() {
         return mainStage;
@@ -37,6 +38,10 @@ public class MainController {
 
     public static Scene getHomeScene() {
         return homeScene;
+    }
+
+    public static Scene getDiscussionScene() {
+        return discussionScene;
     }
 
     public static String getCurrentScene() {
@@ -61,6 +66,11 @@ public class MainController {
         URL homeURL = new File("src/main/pages/home.fxml").toURI().toURL();
         Parent homeRoot = FXMLLoader.load(homeURL);
         homeScene = new Scene(homeRoot, 659, 402);
+
+        URL discussionURL = new File("src/main/pages/discussion.fxml").toURI().toURL();
+        Parent discussionRoot = FXMLLoader.load(discussionURL);
+        discussionScene = new Scene(discussionRoot, 659, 402);
+
 
         mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to main stage
         setCurrentScene("");
@@ -97,6 +107,20 @@ public class MainController {
 
         else {
             log.warn("Already in home scene !");
+        }
+    }
+
+    public static void switchToDiscussionScene() {
+        if (!getCurrentScene().equals("discussion")) {
+            setCurrentScene("discussion");
+
+            mainStage.setTitle("discussion_title");
+            mainStage.setScene(discussionScene);
+            mainStage.show();
+        }
+
+        else {
+            log.warn("Already in discussion scene !");
         }
     }
 

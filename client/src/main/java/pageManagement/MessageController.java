@@ -27,11 +27,8 @@ public class MessageController {
     private int messageNb;
     private String sender;
     private String date;
+    private String content;
 
-    private String operationType;
-    private String serverIpAddress;
-    private int serverPort;
-    private int groupId;
 
     public int getMessageNb() {
         return messageNb;
@@ -45,34 +42,15 @@ public class MessageController {
         return date;
     }
 
-    public String getOperationType() {
-        return operationType;
-    }
+    public String getContent() {return content; }
 
-    public String getServerIpAddress() {
-        return serverIpAddress;
-    }
 
-    public int getServerPort() {
-        return serverPort;
-    }
-
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public MessageController(int messageNb, String sender, String date,
-                             String operationType, String serverIpAddress,
-                             int serverPort, int groupId) {
+    public MessageController(int messageNb, String sender, String date, String content) {
 
         this.messageNb = messageNb;
         this.sender = sender;
         this.date = date;
-
-        this.operationType = operationType;
-        this.serverIpAddress = serverIpAddress;
-        this.serverPort = serverPort;
-        this.groupId = groupId;
+        this.content = content;
     }
 
     /**

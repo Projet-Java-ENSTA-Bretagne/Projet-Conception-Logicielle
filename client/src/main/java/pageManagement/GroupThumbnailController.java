@@ -92,8 +92,11 @@ public class GroupThumbnailController {
      * TODO : Link this method to network
      * TODO : Link this method to the associated Discussion scene
      */
-    public void actionOpenGroupButton() {
+    public void actionOpenGroupButton() throws IOException {
         log.info("Bouton \"OPEN\" appuye, groupName = \"" + getGroupName() + "\"");
+
+
+        MainController.switchToDiscussionScene();
 
         // --> opens Discussion scene [TO DO]
     }

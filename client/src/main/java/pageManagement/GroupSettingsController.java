@@ -196,7 +196,13 @@ public class GroupSettingsController {
             Parent groupThumbnailRoot = groupThumbnailLoader.load();
 
             JFXButton openGroupButton = (JFXButton) groupThumbnailRoot.lookup("#openGroupButton");
-            openGroupButton.setOnAction(e -> groupThumbnailController.actionOpenGroupButton());
+            openGroupButton.setOnAction(e -> {
+                try {
+                    groupThumbnailController.actionOpenGroupButton();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            });
 
             JFXButton leaveGroupButton = (JFXButton) groupThumbnailRoot.lookup("#leaveGroupButton");
             leaveGroupButton.setOnAction(e -> {

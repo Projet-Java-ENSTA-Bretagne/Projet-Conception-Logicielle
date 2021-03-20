@@ -1,9 +1,11 @@
 package pageManagement;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -155,34 +157,75 @@ public class DiscussionController {
         setCurrentConfirmLeaveGroupStage(null);
     }
 
+
+
     /**
-     * Action linked to the "join or create group" icon/JFXButton.
-     * Opens a new GroupSettings stage, where it's possible to configurate
-     * the settings of the group you want to join/create.
+     * Action linked to the "DONE" JFXButton.
+     * Checks if the group settings are valid, then, according to the chosen
+     * operation type, creates a new group or connects the current tcpClient
+     * to the desired group chat.
      *
      * @throws IOException If error when FXMLLoader.load() is called
      * TODO : Link this method to network
      */
     @FXML
-    void joinOrCreateGroup() throws IOException {
-        log.info("Vous venez d'appuyer sur le bouton \"Join or create group\"");
+    void addMessageToDiscussion(MessageController message) throws IOException {
+        log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
 
-        URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
-        Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
-        Scene scene = new Scene(groupSettingsRoot, 400, 375);
+        boolean parametersAreValid = true;
 
-        Stage currentGroupSettingsStage = new Stage();
-        currentGroupSettingsStage.getIcons().add(new Image("settings-icon.png"));
-        currentGroupSettingsStage.setTitle("Group Settings");
-        currentGroupSettingsStage.setScene(scene);
-        currentGroupSettingsStage.initModality(Modality.APPLICATION_MODAL);
-        currentGroupSettingsStage.setOnCloseRequest(e -> setCurrentGroupSettingsStage(null));
+        // TODO : parameter check ?
 
-        setCurrentGroupSettingsStage(currentGroupSettingsStage);
+        if (parametersAreValid) {
+            System.out.println("");
+            log.debug("message N° : \""  +message.getMessageNb() + "\"");
+            log.debug("sender : \"" + message.getSender() + "\"");
+            log.debug("date d'envoi : \"" + message.getdate() + "\"");
 
-        currentGroupSettingsStage.show();
+
+            /* ---------------------------------------------------------- */
+
+            // adding new message displayed
+
+            DiscussionController.incrementNbMessages();
+            DiscussionController.incrementNbMessagesVisible();
+
+            URL messageURL = new File("src/main/pages/message.fxml").toURI().toURL();
+            FXMLLoader messageLoader = new FXMLLoader(messageURL);
+            MessageController messageController = new MessageController(message.getMessageNb(), message.getSender(), message.getdate(), message.getContent());
+            messageLoader.setController(messageController);
+            Parent discussionRoot = messageLoader.load();
+
+
+            // this seems to be the only way to get the **NOT-NULL** discussion HBox from the Home scene
+            if (DiscussionController.getNbMessages() == 1) {
+                DiscussionController.initializediscussionVBox((VBox) MainController.getHomeScene().lookup("#discussionVBox"));
+            }
+
+            Label senderLabel = (Label) discussionRoot.lookup("#senderlabel");
+            senderLabel.setText(message.getContent());
+
+            Label dateLabel = (Label) discussionRoot.lookup("#datelabel");
+            if (message.getContent().equals("today")) {  //TODO : add real date support to date (change type)
+                dateLabel.setText("today");
+            }
+            else {
+                dateLabel.setText(message.getdate());
+            }
+
+            Label contentLabel = (Label) discussionRoot.lookup("#contentlabel");
+            contentLabel.setText(message.getContent());
+
+            MessageObject newMessageObject = new MessageObject(messageController, discussionRoot);
+            DiscussionController.addmessage(newMessageObject);
+
+        }
+
+        else {
+            System.out.println("");
+            log.error("Parametrage invalide !");
+        }
     }
-
     //
 
 }

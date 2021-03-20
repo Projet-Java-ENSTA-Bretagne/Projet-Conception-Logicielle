@@ -26,7 +26,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <JFXButton id="exitButton" buttonType="RAISED" onAction="#actionExitDiscussion" ripplerFill="WHITE" text="exit" textFill="WHITE" />
+                        <JFXButton id="exitButton" buttonType="RAISED" ripplerFill="WHITE" text="exit" textFill="WHITE" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">

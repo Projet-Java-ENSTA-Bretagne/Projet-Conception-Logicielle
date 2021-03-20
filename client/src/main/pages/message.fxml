@@ -40,7 +40,7 @@
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="54.0" prefWidth="276.0" text=" Lorem ipsum " />
+                  <Label id="contentlabel" prefHeight="54.0" prefWidth="276.0" text="Lorem ipsum " />
                </children>
             </VBox>
          </children>
