@@ -72,9 +72,6 @@
                      </font>
                   </JFXButton>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </HBox>
          </children>
       </VBox>

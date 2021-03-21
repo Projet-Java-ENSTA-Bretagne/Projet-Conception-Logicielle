@@ -35,6 +35,7 @@ public class DiscussionController {
 
     /**
      * Deletes a group object from the group object list.
+     * TODO : Link this method to network
      *
      * @param nameOfTheGroupToDelete The name of the group to delete
      */
@@ -53,6 +54,9 @@ public class DiscussionController {
         }
     }
 
+    /**
+     * Adds "dummy messages" in a group chat.
+     */
     public static void loadGroupObjectWithDummyData() {
         String currentDate = getCurrentDate();
 
@@ -78,7 +82,7 @@ public class DiscussionController {
             MessageController message1 = new MessageController("Mec ché-per", currentDate, "qqn a vu mes clés ?");
             MessageController message2 = new MessageController(currentSender, currentDate, "euh ... non pk ?");
             MessageController message3 = new MessageController(currentSender, currentDate, "ah si c possible");
-            MessageController message4 = new MessageController("Mec ché-per", currentDate, "nice ! ou ça ?");
+            MessageController message4 = new MessageController("Mec ché-per", currentDate, "nice ! où ça ?");
 
             addMessageToAssociatedMessageList(message1);
             addMessageToAssociatedMessageList(message2);
@@ -116,7 +120,7 @@ public class DiscussionController {
     /**
      * Displays a given message in the discussion VBox from the data in its associated controller.
      *
-     * @param messageController
+     * @param messageController The message controller that will be converted to a visual object
      * @throws IOException If error when FXMLLoader.load() is called
      */
     public static void displayMessageFromController(MessageController messageController) throws IOException {
@@ -149,6 +153,7 @@ public class DiscussionController {
     /**
      * Loads all the messages stored in the group object associated to the discussion page
      * that was just opened from the Home scene.
+     * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
      */
@@ -237,7 +242,9 @@ public class DiscussionController {
         Label discussionNameLabel = (Label) MainController.getDiscussionScene().lookup("#discussionNameLabel");
         discussionNameLabel.setText("Discussion name"); // default name
 
-        unloadMessages();
+        if (!isDiscussionVBoxNull()) {
+            unloadMessages();
+        }
 
         MainController.switchToHomeScene();
     }
@@ -253,6 +260,8 @@ public class DiscussionController {
      */
     @FXML
     void sendMessage() throws IOException {
+        log.info("Vous venez d'appuyer sur le bouton \"SEND\"");
+
         totalNbOfSentMessages += 1;
 
         // this seems to be the only way to get the **NOT-NULL** discussion VBox from the
@@ -281,7 +290,7 @@ public class DiscussionController {
                                                       getCurrentDate(), currentMessage);
 
             System.out.println("");
-            log.debug("Emetteur : \"" + messageController.getSender() + "\"");
+            log.debug("Émetteur : \"" + messageController.getSender() + "\"");
             log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
             log.debug("Contenu : \"" + messageController.getContent() + "\"");
 

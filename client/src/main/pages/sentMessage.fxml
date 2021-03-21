@@ -35,7 +35,8 @@
                   <Label id="contentLabel" prefHeight="54.0" prefWidth="269.0" text="Message content">
                      <VBox.margin>
                         <Insets right="25.0" />
-                     </VBox.margin></Label>
+                     </VBox.margin>
+                  </Label>
                </children>
             </VBox>
             <ImageView fitHeight="53.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
