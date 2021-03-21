@@ -14,22 +14,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="400.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.GroupSettingsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="400.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.GroupSettingsController">
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
    <children>
-      <VBox alignment="CENTER" prefHeight="375.0" prefWidth="400.0" spacing="8.0">
+      <VBox alignment="CENTER" prefHeight="415.0" prefWidth="400.0" spacing="8.0">
          <children>
-            <GridPane alignment="CENTER" hgap="25.0" prefHeight="309.0" prefWidth="400.0" vgap="5.0">
+            <GridPane alignment="CENTER" hgap="25.0" prefHeight="350.0" prefWidth="400.0" vgap="5.0">
               <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
@@ -48,7 +51,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label text="Nom du groupe :" textAlignment="CENTER" GridPane.rowIndex="3">
+                  <Label text="GroupName/Username :" textAlignment="CENTER" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -83,11 +86,16 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </JFXRadioButton>
+                        <JFXRadioButton onAction="#actionCreatePmRadioButton" text="MESSAGE PRIVÉ (MP)" textAlignment="CENTER" toggleGroup="$operationTypeToggleGroup">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXRadioButton>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
-                        <JFXRadioButton onAction="#actionPublicGroupStatusRadioButton" selected="true" text="PUBLIC" textAlignment="CENTER">
+                        <JFXRadioButton id="publicGroupStatusRadioButton" onAction="#actionPublicGroupStatusRadioButton" selected="true" text="PUBLIC" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -95,7 +103,7 @@
                               <ToggleGroup fx:id="groupStatusToggleGroup" />
                            </toggleGroup>
                         </JFXRadioButton>
-                        <JFXRadioButton onAction="#actionPrivateGroupStatusRadioButton" text="PRIVÉ" textAlignment="CENTER" toggleGroup="$groupStatusToggleGroup">
+                        <JFXRadioButton id="privateGroupStatusRadioButton" onAction="#actionPrivateGroupStatusRadioButton" text="PRIVÉ" textAlignment="CENTER" toggleGroup="$groupStatusToggleGroup">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -104,32 +112,32 @@
                   </VBox>
                   <JFXTextField fx:id="ipAddressTextField" prefHeight="25.0" prefWidth="146.0" promptText="127.0.0.1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <padding>
-                        <Insets right="39.0" />
+                        <Insets right="36.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="portTextField" prefHeight="25.0" prefWidth="146.0" promptText="6666" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <padding>
-                        <Insets right="39.0" />
+                        <Insets right="36.0" />
                      </padding>
                   </JFXTextField>
-                  <JFXTextField fx:id="groupNameTextField" prefHeight="25.0" prefWidth="146.0" promptText="&lt; 15 caractères" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <JFXTextField fx:id="groupNameTextField" prefHeight="25.0" prefWidth="146.0" promptText="&lt; 12 caractères" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <padding>
-                        <Insets right="39.0" />
+                        <Insets right="36.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupIdTextField" prefHeight="25.0" prefWidth="146.0" promptText="1" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <padding>
-                        <Insets right="39.0" />
+                        <Insets right="36.0" />
                      </padding>
                   </JFXTextField>
                   <JFXTextField fx:id="groupDescriptionTextField" prefHeight="25.0" prefWidth="146.0" promptText="Optionnelle, &lt; 30 car" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <padding>
-                        <Insets right="39.0" />
+                        <Insets right="36.0" />
                      </padding>
                   </JFXTextField>
                </children>
             </GridPane>
-            <VBox alignment="CENTER" prefHeight="45.0" prefWidth="400.0">
+            <VBox alignment="CENTER" prefHeight="65.0" prefWidth="400.0">
                <children>
                   <JFXButton id="doneButton" buttonType="RAISED" onAction="#actionDoneButton" prefWidth="65.0" ripplerFill="#5996ff" text="DONE" textAlignment="CENTER">
                      <font>
@@ -137,11 +145,11 @@
                      </font>
                   </JFXButton>
                </children>
+               <padding>
+                  <Insets bottom="12.0" />
+               </padding>
             </VBox>
          </children>
       </VBox>
    </children>
-   <cursor>
-      <Cursor fx:constant="HAND" />
-   </cursor>
 </AnchorPane>

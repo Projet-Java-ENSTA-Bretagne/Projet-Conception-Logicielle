@@ -1,5 +1,8 @@
 package pageManagement;
 
+import com.jfoenix.controls.JFXRadioButton;
+import javafx.scene.Group;
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXButton;
@@ -53,6 +56,22 @@ public class GroupSettingsController {
         log.debug("Operation type : " + operationType);
     }
 
+    @FXML
+    void actionCreatePmRadioButton() {
+        setOperationType("createPm");
+        log.debug("Operation type : " + operationType);
+
+        JFXRadioButton publicGroupStatusRadioButton = (JFXRadioButton) HomeController.getCurrentGroupSettingsRoot().lookup("#publicGroupStatusRadioButton");
+        if (publicGroupStatusRadioButton.isSelected()) {
+            publicGroupStatusRadioButton.setSelected(false);
+
+            JFXRadioButton privateGroupStatusRadioButton = (JFXRadioButton) HomeController.getCurrentGroupSettingsRoot().lookup("#privateGroupStatusRadioButton");
+            privateGroupStatusRadioButton.setSelected(true);
+            setGroupStatus("private");
+            log.debug("Group status : " + groupStatus);
+        }
+    }
+
     /* -------------------------------------------- */
 
     @FXML
@@ -85,8 +104,21 @@ public class GroupSettingsController {
 
     @FXML
     void actionPublicGroupStatusRadioButton() {
-        setGroupStatus("public");
-        log.debug("Group status : " + groupStatus);
+        if (operationType.equals("createPm")) {
+            log.warn("A PM discussion cannot be public !");
+
+            JFXRadioButton publicGroupStatusRadioButton = (JFXRadioButton) HomeController.getCurrentGroupSettingsRoot().lookup("#publicGroupStatusRadioButton");
+            publicGroupStatusRadioButton.setSelected(false);
+
+            JFXRadioButton privateGroupStatusRadioButton = (JFXRadioButton) HomeController.getCurrentGroupSettingsRoot().lookup("#privateGroupStatusRadioButton");
+            privateGroupStatusRadioButton.setSelected(true);
+            setGroupStatus("private");
+            log.debug("Group status : " + groupStatus);
+        }
+        else {
+            setGroupStatus("public");
+            log.debug("Group status : " + groupStatus);
+        }
     }
 
     @FXML
@@ -107,17 +139,23 @@ public class GroupSettingsController {
      * Checks if the group settings are valid, then, according to the chosen
      * operation type, creates a new group or connects the current tcpClient
      * to the desired group chat.
+     * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called
-     * TODO : Link this method to network
      */
     @FXML
     void actionDoneButton() throws IOException {
         log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
 
         boolean parametersAreValid = true;
+        boolean anErrorWasCaught = false;
 
         try {
+            // just in case
+            if (operationType.equals("createPm")) {
+                setGroupStatus("private");
+            }
+
             serverIpAddress = ipAddressTextField.getText();
             if ((serverIpAddress == null) || (serverIpAddress.length() == 0)) {
                 parametersAreValid = false;
@@ -133,8 +171,8 @@ public class GroupSettingsController {
                 parametersAreValid = false;
             }
             else {
-                // the group name has to be less than 15 characters
-                groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 15));
+                // the group name has to be less than 12 characters
+                groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 12));
 
                 // here we check if the group name already exists
                 ArrayList<GroupThumbnailObject> groupThumbnailObjectList = HomeController.getGroupThumbnailObjectList();
@@ -165,6 +203,7 @@ public class GroupSettingsController {
         }
         catch (Exception e) {
             parametersAreValid = false;
+            anErrorWasCaught = true;
             System.out.println("");
             log.error("Parametrage invalide ! Erreur : " + e);
         }
@@ -200,7 +239,7 @@ public class GroupSettingsController {
                 try {
                     groupThumbnailController.actionOpenGroupButton();
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    log.error("Erreur lors de l'appel au bouton \"OPEN\" (groupName = \"" + groupName + "\") : " + ioException);
                 }
             });
 
@@ -222,11 +261,16 @@ public class GroupSettingsController {
             groupNameLabel.setText(groupName);
 
             Label groupStatusLabel = (Label) groupThumbnailRoot.lookup("#groupStatusLabel");
-            if (groupStatus.equals("public")) {
-                groupStatusLabel.setText("Groupe public");
+            if (operationType.equals("createPm")) {
+                groupStatusLabel.setText("Messages privés (MP)");
             }
-            else if (groupStatus.equals("private")) {
-                groupStatusLabel.setText("Groupe privé");
+            else {
+                if (groupStatus.equals("public")) {
+                    groupStatusLabel.setText("Groupe public");
+                }
+                else if (groupStatus.equals("private")) {
+                    groupStatusLabel.setText("Groupe privé");
+                }
             }
 
             Label groupDescriptionLabel = (Label) groupThumbnailRoot.lookup("#groupDescriptionLabel");
@@ -235,6 +279,9 @@ public class GroupSettingsController {
             GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
             HomeController.addGroup(newGroupThumbnailObject);
 
+            GroupObject newGroupObject = new GroupObject(groupName);
+            DiscussionController.addGroupObject(newGroupObject);
+
             System.out.println("");
             if (operationType.equals("joinGroup")) {
                 log.debug("Vous venez de rejoindre le groupe \"" + groupName + "\" !\n");
@@ -242,14 +289,16 @@ public class GroupSettingsController {
             else if (operationType.equals("createGroup")) {
                 log.debug("Vous venez de creer le groupe \"" + groupName + "\" !\n");
             }
+            else if (operationType.equals("createPm")) {
+                log.debug("Vous venez de creer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !\n");
+            }
         }
 
         else {
-            System.out.println("");
-            log.error("Parametrage invalide !");
+            if (!anErrorWasCaught) {
+                System.out.println("");
+                log.error("Parametrage invalide !");
+            }
         }
     }
-
-    //
-
 }

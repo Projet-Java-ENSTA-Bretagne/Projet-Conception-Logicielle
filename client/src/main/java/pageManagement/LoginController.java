@@ -64,7 +64,6 @@ public class LoginController {
      * Action linked to the "Login" JFXButton.
      * Checks if the username and the password entries are valid, then
      * tries to connect to the server.
-     *
      * TODO : Link this method to network
      */
     @FXML
@@ -94,6 +93,7 @@ public class LoginController {
                 // changing/setting username
                 setUsername(currentUsernameEntry);
                 allowedToChangeUsername = false;
+                DiscussionController.setCurrentSender(username);
 
                 // changing/setting password
                 setPassword(currentPasswordEntry);

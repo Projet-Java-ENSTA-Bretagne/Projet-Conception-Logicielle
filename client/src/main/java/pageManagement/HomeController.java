@@ -44,7 +44,7 @@ public class HomeController {
      *
      * @param nameOfTheGroupToDelete The name of the group to delete
      */
-    public static void deleteGroupByName(String nameOfTheGroupToDelete) {
+    public static void deleteGroupThumbnailByGroupName(String nameOfTheGroupToDelete) {
         for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
             GroupThumbnailController groupThumbnailController = groupThumbnailObject.getController();
             String groupName = groupThumbnailController.getGroupName();
@@ -55,13 +55,12 @@ public class HomeController {
 
                 groupThumbnailObjectList.remove(groupThumbnailObject);
 
-                groupThumbnailController = null;
-                groupThumbnailRoot = null;
+                groupThumbnailObject.delete();
                 groupThumbnailObject = null;
 
                 decrementNbGroupsYouAreStillPartOf();
                 System.out.println("");
-                log.debug("Vous venez de quitter le groupe \"" + groupName + "\"");
+                log.debug("Vous venez de quitter le groupe \"" + nameOfTheGroupToDelete + "\"");
                 log.debug("Nombre total de groupes restants : " + nbGroupsYouAreStillPartOf + "\n");
 
                 return;
@@ -106,7 +105,7 @@ public class HomeController {
      */
     @FXML
     void initialize() {
-        log.info("Initializing home controller\n");
+        log.info("Initializing home controller");
 
         groupThumbnailHBox = null;
         groupThumbnailObjectList = new ArrayList<>();
@@ -116,12 +115,9 @@ public class HomeController {
         currentConfirmLeaveGroupStage = null;
     }
 
-    //
-
     /**
      * Action linked to the "Déconnexion" JFXButton.
      * Disconnects from the server, leaves the Home page, then switches to the Login scene.
-     *
      * TODO : Link this method to network
      */
     @FXML
@@ -135,11 +131,24 @@ public class HomeController {
 
     public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
         currentGroupSettingsStage = groupSettingsStage;
+        if (groupSettingsStage == null) {
+            setCurrentGroupSettingsRoot(null);
+        }
     }
 
     public static void closeCurrentGroupSettingsStage() {
         currentGroupSettingsStage.close();
         setCurrentGroupSettingsStage(null);
+    }
+
+    private static Parent currentGroupSettingsRoot;
+
+    public static Parent getCurrentGroupSettingsRoot() {
+        return currentGroupSettingsRoot;
+    }
+
+    public static void setCurrentGroupSettingsRoot(Parent groupSettingsRoot) {
+        currentGroupSettingsRoot = groupSettingsRoot;
     }
 
     private static Stage currentConfirmLeaveGroupStage;
@@ -157,9 +166,9 @@ public class HomeController {
      * Action linked to the "join or create group" icon/JFXButton.
      * Opens a new GroupSettings stage, where it's possible to configurate
      * the settings of the group you want to join/create.
+     * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called
-     * TODO : Link this method to network
      */
     @FXML
     void joinOrCreateGroup() throws IOException {
@@ -167,7 +176,8 @@ public class HomeController {
 
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
-        Scene scene = new Scene(groupSettingsRoot, 400, 375);
+        setCurrentGroupSettingsRoot(groupSettingsRoot);
+        Scene scene = new Scene(groupSettingsRoot, 400, 415);
 
         Stage currentGroupSettingsStage = new Stage();
         currentGroupSettingsStage.getIcons().add(new Image("settings-icon.png"));
@@ -180,7 +190,4 @@ public class HomeController {
 
         currentGroupSettingsStage.show();
     }
-
-    //
-
 }

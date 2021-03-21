@@ -36,13 +36,13 @@ public class ConfirmLeaveGroupController {
      * Action linked to the "Oui" JFXButton.
      * Effectively leaves the chosen group.
      * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
-     *
      * TODO : Link this method to network
      */
     public void actionYesButton() {
         log.info("Bouton \"Oui\" appuye (confirmLeaveGroup), groupName = \"" + getGroupName() + "\"");
         HomeController.closeCurrentConfirmLeaveGroupStage();
-        HomeController.deleteGroupByName(getGroupName());
+        HomeController.deleteGroupThumbnailByGroupName(getGroupName());
+        DiscussionController.deleteGroupObjectByGroupName(getGroupName());
     }
 
     /**

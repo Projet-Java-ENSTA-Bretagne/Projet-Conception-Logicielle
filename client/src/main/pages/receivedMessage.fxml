@@ -10,37 +10,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="messageAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="98.0" prefWidth="350.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="messageAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="561.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <cursor>
       <Cursor fx:constant="HAND" />
    </cursor>
    <children>
-      <HBox prefHeight="100.0" prefWidth="350.0">
+      <HBox id="receivedMessageHBox" prefHeight="100.0" prefWidth="374.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <ImageView fitHeight="69.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="53.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/defaultGroupIcon-small-size.png" />
                </image>
                <HBox.margin>
-                  <Insets top="25.0" />
+                  <Insets left="25.0" top="25.0" />
                </HBox.margin>
             </ImageView>
-            <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="277.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="294.0">
                <HBox.margin>
-                  <Insets left="16.0" />
+                  <Insets left="25.0" />
                </HBox.margin>
                <children>
-                  <Label id="senderlabel" text="sender" textAlignment="CENTER">
+                  <Label id="senderLabel" text="Sender" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-                  <Label id="datelabel" text="date" textAlignment="CENTER">
+                  <Label id="dateLabel" text="Date" textAlignment="CENTER">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <Label id="contentlabel" prefHeight="54.0" prefWidth="276.0" text="Lorem ipsum " />
+                  <Label id="contentLabel" prefHeight="54.0" prefWidth="269.0" text="Message content">
+                     <VBox.margin>
+                        <Insets right="25.0" />
+                     </VBox.margin></Label>
                </children>
             </VBox>
          </children>

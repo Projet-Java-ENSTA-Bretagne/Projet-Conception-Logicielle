@@ -1,82 +1,47 @@
 package pageManagement;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
 /**
- * Class handling the JavaFX objects from the Group Thumbnails (defined in groupThumbnail.fxml)
- * that will be added to the Home scene.
+ * Class handling the JavaFX objects from the messages (defined in sentMessage.fxml and
+ * receivedMessage.fxml) that will be added to the Discussion scene.
  */
 public class MessageController {
     // Logging
     private final Logger log = LogManager.getLogger(MessageController.class);
 
-    private int messageNb;
     private String sender;
     private String date;
     private String content;
-
-
-    public int getMessageNb() {
-        return messageNb;
-    }
 
     public String getSender() {
         return sender;
     }
 
-    public String getdate() {
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getDate() {
         return date;
     }
 
-    public String getContent() {return content; }
+    public void setDate(String date) {
+        this.date = date;
+    }
 
+    public String getContent() {
+        return content;
+    }
 
-    public MessageController(int messageNb, String sender, String date, String content) {
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-        this.messageNb = messageNb;
+    public MessageController(String sender, String date, String content) {
         this.sender = sender;
         this.date = date;
         this.content = content;
     }
-
-    /**
-     * Method that is executed right before "groupThumbnail.fxml" is loaded.
-     */
-    @FXML
-    void initialize() {
-        System.out.println("");
-        log.info("Initializing group thumbnail controller, message number = \"" + getMessageNb() + "\"");
-    }
-
-    /**
-     * Action linked to the "OPEN" JFXButton.
-     * Opens the discussion scene associated with the chosen group. Loads the message
-     * from that same group.
-     * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
-     *
-     * TODO : Link this method to network
-     * TODO : Link this method to the associated Discussion scene
-     */
-    public void actionOpenGroupButton() {
-        log.info("Bouton \"OPEN\" appuye, message number = \"" + getMessageNb() + "\"");
-
-        // TODO : open discussion.fxml
-    }
-
-
-
 }

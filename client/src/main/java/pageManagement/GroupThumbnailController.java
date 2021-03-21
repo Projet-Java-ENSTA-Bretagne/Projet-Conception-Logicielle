@@ -60,6 +60,8 @@ public class GroupThumbnailController {
         return groupId;
     }
 
+    private int nbOfTimesTheGroupWasOpened;
+
     public GroupThumbnailController(String groupName, String groupStatus, String groupDescription,
                                     String operationType, String serverIpAddress,
                                     int serverPort, int groupId) {
@@ -72,6 +74,8 @@ public class GroupThumbnailController {
         this.serverIpAddress = serverIpAddress;
         this.serverPort = serverPort;
         this.groupId = groupId;
+
+        nbOfTimesTheGroupWasOpened = 0;
     }
 
     /**
@@ -88,17 +92,30 @@ public class GroupThumbnailController {
      * Opens the discussion scene associated with the chosen group. Loads the message
      * from that same group.
      * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
-     *
      * TODO : Link this method to network
-     * TODO : Link this method to the associated Discussion scene
+     *
+     * @throws IOException If error when FXMLLoader.load() is called (in DiscussionController.loadMessages();)
      */
     public void actionOpenGroupButton() throws IOException {
         log.info("Bouton \"OPEN\" appuye, groupName = \"" + getGroupName() + "\"");
 
+        Label discussionNameLabel = (Label) MainController.getDiscussionScene().lookup("#discussionNameLabel");
+        if (getOperationType().equals("createPm")) {
+            discussionNameLabel.setText("MP avec : " + getGroupName());
+        }
+        else {
+            discussionNameLabel.setText("Groupe : " + getGroupName());
+        }
 
+        DiscussionController.setNameOfTheCurrentGroup(getGroupName());
+
+        if ((nbOfTimesTheGroupWasOpened == 0) && (!DiscussionController.isDiscussionVBoxNull())) {
+            DiscussionController.loadGroupObjectWithDummyData();
+        }
+        nbOfTimesTheGroupWasOpened += 1;
+
+        DiscussionController.loadMessages();
         MainController.switchToDiscussionScene();
-
-        // --> opens Discussion scene [TO DO]
     }
 
     /**
@@ -139,7 +156,4 @@ public class GroupThumbnailController {
 
         currentConfirmLeaveGroupStage.show();
     }
-
-    //
-
 }

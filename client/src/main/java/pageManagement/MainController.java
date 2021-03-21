@@ -12,7 +12,7 @@ import java.io.File;
 import javafx.scene.image.Image;
 
 /**
- * Class handling the switches between the main scenes (Login, Home).
+ * Class handling the switches between the main scenes (Login, Home, Discussion).
  */
 public class MainController {
     // Logging
@@ -53,8 +53,8 @@ public class MainController {
     }
 
     /**
-     * Loads the 2 main FXML files (login, home), so that the associated scenes
-     * can be easily reused throughout the code.
+     * Loads the 3 main FXML files (login, home, discussion), so that the associated scenes
+     * can be easily reused (statically) throughout the code.
      *
      * @throws IOException If error when FXMLLoader.load() is called
      */
@@ -70,7 +70,6 @@ public class MainController {
         URL discussionURL = new File("src/main/pages/discussion.fxml").toURI().toURL();
         Parent discussionRoot = FXMLLoader.load(discussionURL);
         discussionScene = new Scene(discussionRoot, 659, 402);
-
 
         mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to main stage
         setCurrentScene("");
@@ -110,11 +109,14 @@ public class MainController {
         }
     }
 
+    /**
+     * Switches to the Discussion scene. If already in the Discussion scene, nothing is done.
+     */
     public static void switchToDiscussionScene() {
         if (!getCurrentScene().equals("discussion")) {
             setCurrentScene("discussion");
 
-            mainStage.setTitle("discussion_title");
+            mainStage.setTitle("Discussion");
             mainStage.setScene(discussionScene);
             mainStage.show();
         }
@@ -123,7 +125,4 @@ public class MainController {
             log.warn("Already in discussion scene !");
         }
     }
-
-    //
-
 }

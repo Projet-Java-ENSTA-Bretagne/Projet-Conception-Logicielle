@@ -1,108 +1,214 @@
 package pageManagement;
 
-import com.jfoenix.controls.JFXButton;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.jfoenix.controls.JFXTextField;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * Class handling the JavaFX objects from the Home scene (defined in home.fxml).
+ * Class handling the JavaFX objects from the Discussion scene (defined in discussion.fxml).
  */
 public class DiscussionController {
     // Logging
     private static final Logger log = LogManager.getLogger(DiscussionController.class);
 
-    // Object containing all the current group thumbnails
-    private static ArrayList<MessageObject> messageList;
+    // Object containing all the current groups (with their respective messages)
+    private static ArrayList<GroupObject> groupObjectList;
 
-    public static ArrayList<MessageObject> getmessageList() {
-        return messageList;
+    public static ArrayList<GroupObject> getGroupObjectList() {
+        return groupObjectList;
+    }
+
+    public static void addGroupObject(GroupObject groupObject) {
+        groupObjectList.add(groupObject);
     }
 
     /**
-     * Adds messages previews to the discussion page.
+     * Deletes a group object from the group object list.
      *
-     * @param messageObject The message preview object to add
+     * @param nameOfTheGroupToDelete The name of the group to delete
      */
-    public static void addmessage(MessageObject messageObject) {
-        discussionVBox.getChildren().add(messageObject.getRoot());
-        messageList.add(messageObject);
-    }
+    public static void deleteGroupObjectByGroupName(String nameOfTheGroupToDelete) {
+        for (GroupObject groupObject : groupObjectList) {
+            String otherGroupName = groupObject.getGroupName();
 
-    /**
-     * Deletes a group thumbnail from the Home page.
-     *
-     * @param numberOfTheMessageToDelete The name of the message to delete
-     */
-    public static void deleteMessageByNumber(int numberOfTheMessageToDelete) {
-        for (MessageObject messageObject : messageList) {
-            MessageController messageController = messageObject.getController();
-            int messageNb = messageController.getMessageNb();
+            if (otherGroupName.equals(nameOfTheGroupToDelete)) {
+                groupObjectList.remove(groupObject);
 
-            if (messageNb == numberOfTheMessageToDelete) {
-                Parent messageRoot = messageObject.getRoot();
-                discussionVBox.getChildren().remove(messageRoot);
-
-                messageList.remove(messageObject);
-
-                messageController = null;
-                messageRoot = null;
-                messageObject = null;
-
-                decrementNbMessagesVisible();
-                System.out.println("");
-                log.debug("Vous venez de supprimer le message n° \"" + messageNb + "\"");
-                log.debug("Nombre total de groupes restants : " + nbMessagesVisible + "\n");
+                groupObject.delete();
+                groupObject = null;
 
                 return;
             }
         }
+    }
 
-        // just in case (but should theoretically never happen)
-        System.out.println("");
-        log.error("Le message \"" + numberOfTheMessageToDelete + "\" n'existe pas !\n");
+    public static void loadGroupObjectWithDummyData() {
+        String currentDate = getCurrentDate();
+
+        if (totalNbOfSentMessages % 3 == 0) {
+            MessageController message1 = new MessageController(currentSender, currentDate, "hey");
+            MessageController message2 = new MessageController("Mec 1", currentDate, "hey !");
+            MessageController message3 = new MessageController(currentSender, currentDate, "ça va ?");
+            MessageController message4 = new MessageController("Mec 1", currentDate, "yes et toi ?");
+            MessageController message5 = new MessageController("Mec 2", currentDate, "re !");
+            MessageController message6 = new MessageController(currentSender, currentDate, "aaaye re");
+            MessageController message7 = new MessageController("Mec 1", currentDate, "re mdr");
+
+            addMessageToAssociatedMessageList(message1);
+            addMessageToAssociatedMessageList(message2);
+            addMessageToAssociatedMessageList(message3);
+            addMessageToAssociatedMessageList(message4);
+            addMessageToAssociatedMessageList(message5);
+            addMessageToAssociatedMessageList(message6);
+            addMessageToAssociatedMessageList(message7);
+        }
+
+        else if (totalNbOfSentMessages % 3 == 1) {
+            MessageController message1 = new MessageController("Mec ché-per", currentDate, "qqn a vu mes clés ?");
+            MessageController message2 = new MessageController(currentSender, currentDate, "euh ... non pk ?");
+            MessageController message3 = new MessageController(currentSender, currentDate, "ah si c possible");
+            MessageController message4 = new MessageController("Mec ché-per", currentDate, "nice ! ou ça ?");
+
+            addMessageToAssociatedMessageList(message1);
+            addMessageToAssociatedMessageList(message2);
+            addMessageToAssociatedMessageList(message3);
+            addMessageToAssociatedMessageList(message4);
+        }
+
+        else {
+            // 33% chance that no additional "dummy messages" are loaded
+            return;
+        }
+    }
+
+    private static String nameOfTheCurrentGroup;
+
+    public static String getNameOfTheCurrentGroup() {
+        return nameOfTheCurrentGroup;
+    }
+
+    public static void setNameOfTheCurrentGroup(String nameOfTheNewCurrentGroup) {
+        nameOfTheCurrentGroup = nameOfTheNewCurrentGroup;
+    }
+
+    public static void addMessageToAssociatedMessageList(MessageController messageController) {
+        for (GroupObject groupObject : groupObjectList) {
+            String groupName = groupObject.getGroupName();
+
+            if (groupName.equals(nameOfTheCurrentGroup)) {
+                groupObject.addMessage(messageController);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Displays a given message in the discussion VBox from the data in its associated controller.
+     *
+     * @param messageController
+     * @throws IOException If error when FXMLLoader.load() is called
+     */
+    public static void displayMessageFromController(MessageController messageController) throws IOException {
+        String sender = messageController.getSender();
+        URL messageURL;
+
+        if (sender.equals(currentSender)) {
+            messageURL = new File("src/main/pages/sentMessage.fxml").toURI().toURL();
+        }
+        else {
+            messageURL = new File("src/main/pages/receivedMessage.fxml").toURI().toURL();
+        }
+
+        FXMLLoader messageLoader = new FXMLLoader(messageURL);
+        messageLoader.setController(messageController);
+        Parent messageRoot = messageLoader.load();
+
+        Label senderLabel = (Label) messageRoot.lookup("#senderLabel");
+        senderLabel.setText(messageController.getSender());
+
+        Label dateLabel = (Label) messageRoot.lookup("#dateLabel");
+        dateLabel.setText(messageController.getDate());
+
+        Label contentLabel = (Label) messageRoot.lookup("#contentLabel");
+        contentLabel.setText(messageController.getContent());
+
+        discussionVBox.getChildren().add(messageRoot);
+    }
+
+    /**
+     * Loads all the messages stored in the group object associated to the discussion page
+     * that was just opened from the Home scene.
+     *
+     * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
+     */
+    public static void loadMessages() throws IOException {
+        for (GroupObject groupObject : groupObjectList) {
+            String groupName = groupObject.getGroupName();
+
+            if (groupName.equals(nameOfTheCurrentGroup)) {
+                for (MessageController messageController : groupObject.getMessageList()) {
+                    displayMessageFromController(messageController);
+                }
+            }
+        }
+    }
+
+    public static void unloadMessages() {
+        discussionVBox.getChildren().clear();
     }
 
     private static VBox discussionVBox;
 
-    public static void initializediscussionVBox(VBox newdiscussionVBox) {
-        discussionVBox = newdiscussionVBox;
+    public static void initializeDiscussionVBox(VBox newDiscussionVBox) {
+        discussionVBox = newDiscussionVBox;
+        discussionVBoxIsNull = false;
     }
 
-    // number of created **or joined** groups
-    private static int nbmessages;
+    private static boolean discussionVBoxIsNull;
 
-    public static int getNbMessages() {
-        return nbmessages;
+    public static boolean isDiscussionVBoxNull() {
+        return discussionVBoxIsNull;
     }
 
-    // nbCreatedGroups can only increase
-    public static void incrementNbMessages() {
-        nbmessages += 1;
+    private static int totalNbOfSentMessages;
+
+    private static String currentSender;
+
+    public static String getCurrentSender() {
+        return currentSender;
     }
 
-    private static int nbMessagesVisible;
-
-    public static void incrementNbMessagesVisible() {
-        nbMessagesVisible += 1;
+    public static void setCurrentSender(String newSenderName) {
+        currentSender = newSenderName;
     }
 
-    public static void decrementNbMessagesVisible() {
-        nbMessagesVisible -= 1;
+    /**
+     * Generates the current date, formatted in a relevant way for the group messages.
+     *
+     * @return The current date (example : "Le 21/03 à 17h53")
+     */
+    public static String getCurrentDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
+        Date date = new Date();
+        String formattedDate = formatter.format(date);
+
+        String[] splitFormattedDate = formattedDate.split(" ");
+        String[] splitTime = splitFormattedDate[1].split(":");
+
+        String currentDate = "Le " + splitFormattedDate[0] + " à " + splitTime[0] + "h" + splitTime[1];
+
+        return currentDate;
     }
 
     /**
@@ -112,120 +218,75 @@ public class DiscussionController {
     void initialize() {
         log.info("Initializing discussion controller\n");
 
+        totalNbOfSentMessages = 0;
         discussionVBox = null;
-        messageList = new ArrayList<>();
-        nbmessages = 0;
-        nbMessagesVisible = 0;
-        currentGroupSettingsStage = null;
-        currentConfirmLeaveGroupStage = null;
+        discussionVBoxIsNull = true;
+        groupObjectList = new ArrayList<>();
     }
 
-    //
-
     /**
-     * Action linked to the "Déconnexion" JFXButton.
-     * Disconnects from the server, leaves the Home page, then switches to the Login scene.
-     *
+     * Action linked to the "Quitter" JFXButton.
+     * Leaves the current Discussions page, then switches to the Home scene.
      * TODO : Link this method to network
      */
     @FXML
-    void actionDisconnectButton() {
+    void actionExitButton() {
         System.out.println("");
-        log.info("Deconnexion");
-        MainController.switchToLoginScene();
+        log.info("Vous venez d'appuyer sur le bouton \"Quitter\"");
+
+        Label discussionNameLabel = (Label) MainController.getDiscussionScene().lookup("#discussionNameLabel");
+        discussionNameLabel.setText("Discussion name"); // default name
+
+        unloadMessages();
+
+        MainController.switchToHomeScene();
     }
 
-    private static Stage currentGroupSettingsStage;
-
-    public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
-        currentGroupSettingsStage = groupSettingsStage;
-    }
-
-    public static void closeCurrentGroupSettingsStage() {
-        currentGroupSettingsStage.close();
-        setCurrentGroupSettingsStage(null);
-    }
-
-    private static Stage currentConfirmLeaveGroupStage;
-
-    public static void setCurrentConfirmLeaveGroupStage(Stage confirmLeaveGroupStage) {
-        currentConfirmLeaveGroupStage = confirmLeaveGroupStage;
-    }
-
-    public static void closeCurrentConfirmLeaveGroupStage() {
-        currentConfirmLeaveGroupStage.close();
-        setCurrentConfirmLeaveGroupStage(null);
-    }
-
-
+    @FXML
+    private JFXTextField messageTextField;
 
     /**
-     * Action linked to the "DONE" JFXButton.
-     * Checks if the group settings are valid, then, according to the chosen
-     * operation type, creates a new group or connects the current tcpClient
-     * to the desired group chat.
-     *
-     * @throws IOException If error when FXMLLoader.load() is called
+     * Sends the message to all the users in the current group chat (or the PM chat).
      * TODO : Link this method to network
+     *
+     * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
      */
     @FXML
-    void addMessageToDiscussion(MessageController message) throws IOException {
-        log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
+    void sendMessage() throws IOException {
+        totalNbOfSentMessages += 1;
 
-        boolean parametersAreValid = true;
+        // this seems to be the only way to get the **NOT-NULL** discussion VBox from the
+        // Discussion scene
+        if ((totalNbOfSentMessages == 1) && (discussionVBox == null)) {
+            initializeDiscussionVBox((VBox) MainController.getDiscussionScene().lookup("#discussionVBox"));
+        }
 
-        // TODO : parameter check ?
+        String currentWholeMessage = messageTextField.getText();
 
-        if (parametersAreValid) {
+        if ((currentWholeMessage == null) || (currentWholeMessage.length() == 0)) {
             System.out.println("");
-            log.debug("message N° : \""  +message.getMessageNb() + "\"");
-            log.debug("sender : \"" + message.getSender() + "\"");
-            log.debug("date d'envoi : \"" + message.getdate() + "\"");
-
-
-            /* ---------------------------------------------------------- */
-
-            // adding new message displayed
-
-            DiscussionController.incrementNbMessages();
-            DiscussionController.incrementNbMessagesVisible();
-
-            URL messageURL = new File("src/main/pages/message.fxml").toURI().toURL();
-            FXMLLoader messageLoader = new FXMLLoader(messageURL);
-            MessageController messageController = new MessageController(message.getMessageNb(), message.getSender(), message.getdate(), message.getContent());
-            messageLoader.setController(messageController);
-            Parent discussionRoot = messageLoader.load();
-
-
-            // this seems to be the only way to get the **NOT-NULL** discussion HBox from the Home scene
-            if (DiscussionController.getNbMessages() == 1) {
-                DiscussionController.initializediscussionVBox((VBox) MainController.getHomeScene().lookup("#discussionVBox"));
-            }
-
-            Label senderLabel = (Label) discussionRoot.lookup("#senderlabel");
-            senderLabel.setText(message.getContent());
-
-            Label dateLabel = (Label) discussionRoot.lookup("#datelabel");
-            if (message.getContent().equals("today")) {  //TODO : add real date support to date (change type)
-                dateLabel.setText("today");
-            }
-            else {
-                dateLabel.setText(message.getdate());
-            }
-
-            Label contentLabel = (Label) discussionRoot.lookup("#contentlabel");
-            contentLabel.setText(message.getContent());
-
-            MessageObject newMessageObject = new MessageObject(messageController, discussionRoot);
-            DiscussionController.addmessage(newMessageObject);
-
+            log.error("Message invalide !");
         }
 
         else {
+            // adding the new message to the Discussion scene
+
+            // the sent message has to be less than 20 characters (for now)
+            String currentMessage = currentWholeMessage.substring(0, Math.min(currentWholeMessage.length(), 20));
+
+            // resetting the message TextField
+            messageTextField.setText("");
+
+            MessageController messageController = new MessageController(getCurrentSender(),
+                                                      getCurrentDate(), currentMessage);
+
             System.out.println("");
-            log.error("Parametrage invalide !");
+            log.debug("Emetteur : \"" + messageController.getSender() + "\"");
+            log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
+            log.debug("Contenu : \"" + messageController.getContent() + "\"");
+
+            addMessageToAssociatedMessageList(messageController);
+            displayMessageFromController(messageController);
         }
     }
-    //
-
 }
