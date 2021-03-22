@@ -129,7 +129,7 @@
     -fx-background-color: linear-gradient(to bottom, red, orange, yellow, green, cyan, blue, violet); /* rainbow colours */
 }
 
-/* hiding the left/right arrows of the scrollbar */
+/* hiding the top/bottom arrows of the scrollbar */
 #discussionScrollPane .scroll-bar:vertical .decrement-button {
     -fx-pref-height: 0px;
     -fx-background-color: Transparent;

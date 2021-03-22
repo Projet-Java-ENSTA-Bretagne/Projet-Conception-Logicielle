@@ -42,6 +42,8 @@ public class LoginController {
     private static void setUsername(String newUsername) {
         if (allowedToChangeUsername) {
             username = newUsername;
+            DiscussionController.setCurrentSender(username);
+            allowedToChangeUsername = false;
         }
     }
 
@@ -55,6 +57,7 @@ public class LoginController {
     private static void setPassword(String newPassword) {
         if (allowedToChangePassword) {
             password = newPassword;
+            allowedToChangePassword = false;
         }
     }
 
@@ -90,14 +93,9 @@ public class LoginController {
             nbSuccessfulLogins += 1;
 
             if (allowedToChangeLoginData) {
-                // changing/setting username
+                // changing/setting username and password
                 setUsername(currentUsernameEntry);
-                allowedToChangeUsername = false;
-                DiscussionController.setCurrentSender(username);
-
-                // changing/setting password
                 setPassword(currentPasswordEntry);
-                allowedToChangePassword = false;
 
                 System.out.println("");
                 log.debug("New username : \"" + username + "\"");

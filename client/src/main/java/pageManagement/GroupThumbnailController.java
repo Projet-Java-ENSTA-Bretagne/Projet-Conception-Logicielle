@@ -5,15 +5,15 @@ import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.scene.Scene;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 /**
  * Class handling the JavaFX objects from the Group Thumbnails (defined in groupThumbnail.fxml)
@@ -22,6 +22,15 @@ import javafx.stage.Stage;
 public class GroupThumbnailController {
     // Logging
     private final Logger log = LogManager.getLogger(GroupThumbnailController.class);
+
+    /**
+     * Method that is executed right before "groupThumbnail.fxml" is loaded.
+     */
+    @FXML
+    void initialize() {
+        System.out.println("");
+        log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
+    }
 
     private String groupName;
     private String groupStatus;
@@ -60,7 +69,7 @@ public class GroupThumbnailController {
         return groupId;
     }
 
-    private int nbOfTimesTheGroupWasOpened;
+    private boolean theGroupHasAlreadyBeenOpened;
 
     public GroupThumbnailController(String groupName, String groupStatus, String groupDescription,
                                     String operationType, String serverIpAddress,
@@ -75,16 +84,7 @@ public class GroupThumbnailController {
         this.serverPort = serverPort;
         this.groupId = groupId;
 
-        nbOfTimesTheGroupWasOpened = 0;
-    }
-
-    /**
-     * Method that is executed right before "groupThumbnail.fxml" is loaded.
-     */
-    @FXML
-    void initialize() {
-        System.out.println("");
-        log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
+        theGroupHasAlreadyBeenOpened = false;
     }
 
     /**
@@ -109,13 +109,13 @@ public class GroupThumbnailController {
 
         DiscussionController.setNameOfTheCurrentGroup(getGroupName());
 
-        if ((nbOfTimesTheGroupWasOpened == 0) && (!DiscussionController.isDiscussionVBoxNull())) {
+        if (!theGroupHasAlreadyBeenOpened) {
             DiscussionController.loadGroupObjectWithDummyData();
+            theGroupHasAlreadyBeenOpened = true;
         }
-        nbOfTimesTheGroupWasOpened += 1;
 
-        DiscussionController.loadMessages();
         MainController.switchToDiscussionScene();
+        DiscussionController.loadMessages();
     }
 
     /**

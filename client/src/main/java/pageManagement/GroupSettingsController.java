@@ -1,21 +1,18 @@
 package pageManagement;
 
-import com.jfoenix.controls.JFXRadioButton;
-import javafx.scene.Group;
-import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 
 /**
  * Class handling the JavaFX objects from the GroupSettings secondary stage (defined
@@ -138,7 +135,7 @@ public class GroupSettingsController {
      * Action linked to the "DONE" JFXButton.
      * Checks if the group settings are valid, then, according to the chosen
      * operation type, creates a new group or connects the current tcpClient
-     * to the desired group chat.
+     * to the desired group chat (or to the desired PM chat).
      * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called
@@ -224,7 +221,6 @@ public class GroupSettingsController {
 
             // adding new group visualizer/thumbnail
 
-            HomeController.incrementNbCreatedGroups();
             HomeController.incrementNbGroupsYouAreStillPartOf();
 
             URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
@@ -251,11 +247,6 @@ public class GroupSettingsController {
                     log.error("Erreur lors de l'appel au bouton \"LEAVE\" (groupName = \"" + groupName + "\") : " + ioException);
                 }
             });
-
-            // this seems to be the only way to get the **NOT-NULL** discussion HBox from the Home scene
-            if (HomeController.getNbCreatedGroups() == 1) {
-                HomeController.initializeGroupThumbnailHBox((HBox) MainController.getHomeScene().lookup("#groupThumbnailHBox"));
-            }
 
             Label groupNameLabel = (Label) groupThumbnailRoot.lookup("#groupNameLabel");
             groupNameLabel.setText(groupName);

@@ -11,6 +11,8 @@ public class MessageController {
     // Logging
     private final Logger log = LogManager.getLogger(MessageController.class);
 
+    // For messages, it isn't really useful to write an "initialize" FXML method
+
     private String sender;
     private String date;
     private String content;

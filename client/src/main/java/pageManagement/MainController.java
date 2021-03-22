@@ -3,13 +3,15 @@ package pageManagement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.net.URL;
-import java.io.File;
+import javafx.scene.Scene;
+import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
+import java.io.IOException;
+import java.io.File;
+import java.net.URL;
 
 /**
  * Class handling the switches between the main scenes (Login, Home, Discussion).
@@ -24,20 +26,8 @@ public class MainController {
     private static String currentScene;
     private static Scene discussionScene;
 
-    public static Stage getMainStage() {
-        return mainStage;
-    }
-
     public static void setMainStage(Stage stage) {
         mainStage = stage;
-    }
-
-    public static Scene getLoginScene() {
-        return loginScene;
-    }
-
-    public static Scene getHomeScene() {
-        return homeScene;
     }
 
     public static Scene getDiscussionScene() {
@@ -73,6 +63,9 @@ public class MainController {
 
         mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to main stage
         setCurrentScene("");
+
+        hasAlreadySwitchedToHomeScene = false;
+        hasAlreadySwitchedToDiscussionScene = false;
     }
 
     /**
@@ -92,6 +85,8 @@ public class MainController {
         }
     }
 
+    private static boolean hasAlreadySwitchedToHomeScene;
+
     /**
      * Switches to the Home scene. If already in the Home scene, nothing is done.
      */
@@ -102,12 +97,20 @@ public class MainController {
             mainStage.setTitle("Home");
             mainStage.setScene(homeScene);
             mainStage.show();
+
+            // getting the **NOT-NULL** thumbnail HBox from the Home scene
+            if (!hasAlreadySwitchedToHomeScene) {
+                HomeController.initializeGroupThumbnailHBox((HBox) homeScene.lookup("#groupThumbnailHBox"));
+                hasAlreadySwitchedToHomeScene = true;
+            }
         }
 
         else {
             log.warn("Already in home scene !");
         }
     }
+
+    private static boolean hasAlreadySwitchedToDiscussionScene;
 
     /**
      * Switches to the Discussion scene. If already in the Discussion scene, nothing is done.
@@ -119,6 +122,12 @@ public class MainController {
             mainStage.setTitle("Discussion");
             mainStage.setScene(discussionScene);
             mainStage.show();
+
+            // getting the **NOT-NULL** discussion VBox from the Discussion scene
+            if (!hasAlreadySwitchedToDiscussionScene) {
+                DiscussionController.initializeDiscussionVBox((VBox) discussionScene.lookup("#discussionVBox"));
+                hasAlreadySwitchedToDiscussionScene = true;
+            }
         }
 
         else {
