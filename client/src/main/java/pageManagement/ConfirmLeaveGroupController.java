@@ -12,6 +12,14 @@ public class ConfirmLeaveGroupController {
     // Logging
     private final Logger log = LogManager.getLogger(ConfirmLeaveGroupController.class);
 
+    /**
+     * Method that is executed right before "confirmLeaveGroup.fxml" is loaded.
+     */
+    @FXML
+    void initialize() {
+        log.info("Initializing confirmLeaveGroup controller, groupName = \"" + getGroupName() + "\"");
+    }
+
     private String groupName;
 
     public String getGroupName() {
@@ -23,26 +31,17 @@ public class ConfirmLeaveGroupController {
     }
 
     /**
-     * Method that is executed right before "confirmLeaveGroup.fxml" is loaded.
-     */
-    @FXML
-    void initialize() {
-        log.info("Initializing confirmLeaveGroup controller, groupName = \"" + getGroupName() + "\"");
-
-        //
-    }
-
-    /**
      * Action linked to the "Oui" JFXButton.
      * Effectively leaves the chosen group.
      * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
-     *
      * TODO : Link this method to network
      */
     public void actionYesButton() {
         log.info("Bouton \"Oui\" appuye (confirmLeaveGroup), groupName = \"" + getGroupName() + "\"");
+
         HomeController.closeCurrentConfirmLeaveGroupStage();
-        HomeController.deleteGroupByName(getGroupName());
+        HomeController.deleteGroupThumbnailByGroupName(getGroupName());
+        DiscussionController.deleteGroupObjectByGroupName(getGroupName());
     }
 
     /**
@@ -55,7 +54,4 @@ public class ConfirmLeaveGroupController {
         log.info("Bouton \"Non\" appuye (confirmLeaveGroup), groupName = \"" + getGroupName() + "\"");
         HomeController.closeCurrentConfirmLeaveGroupStage();
     }
-
-    //
-
 }

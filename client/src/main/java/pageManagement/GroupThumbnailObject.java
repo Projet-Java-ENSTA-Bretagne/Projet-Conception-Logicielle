@@ -28,6 +28,8 @@ public class GroupThumbnailObject {
         return groupThumbnailRoot;
     }
 
-    //
-
+    public void delete() {
+        groupThumbnailController = null;
+        groupThumbnailRoot = null;
+    }
 }

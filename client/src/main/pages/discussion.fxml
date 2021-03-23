@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +11,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.DiscussionController">
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
    <children>
       <VBox alignment="CENTER" prefHeight="402.0" prefWidth="659.0">
          <children>
@@ -18,7 +22,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
                      <children>
-                        <Label id="menuLabel" text="discussion_name" textAlignment="CENTER" textFill="WHITE">
+                        <Label id="discussionNameLabel" text="Discussion name" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -26,7 +30,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <JFXButton id="exitButton" buttonType="RAISED" onAction="#actionExitDiscussion" ripplerFill="WHITE" text="exit" textFill="WHITE" />
+                        <JFXButton id="exitButton" buttonType="RAISED" onAction="#actionExitButton" ripplerFill="WHITE" text="Quitter" textFill="WHITE" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
@@ -34,8 +38,7 @@
                         <Insets right="50.0" />
                      </opaqueInsets>
                      <children>
-                        <JFXButton id="joinOrCreateGroupButton" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onAction="#joinOrCreateGroup" ripplerFill="WHITE" style="-fx-graphic: url('joinGroup-icon.png');" />
-                        <Label id="joinGroupLabel" text="Rejoins/crée un nouveau groupe !" textFill="WHITE">
+                        <Label id="secondMenuLabel" text="Envoie tes meilleurs messages !" textFill="WHITE">
                            <font>
                               <Font size="13.0" />
                            </font>
@@ -47,19 +50,30 @@
                   </HBox>
                </children>
             </HBox>
-            <ScrollPane id="discussionScrollPane" hbarPolicy="NEVER" prefHeight="362.0" prefWidth="659.0" vbarPolicy="AS_NEEDED">
+            <ScrollPane id="discussionScrollPane" hbarPolicy="NEVER" prefHeight="322.0" prefWidth="659.0" vbarPolicy="AS_NEEDED">
                <content>
-                  <VBox id="discussionVbox" opacity="0.62" prefHeight="362.0" prefWidth="659.0" spacing="40.0">
+                  <VBox id="discussionVBox" opacity="0.62" prefHeight="322.0" prefWidth="659.0" spacing="12.0">
                      <padding>
-                        <Insets bottom="58.0" left="40.0" right="40.0" top="40.0" />
+                        <Insets bottom="40.0" left="40.0" right="58.0" top="40.0" />
                      </padding>
                   </VBox>
                </content>
             </ScrollPane>
+            <HBox id="sendMessageLowerHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="659.0" spacing="15.0">
+               <children>
+                  <JFXTextField fx:id="messageTextField" alignment="CENTER" prefHeight="25.0" prefWidth="396.0" promptText="Message à envoyer, &lt; 20 caractères">
+                     <HBox.margin>
+                        <Insets left="90.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXButton id="sendButton" buttonType="RAISED" onAction="#sendMessage" ripplerFill="#4b84f5" text="SEND" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>
-   <cursor>
-      <Cursor fx:constant="HAND" />
-   </cursor>
 </AnchorPane>

@@ -47,3 +47,5 @@ buildNumber.properties
 # End of https://www.toptal.com/developers/gitignore/api/java,maven
 
 client/client-conception-logicielle.iml
+
+client/.idea/libraries/
