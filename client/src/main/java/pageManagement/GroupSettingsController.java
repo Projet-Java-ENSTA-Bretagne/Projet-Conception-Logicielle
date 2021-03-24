@@ -26,7 +26,7 @@ public class GroupSettingsController {
      * Method that is executed right before "groupSettings.fxml" is loaded.
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         log.info("Initializing group settings controller");
 
         operationType = "joinGroup";
@@ -42,19 +42,19 @@ public class GroupSettingsController {
     }
 
     @FXML
-    void actionJoinGroupRadioButton() {
+    private void actionJoinGroupRadioButton() {
         setOperationType("joinGroup");
         log.debug("Operation type : " + operationType);
     }
 
     @FXML
-    void actionCreateGroupRadioButton() {
+    private void actionCreateGroupRadioButton() {
         setOperationType("createGroup");
         log.debug("Operation type : " + operationType);
     }
 
     @FXML
-    void actionCreatePmRadioButton() {
+    private void actionCreatePmRadioButton() {
         setOperationType("createPm");
         log.debug("Operation type : " + operationType);
 
@@ -100,7 +100,7 @@ public class GroupSettingsController {
     }
 
     @FXML
-    void actionPublicGroupStatusRadioButton() {
+    private void actionPublicGroupStatusRadioButton() {
         if (operationType.equals("createPm")) {
             log.warn("A PM discussion cannot be public !");
 
@@ -119,7 +119,7 @@ public class GroupSettingsController {
     }
 
     @FXML
-    void actionPrivateGroupStatusRadioButton() {
+    private void actionPrivateGroupStatusRadioButton() {
         setGroupStatus("private");
         log.debug("Group status : " + groupStatus);
     }
@@ -141,7 +141,7 @@ public class GroupSettingsController {
      * @throws IOException If error when FXMLLoader.load() is called
      */
     @FXML
-    void actionDoneButton() throws IOException {
+    private void actionDoneButton() throws IOException {
         log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
 
         boolean parametersAreValid = true;
@@ -163,6 +163,8 @@ public class GroupSettingsController {
                 parametersAreValid = false;
             }
 
+            ArrayList<GroupThumbnailObject> groupThumbnailObjectList = HomeController.getGroupThumbnailObjectList();
+
             String wholeGroupName = groupNameTextField.getText();
             if ((wholeGroupName == null) || (wholeGroupName.length() == 0)) {
                 parametersAreValid = false;
@@ -171,8 +173,7 @@ public class GroupSettingsController {
                 // the group name has to be less than 12 characters
                 groupName = wholeGroupName.substring(0, Math.min(wholeGroupName.length(), 12));
 
-                // here we check if the group name already exists
-                ArrayList<GroupThumbnailObject> groupThumbnailObjectList = HomeController.getGroupThumbnailObjectList();
+                // here we check if the group name (or group ID) already exists
                 for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
                     String otherGroupName = groupThumbnailObject.getController().getGroupName();
                     if (groupName.equals(otherGroupName)) {
@@ -187,6 +188,18 @@ public class GroupSettingsController {
             groupId = Integer.parseInt(groupIdTextField.getText());
             if (groupId <= 0) {
                 parametersAreValid = false;
+            }
+            else {
+                // here we check if the group ID already exists
+                for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
+                    int otherGroupId = groupThumbnailObject.getController().getGroupId();
+                    if (groupId == otherGroupId) {
+                        parametersAreValid = false;
+                        System.out.println("");
+                        log.error("L'ID de groupe \"" + groupId + "\" existe deja !");
+                        break;
+                    }
+                }
             }
 
             String wholeDescription = groupDescriptionTextField.getText();

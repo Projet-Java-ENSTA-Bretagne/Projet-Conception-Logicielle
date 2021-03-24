@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/cssfile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="659.0" stylesheets="@../resources/stylesheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pageManagement.HomeController">
    <cursor>
       <Cursor fx:constant="HAND" />
    </cursor>
@@ -21,15 +21,19 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
                      <children>
-                        <Label id="menuLabel" text="DISCUSSIONS" textAlignment="CENTER" textFill="WHITE">
+                        <Label text="DISCUSSIONS" textAlignment="CENTER" textFill="WHITE">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font>
                            <padding>
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Déconnexion" textFill="WHITE" />
+                        <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Déconnexion" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Italic" size="13.0" />
+                           </font>
+                        </JFXButton>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
@@ -37,10 +41,14 @@
                         <Insets right="50.0" />
                      </opaqueInsets>
                      <children>
-                        <JFXButton id="joinOrCreateGroupButton" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onAction="#joinOrCreateGroup" ripplerFill="WHITE" style="-fx-graphic: url('joinGroup-icon.png');" />
-                        <Label id="joinGroupLabel" text="Rejoins/crée un nouveau groupe !" textFill="WHITE">
+                        <JFXButton id="joinOrCreateGroupButton" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onAction="#joinOrCreateGroup" ripplerFill="WHITE" style="-fx-graphic: url('joinGroup-icon.png');" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <Label text="Rejoins/crée un nouveau groupe !" textAlignment="CENTER" textFill="WHITE">
                            <font>
-                              <Font size="13.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                            <HBox.margin>
                               <Insets right="15.0" />

@@ -1,0 +1,212 @@
+/* ================ Main CSS stylesheet ================ */
+
+/* defining the Sansation font */
+@font-face {
+    font-family: 'Sansation';
+    src: url('Sansation_Bold.ttf');
+}
+
+/* ---------------- Login page ---------------- */
+
+/* fonts other than the default "System" font have to be defined in this CSS stylesheet */
+#welcomeLabel {
+    -fx-font-family: 'Garamond';
+}
+
+#enstarLabel {
+    -fx-font-family: 'Sansation';
+}
+
+#loginButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+/* ---------------- Home page ---------------- */
+
+#topLayerHBox {
+    -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
+}
+
+#disconnectButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#joinOrCreateGroupButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#groupThumbnailHBox {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+
+#groupThumbnailScrollPane {
+    -fx-background-color: Transparent;
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal {
+    -fx-pref-height: 18px;
+}
+
+/* defining the colour of the "thumb" of the horizontal scrollbar (thumb = the long scrollable button) */
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgb(230, 230, 230); /* light gray */
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
+}
+
+/* defining the color of background of the scrollbar (background of the scrollbar = "track") */
+#groupThumbnailScrollPane .scroll-bar:horizontal .track {
+    -fx-background-color: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet); /* rainbow colours */
+}
+
+/* hiding the left/right arrows of the horizontal scrollbar */
+#groupThumbnailScrollPane .scroll-bar:horizontal .decrement-button {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal .decrement-button .decrement-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal .increment-button {
+    -fx-pref-width: 0px;
+}
+#groupThumbnailScrollPane .scroll-bar:horizontal .increment-button .increment-arrow {
+    -fx-pref-width: 0px;
+    -fx-background-color: Transparent;
+}
+
+/* ---------------- Discussion page ------------------- */
+
+#exitButton:hover {
+    -fx-border-color: white;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#discussionVBox {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+
+#discussionScrollPane {
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:vertical {
+    -fx-pref-width: 18px;
+}
+
+/* defining the colour of the "thumb" of the vertical scrollbar (thumb = the long scrollable button) */
+#discussionScrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: #d6d6c2; /* light gray */
+}
+#discussionScrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgb(230, 230, 230); /* light gray */
+}
+#discussionScrollPane .scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: rgba(230, 230, 230, 0.9); /* light gray */
+}
+
+/* defining the color of background of the scrollbar (background of the scrollbar = "track") */
+#discussionScrollPane .scroll-bar:vertical .track {
+    -fx-background-color: linear-gradient(to bottom, red, orange, yellow, green, cyan, blue, violet); /* rainbow colours */
+}
+
+/* hiding the top/bottom arrows of the vertical scrollbar */
+#discussionScrollPane .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:vertical .decrement-button .decrement-arrow {
+    -fx-pref-height: 0px;
+    -fx-background-color: Transparent;
+}
+#discussionScrollPane .scroll-bar:vertical .increment-button {
+    -fx-pref-height: 0px;
+}
+#discussionScrollPane .scroll-bar:vertical .increment-button .increment-arrow {
+    -fx-pref-height: 0px;
+    -fx-background-color: Transparent;
+}
+
+#sendMessageLowerHBox {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 1px 0px 0px 0px; /* top right bottom left */
+}
+
+/* --------------------- Message ----------------------- */
+
+/* for both types of messages (sent and received) */
+#messageAnchorPane {
+    -fx-background-color: Transparent;
+}
+
+#sentMessageHBox {
+    -fx-background-color: rgba(213, 128, 255, 0.6); /* faded light purple */
+}
+#sentMessageHBox:hover {
+    -fx-border-color: #8000ff; /* slightly faded blue-purple */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+
+#receivedMessageHBox {
+    -fx-background-color: white;
+}
+#receivedMessageHBox:hover {
+    -fx-border-color: #80e5ff; /* faded light blue */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+
+/* ---------------- Group Settings page ---------------- */
+
+#doneButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+/* ---------------- Group Thumbnail ---------------- */
+
+#groupThumbnailAnchorPane {
+    -fx-background-color: white;
+    -fx-border-color: rgba(169, 169, 169, 0.8); /* dark gray */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+#groupThumbnailAnchorPane:hover {
+    -fx-border-color: #80e5ff; /* faded light blue */
+    -fx-border-width: 2px 2px 2px 2px; /* top right bottom left */
+}
+
+#openGroupButton {
+    -fx-text-fill: linear-gradient(to right, #8000ff, #400080); /* shades of purple */
+}
+#openGroupButton:hover {
+    -fx-border-color: #8000ff; /* slightly faded blue-purple */
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#leaveGroupButton {
+    -fx-text-fill: linear-gradient(to right, #400080, #8000ff, #400080); /* shades of purple */
+}
+#leaveGroupButton:hover {
+    -fx-border-color: #8000ff; /* slightly faded blue-purple */
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+/* ---------------- ConfirmLeaveGroup page ---------------- */
+
+#noButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+#yesButton:hover {
+    -fx-border-color: black;
+    -fx-border-width: 1px 1px 1px 1px; /* top right bottom left */
+}
+
+/* ============================ END =========================== */

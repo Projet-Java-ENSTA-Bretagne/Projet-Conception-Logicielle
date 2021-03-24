@@ -27,7 +27,7 @@ public class GroupThumbnailController {
      * Method that is executed right before "groupThumbnail.fxml" is loaded.
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         System.out.println("");
         log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
     }
@@ -139,11 +139,11 @@ public class GroupThumbnailController {
         Label groupNameLabel = (Label) confirmLeaveGroupRoot.lookup("#groupNameLabel");
         groupNameLabel.setText("\"" + groupName + "\" ?");
 
-        JFXButton yesButton = (JFXButton) confirmLeaveGroupRoot.lookup("#yesButton");
-        yesButton.setOnAction(e -> confirmLeaveGroupController.actionYesButton());
-
         JFXButton noButton = (JFXButton) confirmLeaveGroupRoot.lookup("#noButton");
         noButton.setOnAction(e -> confirmLeaveGroupController.actionNoButton());
+
+        JFXButton yesButton = (JFXButton) confirmLeaveGroupRoot.lookup("#yesButton");
+        yesButton.setOnAction(e -> confirmLeaveGroupController.actionYesButton());
 
         Stage currentConfirmLeaveGroupStage = new Stage();
         currentConfirmLeaveGroupStage.getIcons().add(new Image("question-mark.png"));

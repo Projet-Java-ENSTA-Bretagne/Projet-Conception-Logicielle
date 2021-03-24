@@ -3,11 +3,18 @@ package pageManagement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.ScrollEvent;
+import javafx.event.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +33,7 @@ public class DiscussionController {
      * Method that is executed right before "discussion.fxml" is loaded.
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         log.info("Initializing discussion controller\n");
 
         discussionVBox = null;
@@ -37,6 +44,33 @@ public class DiscussionController {
 
     public static void initializeDiscussionVBox(VBox newDiscussionVBox) {
         discussionVBox = newDiscussionVBox;
+    }
+
+    private static ScrollPane discussionScrollPane;
+
+    public static void initializeDiscussionScrollPane(ScrollPane newDiscussionScrollPane) {
+        discussionScrollPane = newDiscussionScrollPane;
+
+        // preventing horizontal scrolling in the discussion ScrollPane
+        discussionScrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent scrollEvent) {
+                if (scrollEvent.getDeltaX() != 0) {
+                    scrollEvent.consume();
+                }
+            }
+        });
+
+        // we do this so that we get the new value of the height of the discussion VBox
+        // **as soon as it's increased**, and can therefore automatically scroll to the
+        // *very bottom* of the discussion ScrollPane **as soon as a new message is sent/received**,
+        // which CANNOT be done (easily) otherwise
+        discussionVBox.heightProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldVvalue, Object newVvalue) {
+                discussionScrollPane.setVvalue((Double) newVvalue);
+            }
+        });
     }
 
     private static String currentSender;
@@ -211,24 +245,30 @@ public class DiscussionController {
     @FXML
     private JFXTextField messageTextField;
 
+    @FXML
+    private void checkIfEnterIsPressedThenSendMessage(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            sendMessage();
+        }
+    }
+
     /**
      * Sends the message to all the users in the current group chat (or the PM chat).
      * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
      */
-    @FXML
-    void sendMessage() throws IOException {
-        log.info("Vous venez d'appuyer sur le bouton \"SEND\"");
-
+    private void sendMessage() throws IOException {
         String currentWholeMessage = messageTextField.getText();
 
         if ((currentWholeMessage == null) || (currentWholeMessage.length() == 0)) {
-            System.out.println("");
-            log.error("Message invalide !");
+            // we don't want to send empty messages
+            return;
         }
 
         else {
+            log.info("Vous venez d'envoyer un nouveau message !");
+
             // adding the new message to the Discussion scene
 
             // the sent message has to be less than 20 characters (for now)
@@ -256,7 +296,7 @@ public class DiscussionController {
      * TODO : Link this method to network
      */
     @FXML
-    void actionExitButton() {
+    private void actionExitButton() {
         System.out.println("");
         log.info("Vous venez d'appuyer sur le bouton \"Quitter\"");
 

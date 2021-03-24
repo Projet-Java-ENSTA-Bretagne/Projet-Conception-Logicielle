@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
@@ -23,11 +24,19 @@ public class MainController {
     private static Stage mainStage;
     private static Scene loginScene;
     private static Scene homeScene;
-    private static String currentScene;
     private static Scene discussionScene;
+    private static String currentScene;
 
     public static void setMainStage(Stage stage) {
         mainStage = stage;
+    }
+
+    public static Scene getLoginScene() {
+        return loginScene;
+    }
+
+    public static Scene getHomeScene() {
+        return homeScene;
     }
 
     public static Scene getDiscussionScene() {
@@ -35,6 +44,7 @@ public class MainController {
     }
 
     public static String getCurrentScene() {
+        // NB : here "currentScene" is a simple descriptive String, not a Scene object !
         return currentScene;
     }
 
@@ -61,7 +71,7 @@ public class MainController {
         Parent discussionRoot = FXMLLoader.load(discussionURL);
         discussionScene = new Scene(discussionRoot, 659, 402);
 
-        mainStage.getIcons().add(new Image("DUCK.png")); // adding duck icon to main stage
+        mainStage.getIcons().add(new Image("duck-icon.png")); // adding duck icon to main stage
         setCurrentScene("");
 
         hasAlreadySwitchedToHomeScene = false;
@@ -98,9 +108,10 @@ public class MainController {
             mainStage.setScene(homeScene);
             mainStage.show();
 
-            // getting the **NOT-NULL** thumbnail HBox from the Home scene
+            // getting the **NOT-NULL** thumbnail HBox (+ the ScrollPane) from the Home scene
             if (!hasAlreadySwitchedToHomeScene) {
                 HomeController.initializeGroupThumbnailHBox((HBox) homeScene.lookup("#groupThumbnailHBox"));
+                HomeController.initializeGroupThumbnailScrollPane((ScrollPane) homeScene.lookup("#groupThumbnailScrollPane"));
                 hasAlreadySwitchedToHomeScene = true;
             }
         }
@@ -123,9 +134,10 @@ public class MainController {
             mainStage.setScene(discussionScene);
             mainStage.show();
 
-            // getting the **NOT-NULL** discussion VBox from the Discussion scene
+            // getting the **NOT-NULL** discussion VBox (+ the ScrollPane) from the Discussion scene
             if (!hasAlreadySwitchedToDiscussionScene) {
                 DiscussionController.initializeDiscussionVBox((VBox) discussionScene.lookup("#discussionVBox"));
+                DiscussionController.initializeDiscussionScrollPane((ScrollPane) discussionScene.lookup("#discussionScrollPane"));
                 hasAlreadySwitchedToDiscussionScene = true;
             }
         }

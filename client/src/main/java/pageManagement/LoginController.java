@@ -17,7 +17,7 @@ public class LoginController {
      * Method that is executed right before "login.fxml" is loaded.
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         System.out.println("");
         log.info("Initializing login controller");
 
@@ -70,7 +70,7 @@ public class LoginController {
      * TODO : Link this method to network
      */
     @FXML
-    void makeLogin() {
+    private void makeLogin() {
         if (nbSuccessfulLogins == 0) {
             allowedToChangeUsername = true;
             allowedToChangePassword = true;
@@ -120,7 +120,7 @@ public class LoginController {
      * Unmasks the current password entry.
      */
     @FXML
-    void unmaskPassword() {
+    private void unmaskPassword() {
         currentPasswordEntry = passwordField.getText();
         passwordField.clear();
         passwordField.setPromptText(currentPasswordEntry);
@@ -131,7 +131,7 @@ public class LoginController {
      * Masks the current password entry.
      */
     @FXML
-    void maskPassword() {
+    private void maskPassword() {
         passwordField.setText(currentPasswordEntry);
         passwordField.setPromptText("Password");
     }
