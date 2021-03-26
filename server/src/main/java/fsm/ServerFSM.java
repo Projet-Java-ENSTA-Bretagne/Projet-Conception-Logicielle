@@ -4,10 +4,10 @@ public class ServerFSM extends FiniteStateMachineImpl {
 
     public ServerFSM() {
         // Creating the states
-        IState idleState = new StateImpl("idle");
-        IState sendingState = new StateImpl("sending");
-        IState receivingState = new StateImpl("receiving");
-        IState closingState = new StateImpl("closing");
+        IState idleState = StatesEnum.IDLE.getState();
+        IState sendingState = StatesEnum.SENDING.getState();
+        IState receivingState = StatesEnum.RECEIVING.getState();
+        IState closingState = StatesEnum.CLOSING.getState();
 
         // Creating the actions
         Action sendMessage = ActionsEnum.SEND.getAction();
@@ -26,5 +26,9 @@ public class ServerFSM extends FiniteStateMachineImpl {
         addTransit(sendingState, receivingState, sendMessage);
         addTransit(receivingState, closingState, closeConnection);
         addTransit(sendingState, closingState, closeConnection);
+
+        // setting start and end states
+        setStartState(idleState);
+        setEndState(closingState);
     }
 }

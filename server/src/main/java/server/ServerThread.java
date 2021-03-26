@@ -1,6 +1,7 @@
 package server;
 
 import database.UserNotLoggedException;
+import fsm.ActionsEnum;
 import fsm.IFiniteStateMachine;
 import fsm.ServerFSM;
 import org.apache.logging.log4j.LogManager;
@@ -29,10 +30,13 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
+        fsm.transit(ActionsEnum.ACCEPT.getAction());
+
         try {
             String requestString;
             BufferedReader inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintStream outStream = new PrintStream(clientSocket.getOutputStream());
+            fsm.transit(ActionsEnum.RECEIVE.getAction());
 
             // reading the incoming request
             requestString = inStream.readLine();
@@ -49,15 +53,19 @@ public class ServerThread extends Thread {
                 } catch (SQLException e) {
                     log.error(e);
                     ResponseBuilder.forRequest(request, outStream).serverError(e.toString());
+                    fsm.transit(ActionsEnum.SEND.getAction());
                 } catch (UserNotLoggedException e) {
                     log.warn(e);
                     ResponseBuilder.forRequest(request, outStream).deniedError(e.toString());
+                    fsm.transit(ActionsEnum.SEND.getAction());
                 }
             }
 
             log.info("Closing server thread");
+            fsm.transit(ActionsEnum.CLOSE.getAction());
         } catch (IOException e) {
             log.error("Exception", e);
+            fsm.transit(ActionsEnum.CLOSE.getAction());
         }
     }
 }
