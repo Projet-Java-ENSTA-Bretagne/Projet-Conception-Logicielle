@@ -40,6 +40,8 @@ public class HomeController {
         aGroupIsCurrentlyBeingDeleted = false;
         currentGroupSettingsStage = null;
         currentConfirmLeaveGroupStage = null;
+
+
     }
 
     private static HBox groupThumbnailHBox;

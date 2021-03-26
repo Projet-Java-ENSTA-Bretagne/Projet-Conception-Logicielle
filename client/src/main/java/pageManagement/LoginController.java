@@ -1,5 +1,6 @@
 package pageManagement;
 
+import FSM.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.jfoenix.controls.JFXPasswordField;
@@ -30,6 +31,31 @@ public class LoginController {
         allowedToChangePassword = false;
         password = null;
         currentPasswordEntry = null;
+
+        // fsm
+
+        IState idleState = new State("Idle");
+        IState waitState = new State("Wait");
+        IState sendingState = new State("Sending");
+
+        Action connected =  new Action("Connected");
+        Action disconnected = new Action("Disconnected");
+        Action sending = new Action("Sending");
+        Action quitSending = new Action("QuitSending");
+
+
+        IFiniteStateMachine fsm = new FiniteStateMachine();
+        fsm.setStartState(idleState);
+        log.info("initializing FSM:"+ fsm.getCurrentState().getStateDesc());
+
+        fsm.addState(idleState, waitState, connected);
+        fsm.addState(waitState, sendingState, sending);
+        fsm.addState(sendingState, waitState, quitSending);
+        fsm.addState(waitState, idleState, disconnected);
+
+        // to switch states do fsm.transit(Action)
+
+
     }
 
     @FXML
