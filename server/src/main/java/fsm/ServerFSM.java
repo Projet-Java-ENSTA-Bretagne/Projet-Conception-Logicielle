@@ -26,6 +26,7 @@ public class ServerFSM extends FiniteStateMachineImpl {
         addTransit(sendingState, receivingState, sendMessage);
         addTransit(receivingState, closingState, closeConnection);
         addTransit(sendingState, closingState, closeConnection);
+        // addTransit(closingState, closingState, closeConnection);
 
         // setting start and end states
         setStartState(idleState);

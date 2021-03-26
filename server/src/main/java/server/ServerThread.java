@@ -30,6 +30,27 @@ public class ServerThread extends Thread {
         this.fsm = new ServerFSM();
     }
 
+    public void signalStop() {
+        // if we are stuck in listening
+        if (fsm.getCurrentState() == StatesEnum.RECEIVING.getState()) {
+            // force close
+            closeThread();
+        } else {
+            // else send a beautiful shutdown message
+            fsm.transit(ActionsEnum.CLOSE.getAction());
+        }
+    }
+
+    private void closeThread() {
+        // closing properly the thread
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            log.error("Could not properly close the socket with the client");
+        }
+        tcpServer.removeClient(this);
+    }
+
     public void run() {
         fsm.transit(ActionsEnum.ACCEPT.getAction());
 
@@ -72,19 +93,11 @@ public class ServerThread extends Thread {
                 }
             } catch (IOException e) {
                 // if we catch an exception like the client disconnected from the server
-                log.error("Exception", e);
+                log.error("Exception: " + e.toString());
                 log.info("Closing server thread");
                 fsm.transit(ActionsEnum.CLOSE.getAction());
             }
         }
-
-        // closing properly the thread
-        tcpServer.removeClient();
-        try {
-            clientSocket.close();
-        } catch (IOException e) {
-            log.error("Could not properly close the socket with the client");
-        }
-
+        closeThread();
     }
 }
