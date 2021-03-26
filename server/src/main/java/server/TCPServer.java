@@ -44,6 +44,8 @@ public class TCPServer extends Thread{
         return this.context;
     }
 
+    public void removeClient() { nbClients--; }
+
     public boolean isRunning() { return this.running; }
     public void setRunning(boolean value) {
         this.running = value;
@@ -70,18 +72,17 @@ public class TCPServer extends Thread{
             while (nbClients <= maxClients) {
                 try {
                     log.info("Waiting for a new client to connect.");
-                    clientSocket = serverSocket.accept();
+                    ServerThread st = new ServerThread(serverSocket.accept(), this);
                     nbClients++;
                     log.info("Number of clients : " + nbClients);
+                    st.start();
                 } catch (IOException e) {
                     log.error("Accept failed: " + serverSocket.getLocalPort(), e);
                     System.exit(1);
                 }
-                ServerThread st = new ServerThread(clientSocket, this);
-                st.start();
             }
             log.warn("There are already " + nbClients + " clients connected. Reached maximum.");
-            while (nbClients > maxClients) {}
+            while (nbClients > maxClients);
         }
 
         // Closing properly the main.java.server

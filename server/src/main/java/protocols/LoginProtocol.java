@@ -3,6 +3,7 @@ package protocols;
 import com.j256.ormlite.dao.Dao;
 import database.SecurityManager;
 import database.entities.User;
+import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bouncycastle.util.encoders.Hex;
@@ -32,12 +33,11 @@ public class LoginProtocol implements IProtocol {
     /**
      *
      * @param ctx Le contexte du serveur
-     * @param inStream Le stream d'entrée client
      * @param outStream Le stream de sortie vers le client
      * @param request La requête émise par le client
      * @throws SQLException Retourne une erreur sql si il y a un soucis avec la base de données
      */
-    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
+    public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException {
         JSONObject data = request.getJSONObject("args");
         String username = data.getString("username");
         String password = data.getString("password");

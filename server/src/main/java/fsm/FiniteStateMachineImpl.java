@@ -97,7 +97,7 @@ public class FiniteStateMachineImpl implements IFiniteStateMachine {
             log.debug("Transit: " + getCurrentState().getStateDesc() + " --> " + localMapping.get(action.toString()).getStateDesc());
             this.currentState = localMapping.get(action.toString());
         } else {
-            log.error("No action start from current state");
+            log.error("No action '" + action.getActionName() + "' from current state: " + getCurrentState().getStateDesc());
             throw new RuntimeException("No action start from current state");
         }
     }

@@ -3,6 +3,7 @@ package protocols;
 import com.j256.ormlite.dao.Dao;
 import database.entities.Group;
 import database.entities.User;
+import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -25,12 +26,11 @@ public class GetUserGroupsProtocol implements IProtocol {
     /**
      * Function allow to execute the command getUserByName send by a client.
      * @param ctx : The context
-     * @param inStream : The input stream of the client
      * @param outStream : The output stream of the server
      * @param request : The request of the client
      * @throws SQLException
      */
-    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException {
+    public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException {
         JSONObject data = request.getJSONObject("args");
         String id = data.getString("user_id");
 

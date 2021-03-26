@@ -4,6 +4,8 @@ import com.j256.ormlite.dao.Dao;
 import database.SecurityManager;
 import database.UserNotLoggedException;
 import database.entities.User;
+import fsm.ActionsEnum;
+import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -22,7 +24,7 @@ public class BlockUserProtocol implements IProtocol {
 
     public static String requestName = "blockUser";
 
-    public void execute(IContext ctx, BufferedReader inStream, PrintStream outStream, JSONObject request) throws SQLException, UserNotLoggedException {
+    public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException, UserNotLoggedException {
         JSONObject data = request.getJSONObject("args");
         String id = data.getString("id");
 

@@ -2,6 +2,9 @@ package protocols;
 
 import database.DatabaseManager;
 import database.UserNotLoggedException;
+import fsm.ActionsEnum;
+import fsm.IFiniteStateMachine;
+import fsm.ServerFSM;
 import org.json.JSONObject;
 import server.DatabaseContext;
 import server.IContext;
@@ -16,7 +19,6 @@ public class ProtocolTestingHelper {
 
     public PrintStream outStream;
     public ByteArrayOutputStream os;
-    public BufferedReader inStream;
     public JSONObject response;
     public IContext context;
 
@@ -28,14 +30,14 @@ public class ProtocolTestingHelper {
         dm.linkDaos();
 
         // 2. Creating input and output streams
-        inStream = new BufferedReader(new StringReader(""));
         os = new ByteArrayOutputStream();
         outStream = new PrintStream(os);
     }
 
     public static JSONObject executeProtocol(IProtocol protocol, JSONObject request) throws SQLException, UserNotLoggedException {
         ProtocolTestingHelper instance = new ProtocolTestingHelper();
-        protocol.execute(instance.context, instance.inStream, instance.outStream, request);
+
+        protocol.execute(instance.context, instance.outStream, request);
         return new JSONObject(instance.os.toString());
     }
 }
