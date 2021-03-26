@@ -1,6 +1,8 @@
 package server;
 
 import database.UserNotLoggedException;
+import fsm.IFiniteStateMachine;
+import fsm.ServerFSM;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -16,12 +18,14 @@ public class ServerThread extends Thread {
 
     private Socket clientSocket;
     private TCPServer tcpServer;
+    private IFiniteStateMachine fsm;
 
     private final Logger log = LogManager.getLogger(ServerThread.class);
 
     public ServerThread(Socket clientSocket, TCPServer tcpServer) {
         this.clientSocket = clientSocket;
         this.tcpServer = tcpServer;
+        this.fsm = new ServerFSM();
     }
 
     public void run() {
