@@ -10,10 +10,10 @@ public class ServerFSM extends FiniteStateMachineImpl {
         IState closingState = new StateImpl("closing");
 
         // Creating the actions
-        Action sendMessage = new Action("sendMessage");
-        Action receiveMessage = new Action("receiveMessage");
-        Action acceptConnection = new Action("acceptConnection");
-        Action closeConnection = new Action("closeConnection");
+        Action sendMessage = ActionsEnum.SEND.getAction();
+        Action receiveMessage = ActionsEnum.RECEIVE.getAction();
+        Action acceptConnection = ActionsEnum.ACCEPT.getAction();
+        Action closeConnection = ActionsEnum.CLOSE.getAction();
 
         // adding everything
         addState(idleState);
