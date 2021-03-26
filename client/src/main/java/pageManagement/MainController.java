@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.File;
 import java.net.URL;
 
+import fsm.*;
+
 /**
  * Class handling the switches between the main scenes (Login, Home, Discussion).
  */
@@ -22,9 +24,13 @@ public class MainController {
     private static final Logger log = LogManager.getLogger(MainController.class);
 
     private static Stage mainStage;
+
+    // the 3 main scenes
     private static Scene loginScene;
     private static Scene homeScene;
     private static Scene discussionScene;
+
+    // NB : here "currentScene" is a simple descriptive String, not a Scene object !
     private static String currentScene;
 
     public static void setMainStage(Stage stage) {
@@ -44,7 +50,6 @@ public class MainController {
     }
 
     public static String getCurrentScene() {
-        // NB : here "currentScene" is a simple descriptive String, not a Scene object !
         return currentScene;
     }
 
@@ -76,6 +81,42 @@ public class MainController {
 
         hasAlreadySwitchedToHomeScene = false;
         hasAlreadySwitchedToDiscussionScene = false;
+    }
+
+    private static IFiniteStateMachine fsm;
+
+    public static IFiniteStateMachine getFSM() {
+        return fsm;
+    }
+
+    /**
+     * Initializes the finite state machine (FSM) that will be associated with
+     * the state of the current user/client (relative to the server).
+     */
+    public static void initializeFSM() {
+        // FSM
+
+        IState idleState = new State("Idle");
+        IState waitState = new State("Wait");
+        IState sendingState = new State("Sending");
+
+        Action connected =  new Action("Connected");
+        Action disconnected = new Action("Disconnected");
+        Action sending = new Action("Sending");
+        Action quitSending = new Action("QuitSending");
+
+        fsm = new FiniteStateMachine();
+        fsm.setStartState(idleState);
+
+        log.info("Initializing FSM - Current state : " + fsm.getCurrentState().getStateDesc());
+        System.out.println("");
+
+        fsm.addState(idleState, waitState, connected);
+        fsm.addState(waitState, sendingState, sending);
+        fsm.addState(sendingState, waitState, quitSending);
+        fsm.addState(waitState, idleState, disconnected);
+
+        // --> to switch states, do "fsm.transit(Action)"
     }
 
     /**

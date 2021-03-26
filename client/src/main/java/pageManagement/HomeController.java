@@ -35,13 +35,12 @@ public class HomeController {
         log.info("Initializing home controller");
 
         groupThumbnailHBox = null;
+        groupThumbnailScrollPane = null;
         groupThumbnailObjectList = new ArrayList<>();
         nbGroupsYouAreStillPartOf = 0;
         aGroupIsCurrentlyBeingDeleted = false;
         currentGroupSettingsStage = null;
         currentConfirmLeaveGroupStage = null;
-
-
     }
 
     private static HBox groupThumbnailHBox;

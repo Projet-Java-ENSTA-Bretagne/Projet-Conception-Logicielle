@@ -1,6 +1,7 @@
-package FSM;
+package fsm;
 
 public interface IFiniteStateMachine {
+
     void setStartState(IState startState);
 
     void setEndState(IState endState);

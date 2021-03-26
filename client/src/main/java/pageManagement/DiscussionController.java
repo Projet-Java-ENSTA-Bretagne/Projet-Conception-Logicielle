@@ -34,9 +34,10 @@ public class DiscussionController {
      */
     @FXML
     private void initialize() {
-        log.info("Initializing discussion controller\n");
+        log.info("Initializing discussion controller");
 
         discussionVBox = null;
+        discussionScrollPane = null;
         groupObjectList = new ArrayList<>();
     }
 

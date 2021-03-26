@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * Class handling the JavaFX objects from the GroupSettings secondary stage (defined
@@ -131,6 +132,8 @@ public class GroupSettingsController {
 
     private String groupDescription;
 
+    /* -------------------------------------------- */
+
     /**
      * Action linked to the "DONE" JFXButton.
      * Checks if the group settings are valid, then, according to the chosen
@@ -156,6 +159,11 @@ public class GroupSettingsController {
             serverIpAddress = ipAddressTextField.getText();
             if ((serverIpAddress == null) || (serverIpAddress.length() == 0)) {
                 parametersAreValid = false;
+            }
+            else {
+                if (!ipAddressIsValid(serverIpAddress)) {
+                    parametersAreValid = false;
+                }
             }
 
             serverPort = Integer.parseInt(portTextField.getText());
@@ -221,7 +229,7 @@ public class GroupSettingsController {
         if (parametersAreValid) {
             System.out.println("");
             log.debug("Type de l'operation : \"" + operationType + "\"");
-            log.debug("Adresse IP du serveur : \"" + serverIpAddress + "\"");
+            log.debug("Adresse IP du serveur : " + serverIpAddress);
             log.debug("Port du serveur : " + serverPort);
             log.debug("Nom du groupe : \"" + groupName + "\"");
             log.debug("ID du groupe : " + groupId);
@@ -302,6 +310,47 @@ public class GroupSettingsController {
             if (!anErrorWasCaught) {
                 System.out.println("");
                 log.error("Parametrage invalide !");
+            }
+        }
+    }
+
+    /* -------------------------------------------- */
+
+    /**
+     * Checks if a given IPv4 address is valid.
+     *
+     * @param ipAddress The IPv4 address to check
+     * @return Boolean indicating whether the IPv4 address is valid
+     */
+    private boolean ipAddressIsValid(String ipAddress) {
+        String[] splitIpAddress = ipAddress.split("\\.");
+
+        if (splitIpAddress.length != 4) {
+            return false;
+        }
+
+        else {
+            try {
+                for (String ipComponent : splitIpAddress) {
+                    int associatedInteger = Integer.parseInt(ipComponent);
+
+                    if ((associatedInteger < 0) || (associatedInteger > 255)) {
+                        return false;
+                    }
+
+                    if ((associatedInteger != 0) && (ipComponent.startsWith("0"))) {
+                        return false;
+                    }
+                }
+
+                if (ipAddress.endsWith(".")) {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (NumberFormatException nfe) {
+                return false;
             }
         }
     }
