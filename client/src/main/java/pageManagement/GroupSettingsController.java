@@ -158,16 +158,19 @@ public class GroupSettingsController {
 
             serverIpAddress = ipAddressTextField.getText();
             if ((serverIpAddress == null) || (serverIpAddress.length() == 0)) {
+                log.error("L'adresse IP fournie est vide !");
                 parametersAreValid = false;
             }
             else {
                 if (!ipAddressIsValid(serverIpAddress)) {
+                    log.error("Adresse IPv4 invalide !");
                     parametersAreValid = false;
                 }
             }
 
             serverPort = Integer.parseInt(portTextField.getText());
             if (serverPort <= 0) {
+                log.error("Le port fourni est négatif ! Il doit être strictement positif");
                 parametersAreValid = false;
             }
 
@@ -175,6 +178,7 @@ public class GroupSettingsController {
 
             String wholeGroupName = groupNameTextField.getText();
             if ((wholeGroupName == null) || (wholeGroupName.length() == 0)) {
+                log.error("Le nom de groupe fourni est vide !");
                 parametersAreValid = false;
             }
             else {
@@ -195,6 +199,7 @@ public class GroupSettingsController {
 
             groupId = Integer.parseInt(groupIdTextField.getText());
             if (groupId <= 0) {
+                log.error("L'ID de groupe fourni est négatif ! Il doit être strictement positif");
                 parametersAreValid = false;
             }
             else {
@@ -338,6 +343,7 @@ public class GroupSettingsController {
                         return false;
                     }
 
+                    // for instance, ipComponent = "013" wouldn't be valid (whereas "13" would be)
                     if ((associatedInteger != 0) && (ipComponent.startsWith("0"))) {
                         return false;
                     }
