@@ -3,16 +3,14 @@ package protocols;
 import com.j256.ormlite.dao.Dao;
 import database.SecurityManager;
 import database.entities.User;
-import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.JSONObject;
-import server.DatabaseContext;
-import server.IContext;
+import context.DatabaseContext;
+import context.IContext;
 import server.ResponseBuilder;
 
-import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

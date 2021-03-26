@@ -1,14 +1,12 @@
 package protocols;
 
 import database.SecurityManager;
-import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import server.IContext;
+import context.IContext;
 import server.ResponseBuilder;
 
-import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.sql.SQLException;
 

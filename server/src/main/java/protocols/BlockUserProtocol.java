@@ -4,16 +4,13 @@ import com.j256.ormlite.dao.Dao;
 import database.SecurityManager;
 import database.UserNotLoggedException;
 import database.entities.User;
-import fsm.ActionsEnum;
-import fsm.IFiniteStateMachine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import server.DatabaseContext;
-import server.IContext;
+import context.DatabaseContext;
+import context.IContext;
 import server.ResponseBuilder;
 
-import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.List;

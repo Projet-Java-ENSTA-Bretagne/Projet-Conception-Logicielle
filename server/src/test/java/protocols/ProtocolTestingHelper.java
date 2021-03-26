@@ -2,17 +2,12 @@ package protocols;
 
 import database.DatabaseManager;
 import database.UserNotLoggedException;
-import fsm.ActionsEnum;
-import fsm.IFiniteStateMachine;
-import fsm.ServerFSM;
 import org.json.JSONObject;
-import server.DatabaseContext;
-import server.IContext;
+import context.DatabaseContext;
+import context.IContext;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.sql.SQLException;
 
 public class ProtocolTestingHelper {

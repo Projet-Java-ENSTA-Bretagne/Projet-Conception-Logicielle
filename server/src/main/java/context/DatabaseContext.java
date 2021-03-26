@@ -1,4 +1,4 @@
-package server;
+package context;
 
 import database.DatabaseManager;
 

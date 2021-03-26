@@ -1,5 +1,6 @@
 package server;
 
+import context.IContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import protocols.IProtocol;
@@ -7,7 +8,6 @@ import sun.misc.Signal;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
