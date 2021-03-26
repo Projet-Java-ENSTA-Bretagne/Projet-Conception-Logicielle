@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class State implements IState{
+    /*
+    The State class represents a State in an FSM, like 'idle' or 'sending'.
+     */
     private HashMap<String, IState> mMapping = new HashMap<>();
     private String mStateName;
 

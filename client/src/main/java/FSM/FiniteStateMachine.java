@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FiniteStateMachine implements IFiniteStateMachine{
+    /*
+    FiniteStateMachine represents a set of states and transitions. It allows use to ensure the unicity of
+    the messages sent and received by the client.
+     */
     private IState mStartState;
     private IState mEndState;
     private IState mCurrentState;

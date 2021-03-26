@@ -3,7 +3,6 @@ package FSM;
 import java.util.Map;
 
 public interface IState {
-        // Returns the mapping for which one action will lead to another state
         Map<String, IState> getAdjacentStates();
 
         String getStateDesc();
