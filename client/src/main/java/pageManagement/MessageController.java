@@ -11,7 +11,9 @@ public class MessageController {
     // Logging
     private final Logger log = LogManager.getLogger(MessageController.class);
 
-    // For messages, it isn't really useful to write an "initialize" FXML method
+    // For messages, we will NOT write an "initialize" FXML method, since this class
+    // is deliberately NOT LINKED to any FXML file (since messages will be loaded AND unloaded
+    // dynamically from the Discussion scene)
 
     private String sender;
     private String date;
@@ -21,24 +23,12 @@ public class MessageController {
         return sender;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getContent() {
         return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public MessageController(String sender, String date, String content) {

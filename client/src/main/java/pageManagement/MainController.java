@@ -6,9 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import java.io.IOException;
 import java.io.File;
@@ -25,17 +22,14 @@ public class MainController {
 
     private static Stage mainStage;
 
+    public static void initializeMainStage(Stage newMainStage) {
+        mainStage = newMainStage;
+    }
+
     // the 3 main scenes
     private static Scene loginScene;
     private static Scene homeScene;
     private static Scene discussionScene;
-
-    // NB : here "currentScene" is a simple descriptive String, not a Scene object !
-    private static String currentScene;
-
-    public static void setMainStage(Stage stage) {
-        mainStage = stage;
-    }
 
     public static Scene getLoginScene() {
         return loginScene;
@@ -49,11 +43,21 @@ public class MainController {
         return discussionScene;
     }
 
-    public static String getCurrentScene() {
+    private enum MainScenes {
+        NONE_YET,
+        LOGIN,
+        HOME,
+        DISCUSSION
+    }
+
+    // NB : here "currentScene" is only a descriptive feature, not a Scene object !
+    private static MainScenes currentScene;
+
+    private static MainScenes getCurrentScene() {
         return currentScene;
     }
 
-    public static void setCurrentScene(String scene) {
+    private static void setCurrentScene(MainScenes scene) {
         currentScene = scene;
     }
 
@@ -77,7 +81,7 @@ public class MainController {
         discussionScene = new Scene(discussionRoot, 659, 402);
 
         mainStage.getIcons().add(new Image("duck-icon.png")); // adding duck icon to main stage
-        setCurrentScene("");
+        setCurrentScene(MainScenes.NONE_YET);
 
         hasAlreadySwitchedToHomeScene = false;
         hasAlreadySwitchedToDiscussionScene = false;
@@ -123,8 +127,8 @@ public class MainController {
      * Switches to the Login scene. If already in the Login scene, nothing is done.
      */
     public static void switchToLoginScene() {
-        if (!getCurrentScene().equals("login")) {
-            setCurrentScene("login");
+        if (getCurrentScene() != MainScenes.LOGIN) {
+            setCurrentScene(MainScenes.LOGIN);
 
             mainStage.setTitle("Login");
             mainStage.setScene(loginScene);
@@ -142,17 +146,15 @@ public class MainController {
      * Switches to the Home scene. If already in the Home scene, nothing is done.
      */
     public static void switchToHomeScene() {
-        if (!getCurrentScene().equals("home")) {
-            setCurrentScene("home");
+        if (getCurrentScene() != MainScenes.HOME) {
+            setCurrentScene(MainScenes.HOME);
 
             mainStage.setTitle("Home");
             mainStage.setScene(homeScene);
             mainStage.show();
 
-            // getting the **NOT-NULL** thumbnail HBox (+ the ScrollPane) from the Home scene
             if (!hasAlreadySwitchedToHomeScene) {
-                HomeController.initializeGroupThumbnailHBox((HBox) homeScene.lookup("#groupThumbnailHBox"));
-                HomeController.initializeGroupThumbnailScrollPane((ScrollPane) homeScene.lookup("#groupThumbnailScrollPane"));
+                HomeController.initializeStaticComponents();
                 hasAlreadySwitchedToHomeScene = true;
             }
         }
@@ -168,17 +170,15 @@ public class MainController {
      * Switches to the Discussion scene. If already in the Discussion scene, nothing is done.
      */
     public static void switchToDiscussionScene() {
-        if (!getCurrentScene().equals("discussion")) {
-            setCurrentScene("discussion");
+        if (getCurrentScene() != MainScenes.DISCUSSION) {
+            setCurrentScene(MainScenes.DISCUSSION);
 
             mainStage.setTitle("Discussion");
             mainStage.setScene(discussionScene);
             mainStage.show();
 
-            // getting the **NOT-NULL** discussion VBox (+ the ScrollPane) from the Discussion scene
             if (!hasAlreadySwitchedToDiscussionScene) {
-                DiscussionController.initializeDiscussionVBox((VBox) discussionScene.lookup("#discussionVBox"));
-                DiscussionController.initializeDiscussionScrollPane((ScrollPane) discussionScene.lookup("#discussionScrollPane"));
+                DiscussionController.initializeStaticComponents();
                 hasAlreadySwitchedToDiscussionScene = true;
             }
         }

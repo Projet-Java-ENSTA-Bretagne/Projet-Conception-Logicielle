@@ -28,31 +28,27 @@ public class HomeController {
     private static final Logger log = LogManager.getLogger(HomeController.class);
 
     /**
-     * Method that is executed right before "home.fxml" is loaded.
+     * Method that is automatically executed right after "home.fxml" is loaded.
      */
     @FXML
     private void initialize() {
         log.info("Initializing home controller");
 
-        groupThumbnailHBox = null;
-        groupThumbnailScrollPane = null;
         groupThumbnailObjectList = new ArrayList<>();
         nbGroupsYouAreStillPartOf = 0;
         aGroupIsCurrentlyBeingDeleted = false;
-        currentGroupSettingsStage = null;
-        currentConfirmLeaveGroupStage = null;
     }
 
     private static HBox groupThumbnailHBox;
-
-    public static void initializeGroupThumbnailHBox(HBox newGroupThumbnailHBox) {
-        groupThumbnailHBox = newGroupThumbnailHBox;
-    }
-
     private static ScrollPane groupThumbnailScrollPane;
 
-    public static void initializeGroupThumbnailScrollPane(ScrollPane newGroupThumbnailScrollPane) {
-        groupThumbnailScrollPane = newGroupThumbnailScrollPane;
+    public static void initializeStaticComponents() {
+        Parent homeRoot = MainController.getHomeScene().getRoot();
+
+        // unfortunately, JavaFX does NOT load objects into static "@FXML" variables, so we
+        // will have to do it ourselves
+        groupThumbnailHBox = (HBox) homeRoot.lookup("#groupThumbnailHBox");
+        groupThumbnailScrollPane = (ScrollPane) homeRoot.lookup("#groupThumbnailScrollPane");
 
         // preventing vertical scrolling in the group thumbnail ScrollPane
         groupThumbnailScrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
@@ -204,7 +200,7 @@ public class HomeController {
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
         setCurrentGroupSettingsRoot(groupSettingsRoot);
-        Scene scene = new Scene(groupSettingsRoot, 400, 415);
+        Scene scene = new Scene(groupSettingsRoot, 415, 415);
 
         Stage currentGroupSettingsStage = new Stage();
         currentGroupSettingsStage.getIcons().add(new Image("settings-icon.png"));
@@ -226,7 +222,7 @@ public class HomeController {
     @FXML
     private void actionDisconnectButton() {
         System.out.println("");
-        log.info("Deconnexion");
+        log.info("Déconnexion");
         MainController.switchToLoginScene();
     }
 }

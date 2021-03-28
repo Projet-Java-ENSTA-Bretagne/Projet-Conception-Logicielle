@@ -2,8 +2,8 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPasswordField;
 import javafx.fxml.FXML;
 
 /**
@@ -14,7 +14,7 @@ public class LoginController {
     private static final Logger log = LogManager.getLogger(LoginController.class);
 
     /**
-     * Method that is executed right before "login.fxml" is loaded.
+     * Method that is automatically executed right after "login.fxml" is loaded.
      */
     @FXML
     private void initialize() {

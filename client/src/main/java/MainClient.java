@@ -26,7 +26,7 @@ public class MainClient extends Application {
      */
     @Override
     public void start(Stage mainStage) throws IOException {
-        MainController.setMainStage(mainStage);
+        MainController.initializeMainStage(mainStage);
         MainController.initializeMainScenes();
         MainController.initializeFSM();
         MainController.switchToLoginScene();

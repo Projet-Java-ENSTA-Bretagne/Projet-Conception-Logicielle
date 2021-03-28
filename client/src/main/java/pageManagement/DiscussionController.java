@@ -30,27 +30,25 @@ public class DiscussionController {
     private static final Logger log = LogManager.getLogger(DiscussionController.class);
 
     /**
-     * Method that is executed right before "discussion.fxml" is loaded.
+     * Method that is automatically executed right after "discussion.fxml" is loaded.
      */
     @FXML
     private void initialize() {
         log.info("Initializing discussion controller");
-
-        discussionVBox = null;
-        discussionScrollPane = null;
         groupObjectList = new ArrayList<>();
     }
 
     private static VBox discussionVBox;
-
-    public static void initializeDiscussionVBox(VBox newDiscussionVBox) {
-        discussionVBox = newDiscussionVBox;
-    }
-
     private static ScrollPane discussionScrollPane;
 
-    public static void initializeDiscussionScrollPane(ScrollPane newDiscussionScrollPane) {
-        discussionScrollPane = newDiscussionScrollPane;
+    public static void initializeStaticComponents() {
+        Parent discussionRoot = MainController.getDiscussionScene().getRoot();
+
+        // unfortunately, JavaFX does NOT load objects into static "@FXML" variables, so we
+        // will have to do it ourselves
+        discussionVBox = (VBox) discussionRoot.lookup("#discussionVBox");
+        discussionScrollPane = (ScrollPane) discussionRoot.lookup("#discussionScrollPane");
+        discussionNameLabel = (Label) discussionRoot.lookup("#discussionNameLabel");
 
         // preventing horizontal scrolling in the discussion ScrollPane
         discussionScrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
@@ -72,6 +70,12 @@ public class DiscussionController {
                 discussionScrollPane.setVvalue((Double) newVvalue);
             }
         });
+    }
+
+    private static Label discussionNameLabel;
+
+    public static void updateDiscussionNameLabel(String newDiscussionName) {
+        discussionNameLabel.setText(newDiscussionName);
     }
 
     private static String currentSender;
@@ -113,9 +117,9 @@ public class DiscussionController {
     }
 
     /**
-     * Adds "dummy messages" in a group chat.
+     * Adds "dummy messages" to the current (empty) group chat.
      */
-    public static void loadGroupObjectWithDummyData() {
+    public static void loadCurrentGroupObjectWithDummyData() {
         String currentDate = getCurrentDate();
 
         // generating a random number between 0 and 1
@@ -152,17 +156,17 @@ public class DiscussionController {
         }
     }
 
-    private static String nameOfTheCurrentGroup;
+    private static String currentlyOpenedGroup;
 
-    public static void setNameOfTheCurrentGroup(String nameOfTheNewCurrentGroup) {
-        nameOfTheCurrentGroup = nameOfTheNewCurrentGroup;
+    public static void setCurrentlyOpenedGroup(String newCurrentlyOpenedGroup) {
+        currentlyOpenedGroup = newCurrentlyOpenedGroup;
     }
 
     public static void addMessageToAssociatedMessageList(MessageController messageController) {
         for (GroupObject groupObject : groupObjectList) {
             String groupName = groupObject.getGroupName();
 
-            if (groupName.equals(nameOfTheCurrentGroup)) {
+            if (groupName.equals(currentlyOpenedGroup)) {
                 groupObject.addMessage(messageController);
                 return;
             }
@@ -170,9 +174,9 @@ public class DiscussionController {
     }
 
     /**
-     * Displays a given message in the discussion VBox from the data in its associated controller.
+     * Displays a given message in the discussion VBox from the data contained in its associated controller.
      *
-     * @param messageController The message controller that will be converted to a visual object
+     * @param messageController The message controller that will be converted into a visual object
      * @throws IOException If error when FXMLLoader.load() is called
      */
     public static void displayMessageFromController(MessageController messageController) throws IOException {
@@ -213,7 +217,7 @@ public class DiscussionController {
         for (GroupObject groupObject : groupObjectList) {
             String groupName = groupObject.getGroupName();
 
-            if (groupName.equals(nameOfTheCurrentGroup)) {
+            if (groupName.equals(currentlyOpenedGroup)) {
                 for (MessageController messageController : groupObject.getMessageList()) {
                     displayMessageFromController(messageController);
                 }
@@ -282,6 +286,7 @@ public class DiscussionController {
                                                       getCurrentDate(), currentMessage);
 
             System.out.println("");
+            log.debug("Vous venez d'envoyer un nouveau message !");
             log.debug("Émetteur : \"" + messageController.getSender() + "\"");
             log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
             log.debug("Contenu : \"" + messageController.getContent() + "\"");

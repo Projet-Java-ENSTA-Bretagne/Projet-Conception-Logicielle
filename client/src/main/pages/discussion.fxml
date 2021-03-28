@@ -18,17 +18,17 @@
    <children>
       <VBox alignment="CENTER" prefHeight="402.0" prefWidth="659.0">
          <children>
-            <HBox id="topLayerHBox" alignment="CENTER" prefHeight="40.0" prefWidth="631.0">
+            <HBox id="topLayerHBox" alignment="CENTER" prefHeight="40.0" prefWidth="659.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="419.0" spacing="65.0">
                      <children>
                         <Label id="discussionNameLabel" text="Discussion name" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <padding>
-                              <Insets left="15.0" />
-                           </padding>
+                           <HBox.margin>
+                              <Insets left="28.0" />
+                           </HBox.margin>
                         </Label>
                         <JFXButton id="exitButton" buttonType="RAISED" onAction="#actionExitButton" ripplerFill="WHITE" text="Quitter" textAlignment="CENTER" textFill="WHITE">
                            <font>
@@ -37,7 +37,7 @@
                         </JFXButton>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="240.0">
                      <opaqueInsets>
                         <Insets right="50.0" />
                      </opaqueInsets>
@@ -47,7 +47,7 @@
                               <Font name="System Bold" size="13.0" />
                            </font>
                            <HBox.margin>
-                              <Insets right="15.0" />
+                              <Insets right="28.0" />
                            </HBox.margin>
                         </Label>
                      </children>

@@ -10,7 +10,7 @@
 
 /* fonts other than the default "System" font have to be defined in this CSS stylesheet */
 #welcomeLabel {
-    -fx-font-family: 'Garamond';
+    -fx-font-family: 'Garamond'; /* here we're overriding the default font of "welcomeLabel" (defined in login.fxml) */
 }
 
 #enstarLabel {

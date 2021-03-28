@@ -2,7 +2,6 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -24,19 +23,19 @@ public class GroupThumbnailController {
     private final Logger log = LogManager.getLogger(GroupThumbnailController.class);
 
     /**
-     * Method that is executed right before "groupThumbnail.fxml" is loaded.
+     * Method that is automatically executed right after "groupThumbnail.fxml" is loaded.
      */
     @FXML
     private void initialize() {
-        System.out.println("");
-        log.info("Initializing group thumbnail controller, groupName = \"" + getGroupName() + "\"");
+        theGroupHasAlreadyBeenOpened = false;
     }
 
+    // displayed features
     private String groupName;
-    private String groupStatus;
+    private GroupSettingsController.GroupStatus groupStatus;
     private String groupDescription;
 
-    private String operationType;
+    private GroupSettingsController.OperationType operationType;
     private String serverIpAddress;
     private int serverPort;
     private int groupId;
@@ -45,7 +44,7 @@ public class GroupThumbnailController {
         return groupName;
     }
 
-    public String getGroupStatus() {
+    public GroupSettingsController.GroupStatus getGroupStatus() {
         return groupStatus;
     }
 
@@ -53,7 +52,7 @@ public class GroupThumbnailController {
         return groupDescription;
     }
 
-    public String getOperationType() {
+    public GroupSettingsController.OperationType getOperationType() {
         return operationType;
     }
 
@@ -69,11 +68,19 @@ public class GroupThumbnailController {
         return groupId;
     }
 
-    private boolean theGroupHasAlreadyBeenOpened;
+    @FXML
+    private Label groupNameLabel;
 
-    public GroupThumbnailController(String groupName, String groupStatus, String groupDescription,
-                                    String operationType, String serverIpAddress,
-                                    int serverPort, int groupId) {
+    @FXML
+    private Label groupStatusLabel;
+
+    @FXML
+    private Label groupDescriptionLabel;
+
+    // it's cleaner if we do NOT use constructors when updating FXML templates
+    public void build(String groupName, GroupSettingsController.GroupStatus groupStatus, String groupDescription,
+                      GroupSettingsController.OperationType operationType, String serverIpAddress,
+                      int serverPort, int groupId) {
 
         this.groupName = groupName;
         this.groupStatus = groupStatus;
@@ -84,66 +91,80 @@ public class GroupThumbnailController {
         this.serverPort = serverPort;
         this.groupId = groupId;
 
-        theGroupHasAlreadyBeenOpened = false;
+        System.out.println("");
+        log.info("Initializing group thumbnail controller, groupName = \"" + this.groupName + "\"");
+
+        updateDesign();
     }
 
+    // text contained in the discussion name label of the associated group/PM chat
+    private String discussionNameText;
+
+    private void updateDesign() {
+        groupNameLabel.setText(groupName);
+
+        if (operationType == GroupSettingsController.OperationType.CREATE_PM) {
+            groupStatusLabel.setText("Messages privés (MP)");
+            discussionNameText = "MP avec : " + groupName;
+        }
+        else {
+            if (groupStatus == GroupSettingsController.GroupStatus.PUBLIC) {
+                groupStatusLabel.setText("Groupe public");
+            }
+            else if (groupStatus == GroupSettingsController.GroupStatus.PRIVATE) {
+                groupStatusLabel.setText("Groupe privé");
+            }
+
+            discussionNameText = "Groupe : " + groupName;
+        }
+
+        groupDescriptionLabel.setText(groupDescription);
+    }
+
+    private boolean theGroupHasAlreadyBeenOpened;
+
     /**
-     * Action linked to the "OPEN" JFXButton.
-     * Opens the discussion scene associated with the chosen group. Loads the message
-     * from that same group.
-     * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
+     * Action linked to the "OPEN" JFXButton. Opens the discussion scene associated with the
+     * chosen group. Loads the message from that same group.
      * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called (in DiscussionController.loadMessages();)
      */
-    public void actionOpenGroupButton() throws IOException {
-        log.info("Bouton \"OPEN\" appuye, groupName = \"" + getGroupName() + "\"");
+    @FXML
+    private void actionOpenGroupButton() throws IOException {
+        log.info("Bouton \"OPEN\" appuyé, groupName = \"" + groupName + "\"");
 
-        Label discussionNameLabel = (Label) MainController.getDiscussionScene().lookup("#discussionNameLabel");
-        if (getOperationType().equals("createPm")) {
-            discussionNameLabel.setText("MP avec : " + getGroupName());
-        }
-        else {
-            discussionNameLabel.setText("Groupe : " + getGroupName());
-        }
-
-        DiscussionController.setNameOfTheCurrentGroup(getGroupName());
+        DiscussionController.setCurrentlyOpenedGroup(groupName);
 
         if (!theGroupHasAlreadyBeenOpened) {
-            DiscussionController.loadGroupObjectWithDummyData();
+            DiscussionController.loadCurrentGroupObjectWithDummyData();
             theGroupHasAlreadyBeenOpened = true;
         }
 
         MainController.switchToDiscussionScene();
+        DiscussionController.updateDiscussionNameLabel(discussionNameText);
         DiscussionController.loadMessages();
     }
 
     /**
-     * Action linked to the "LEAVE" JFXButton.
-     * Leaves the chosen group chat. Will open a new ConfirmLeaveGroup window/stage to
-     * check if you really want to leave the group (since it's an irreversible action).
-     * /!\ THIS METHOD IS NOT (DIRECTLY) LINKED TO THE ASSOCIATED FXML FILE /!\
+     * Action linked to the "LEAVE" JFXButton. Leaves the chosen group chat. Will open a new
+     * ConfirmLeaveGroup window/stage to check if you really want to leave the group (since
+     * it's an irreversible action).
      *
      * @throws IOException If error when FXMLLoader.load() is called
      */
-    public void actionLeaveGroupButton() throws IOException {
-        log.info("Bouton \"LEAVE\" appuye, groupName = \"" + getGroupName() + "\"");
+    @FXML
+    private void actionLeaveGroupButton() throws IOException {
+        log.info("Bouton \"LEAVE\" appuyé, groupName = \"" + groupName + "\"");
 
         URL confirmLeaveGroupURL = new File("src/main/pages/confirmLeaveGroup.fxml").toURI().toURL();
         FXMLLoader confirmLeaveGroupLoader = new FXMLLoader(confirmLeaveGroupURL);
-        ConfirmLeaveGroupController confirmLeaveGroupController = new ConfirmLeaveGroupController(groupName);
-        confirmLeaveGroupLoader.setController(confirmLeaveGroupController);
         Parent confirmLeaveGroupRoot = confirmLeaveGroupLoader.load();
+
+        ConfirmLeaveGroupController confirmLeaveGroupController = confirmLeaveGroupLoader.getController();
+        confirmLeaveGroupController.build(groupName);
+
         Scene scene = new Scene(confirmLeaveGroupRoot, 300, 150);
-
-        Label groupNameLabel = (Label) confirmLeaveGroupRoot.lookup("#groupNameLabel");
-        groupNameLabel.setText("\"" + groupName + "\" ?");
-
-        JFXButton noButton = (JFXButton) confirmLeaveGroupRoot.lookup("#noButton");
-        noButton.setOnAction(e -> confirmLeaveGroupController.actionNoButton());
-
-        JFXButton yesButton = (JFXButton) confirmLeaveGroupRoot.lookup("#yesButton");
-        yesButton.setOnAction(e -> confirmLeaveGroupController.actionYesButton());
 
         Stage currentConfirmLeaveGroupStage = new Stage();
         currentConfirmLeaveGroupStage.getIcons().add(new Image("question-mark.png"));
