@@ -153,25 +153,11 @@ public class HomeController {
 
     public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
         currentGroupSettingsStage = groupSettingsStage;
-
-        if (groupSettingsStage == null) {
-            setCurrentGroupSettingsRoot(null);
-        }
     }
 
     public static void closeCurrentGroupSettingsStage() {
         currentGroupSettingsStage.close();
         setCurrentGroupSettingsStage(null);
-    }
-
-    private static Parent currentGroupSettingsRoot;
-
-    public static Parent getCurrentGroupSettingsRoot() {
-        return currentGroupSettingsRoot;
-    }
-
-    public static void setCurrentGroupSettingsRoot(Parent groupSettingsRoot) {
-        currentGroupSettingsRoot = groupSettingsRoot;
     }
 
     private static Stage currentConfirmLeaveGroupStage;
@@ -199,7 +185,6 @@ public class HomeController {
 
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
-        setCurrentGroupSettingsRoot(groupSettingsRoot);
         Scene scene = new Scene(groupSettingsRoot, 415, 415);
 
         Stage currentGroupSettingsStage = new Stage();
