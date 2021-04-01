@@ -272,6 +272,7 @@ public class DiscussionController {
         }
 
         else {
+            System.out.println("");
             log.info("Vous venez d'envoyer un nouveau message !");
 
             // adding the new message to the Discussion scene
@@ -285,8 +286,6 @@ public class DiscussionController {
             MessageController messageController = new MessageController(getCurrentSender(),
                                                       getCurrentDate(), currentMessage);
 
-            System.out.println("");
-            log.debug("Vous venez d'envoyer un nouveau message !");
             log.debug("Émetteur : \"" + messageController.getSender() + "\"");
             log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
             log.debug("Contenu : \"" + messageController.getContent() + "\"");

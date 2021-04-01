@@ -60,7 +60,7 @@ public class HomeController {
             }
         });
 
-        // we do this so that we get the new value of the width of the group thumbnail VBox
+        // we do this so that we get the new value of the width of the group thumbnail HBox
         // **as soon as it's increased**, and can therefore automatically scroll to the
         // *very right* of the group thumbnail ScrollPane **as soon as a new group thumbnail
         // is generated**, which CANNOT be done (easily) otherwise
@@ -68,7 +68,7 @@ public class HomeController {
             @Override
             public void changed(ObservableValue observable, Object oldHvalue, Object newHvalue) {
                 // we don't necessarily want to go to the very right of the group thumbnail
-                // HBox when we leave a group
+                // ScrollPane when we leave/delete a group
                 if (!aGroupIsCurrentlyBeingDeleted) {
                     groupThumbnailScrollPane.setHvalue((Double) newHvalue);
                 }
@@ -99,7 +99,7 @@ public class HomeController {
 
     public static boolean aGroupIsCurrentlyBeingDeleted;
 
-    // Object containing all the current group thumbnails
+    // List containing all the current group thumbnail objects
     private static ArrayList<GroupThumbnailObject> groupThumbnailObjectList;
 
     public static ArrayList<GroupThumbnailObject> getGroupThumbnailObjectList() {
@@ -107,9 +107,9 @@ public class HomeController {
     }
 
     /**
-     * Adds a group (thumbnail) to the Home page.
+     * Adds a group thumbnail to the Home page.
      *
-     * @param groupThumbnailObject The group (thumbnail) object to add
+     * @param groupThumbnailObject The group thumbnail object to add
      */
     public static void addGroup(GroupThumbnailObject groupThumbnailObject) {
         groupThumbnailHBox.getChildren().add(groupThumbnailObject.getRoot());

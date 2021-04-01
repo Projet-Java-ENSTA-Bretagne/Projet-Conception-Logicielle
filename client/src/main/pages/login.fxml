@@ -26,7 +26,7 @@
                      <children>
                         <Label id="welcomeLabel" text="Bienvenue !" textAlignment="CENTER">
                            <font>
-                              <Font name="System Bold" size="24.0" />
+                              <Font size="24.0" />
                            </font>
                         </Label>
                         <Label text="Connecte-toi vite ! " textAlignment="CENTER" />
