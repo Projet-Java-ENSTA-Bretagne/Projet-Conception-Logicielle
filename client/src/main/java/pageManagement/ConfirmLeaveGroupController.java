@@ -56,10 +56,10 @@ public class ConfirmLeaveGroupController {
     @FXML
     private void actionYesButton() {
         log.info("Bouton \"Oui\" appuyé (confirmLeaveGroup), groupName = \"" + groupName + "\"");
+        HomeController.closeCurrentConfirmLeaveGroupStage();
 
         HomeController.aGroupIsCurrentlyBeingDeleted = true;
 
-        HomeController.closeCurrentConfirmLeaveGroupStage();
         HomeController.deleteGroupThumbnailByGroupName(groupName);
         DiscussionController.deleteGroupObjectByGroupName(groupName);
 

@@ -19,9 +19,12 @@
     -fx-font-family: 'Sansation';
 }
 
+#loginButton {
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
+}
 #loginButton:hover {
     -fx-border-color: black;
-    -fx-border-width: 1px;
 }
 
 /* ---------------- Home page ---------------- */
@@ -30,14 +33,20 @@
     -fx-background-color: rgba(70, 0, 255, 0.9); /* slightly faded blue-purple */
 }
 
-#disconnectButton:hover {
-    -fx-border-color: white;
+#disconnectButton {
+    -fx-border-color: Transparent;
     -fx-border-width: 1px;
 }
+#disconnectButton:hover {
+    -fx-border-color: white;
+}
 
+#joinOrCreateGroupButton {
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
+}
 #joinOrCreateGroupButton:hover {
     -fx-border-color: white;
-    -fx-border-width: 1px;
 }
 
 #groupThumbnailHBox {
@@ -107,18 +116,20 @@
 
 #openGroupButton {
     -fx-text-fill: linear-gradient(to right, #8000ff, #400080); /* shades of purple */
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
 }
 #openGroupButton:hover {
     -fx-border-color: #8000ff; /* slightly faded blue-purple */
-    -fx-border-width: 1px;
 }
 
 #leaveGroupButton {
     -fx-text-fill: linear-gradient(to right, #400080, #8000ff, #400080); /* shades of purple */
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
 }
 #leaveGroupButton:hover {
     -fx-border-color: #8000ff; /* slightly faded blue-purple */
-    -fx-border-width: 1px;
 }
 
 /* ---------------- ConfirmLeaveGroup page ---------------- */
@@ -135,9 +146,12 @@
 
 /* ---------------- Discussion page ------------------- */
 
+#exitButton {
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
+}
 #exitButton:hover {
     -fx-border-color: white;
-    -fx-border-width: 1px;
 }
 
 #discussionVBox {
@@ -201,18 +215,20 @@
 
 #sentMessageHBox {
     -fx-background-color: rgba(213, 128, 255, 0.6); /* faded light purple */
+    -fx-border-color: Transparent;
+    -fx-border-width: 2px;
 }
 #sentMessageHBox:hover {
     -fx-border-color: #8000ff; /* slightly faded blue-purple */
-    -fx-border-width: 2px;
 }
 
 #receivedMessageHBox {
     -fx-background-color: white;
+    -fx-border-color: Transparent;
+    -fx-border-width: 2px;
 }
 #receivedMessageHBox:hover {
     -fx-border-color: #80e5ff; /* faded light blue */
-    -fx-border-width: 2px;
 }
 
 /* ============================ END =========================== */

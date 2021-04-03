@@ -126,6 +126,8 @@ public class DiscussionController {
         double random_number = Math.random();
 
         if (random_number > 0.5) {
+            // 1st set of dummy data
+
             MessageController message1 = new MessageController(currentSender, currentDate, "hey");
             MessageController message2 = new MessageController("Mec 1", currentDate, "hey !");
             MessageController message3 = new MessageController(currentSender, currentDate, "ça va ?");
@@ -144,6 +146,8 @@ public class DiscussionController {
         }
 
         else {
+            // 2nd set of dummy data
+
             MessageController message1 = new MessageController("Mec 1", currentDate, "qqn a vu mes clés ?");
             MessageController message2 = new MessageController(currentSender, currentDate, "euh ... non pk ?");
             MessageController message3 = new MessageController(currentSender, currentDate, "ah si c possible");
@@ -221,6 +225,8 @@ public class DiscussionController {
                 for (MessageController messageController : groupObject.getMessageList()) {
                     displayMessageFromController(messageController);
                 }
+
+                return;
             }
         }
     }

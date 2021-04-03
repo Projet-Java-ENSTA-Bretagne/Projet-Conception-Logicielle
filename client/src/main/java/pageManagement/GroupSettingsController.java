@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.File;
@@ -29,6 +30,22 @@ public class GroupSettingsController {
 
         operationType = OperationType.JOIN_GROUP;
         groupStatus = GroupStatus.PUBLIC;
+
+        /* ---------------------------------------------------------- */
+
+        // defining the selected colour of the JFXRadioButtons (it cannot be done via SceneBuilder,
+        // and cannot be done *easily* via a CSS stylesheet)
+
+        // 1st toggle group : operation type
+        Color operationTypeSelectedColor = Color.web("#1aa3ff"); // sky blue
+        joinGroupRadioButton.setSelectedColor(operationTypeSelectedColor);
+        createGroupRadioButton.setSelectedColor(operationTypeSelectedColor);
+        createPmRadioButton.setSelectedColor(operationTypeSelectedColor);
+
+        // 2nd toggle group : group status
+        Color groupStatusSelectedColor = Color.web("#cc0099"); // light purple
+        publicGroupStatusRadioButton.setSelectedColor(groupStatusSelectedColor);
+        privateGroupStatusRadioButton.setSelectedColor(groupStatusSelectedColor);
     }
 
     /* ------------- 1st toggle group : Operation Type ------------- */
@@ -164,7 +181,9 @@ public class GroupSettingsController {
      */
     @FXML
     private void actionDoneButton() throws IOException {
+        System.out.println("");
         log.info("Vous venez d'appuyer sur le bouton \"DONE\"");
+        System.out.println("");
 
         boolean parametersAreValid = true;
         boolean anErrorWasCaught = false;
@@ -203,9 +222,8 @@ public class GroupSettingsController {
                 for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
                     String otherGroupName = groupThumbnailObject.getController().getGroupName();
                     if (groupName.equals(otherGroupName)) {
-                        parametersAreValid = false;
-                        System.out.println("");
                         log.error("Le nom de groupe \"" + groupName + "\" existe déjà !");
+                        parametersAreValid = false;
                         break;
                     }
                 }
@@ -221,9 +239,8 @@ public class GroupSettingsController {
                 for (GroupThumbnailObject groupThumbnailObject : groupThumbnailObjectList) {
                     int otherGroupId = groupThumbnailObject.getController().getGroupId();
                     if (groupId == otherGroupId) {
-                        parametersAreValid = false;
-                        System.out.println("");
                         log.error("L'ID de groupe \"" + groupId + "\" existe déjà !");
+                        parametersAreValid = false;
                         break;
                     }
                 }
@@ -241,12 +258,12 @@ public class GroupSettingsController {
         catch (Exception e) {
             parametersAreValid = false;
             anErrorWasCaught = true;
-            System.out.println("");
             log.error("Paramétrage invalide ! Erreur : " + e);
         }
 
         if (parametersAreValid) {
-            System.out.println("");
+            HomeController.closeCurrentGroupSettingsStage();
+
             log.debug("Type de l'opération : " + operationType.toString());
             log.debug("Adresse IP du serveur : " + serverIpAddress);
             log.debug("Port du serveur : " + serverPort);
@@ -255,11 +272,9 @@ public class GroupSettingsController {
             log.debug("Statut du groupe : " + groupStatus.toString());
             log.debug("Description du groupe : \"" + groupDescription + "\"");
 
-            HomeController.closeCurrentGroupSettingsStage();
-
             /* ---------------------------------------------------------- */
 
-            // adding new group visualizer/thumbnail
+            // adding new group thumbnail + the new group object
 
             HomeController.incrementNbGroupsYouAreStillPartOf();
 
@@ -279,19 +294,19 @@ public class GroupSettingsController {
 
             System.out.println("");
             if (operationType == OperationType.JOIN_GROUP) {
-                log.debug("Vous venez de rejoindre le groupe \"" + groupName + "\" !\n");
+                log.debug("Vous venez de rejoindre le groupe \"" + groupName + "\" !");
             }
             else if (operationType == OperationType.CREATE_GROUP) {
-                log.debug("Vous venez de créer le groupe \"" + groupName + "\" !\n");
+                log.debug("Vous venez de créer le groupe \"" + groupName + "\" !");
             }
             else if (operationType == OperationType.CREATE_PM) {
-                log.debug("Vous venez de créer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !\n");
+                log.debug("Vous venez de créer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !");
             }
+            System.out.println("");
         }
 
         else {
             if (!anErrorWasCaught) {
-                System.out.println("");
                 log.error("Paramétrage invalide !");
             }
         }
@@ -313,6 +328,10 @@ public class GroupSettingsController {
         }
 
         else {
+            if (ipAddress.endsWith(".")) {
+                return false;
+            }
+
             try {
                 for (String ipComponent : splitIpAddress) {
                     int associatedInteger = Integer.parseInt(ipComponent);
@@ -325,10 +344,6 @@ public class GroupSettingsController {
                     if ((associatedInteger != 0) && (ipComponent.startsWith("0"))) {
                         return false;
                     }
-                }
-
-                if (ipAddress.endsWith(".")) {
-                    return false;
                 }
 
                 return true;

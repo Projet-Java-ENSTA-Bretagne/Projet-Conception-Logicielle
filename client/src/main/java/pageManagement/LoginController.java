@@ -24,12 +24,12 @@ public class LoginController {
         nbSuccessfulLogins = 0;
 
         allowedToChangeUsername = false;
-        username = null;
-        currentUsernameEntry = null;
+        username = "";
+        currentUsernameEntry = "";
 
         allowedToChangePassword = false;
-        password = null;
-        currentPasswordEntry = null;
+        password = "";
+        currentPasswordEntry = "";
     }
 
     @FXML
@@ -70,35 +70,48 @@ public class LoginController {
      * TODO : Link this method to network
      */
     @FXML
-    private void makeLogin() {
+    private void actionLoginButton() {
         if (nbSuccessfulLogins == 0) {
             allowedToChangeUsername = true;
             allowedToChangePassword = true;
         }
 
-        // can easily be changed manually
-        boolean allowedToChangeLoginData = (allowedToChangeUsername && allowedToChangePassword);
-
         currentUsernameEntry = usernameField.getText();
-        boolean usernameIsvalid = ((allowedToChangeLoginData && (currentUsernameEntry != null) && (currentUsernameEntry.length() > 0))
-                                   ||
-                                   ((!allowedToChangeLoginData) && currentUsernameEntry.equals(username)));
+        boolean usernameIsValid;
+        if ((currentUsernameEntry == null) || (currentUsernameEntry.length() == 0)) {
+            usernameIsValid = false;
+        }
+        else {
+            if (currentUsernameEntry.length() > 12) {
+                usernameIsValid = false;
+                System.out.println("");
+                log.error("The current username entry has more than 12 characters !");
+            }
+            else {
+                usernameIsValid = (allowedToChangeUsername || currentUsernameEntry.equals(username));
+            }
+        }
 
         currentPasswordEntry = passwordField.getText();
-        boolean passwordIsvalid = ((allowedToChangeLoginData && (currentPasswordEntry != null) && (currentPasswordEntry.length() > 0))
-                                   ||
-                                   ((!allowedToChangeLoginData) && currentPasswordEntry.equals(password)));
+        boolean passwordIsValid;
+        if ((currentPasswordEntry == null) || (currentPasswordEntry.length() == 0)) {
+            passwordIsValid = false;
+        }
+        else {
+            passwordIsValid = (allowedToChangePassword || currentPasswordEntry.equals(password));
+        }
 
-        if (usernameIsvalid && passwordIsvalid) {
+        if (usernameIsValid && passwordIsValid) {
             nbSuccessfulLogins += 1;
 
-            if (allowedToChangeLoginData) {
-                // changing/setting username and password
+            if (allowedToChangeUsername) {
                 setUsername(currentUsernameEntry);
-                setPassword(currentPasswordEntry);
-
                 System.out.println("");
                 log.debug("New username : \"" + username + "\"");
+            }
+
+            if (allowedToChangePassword) {
+                setPassword(currentPasswordEntry);
                 log.debug("New password : \"" + password + "\"");
             }
 
@@ -108,11 +121,11 @@ public class LoginController {
         }
 
         else {
-            System.out.println("");
+            if (currentUsernameEntry.length() <= 12) {
+                System.out.println("");
+            }
             log.error("Invalid username or password. Please try again !");
         }
-
-        System.out.flush();
     }
 
     /**
@@ -122,8 +135,14 @@ public class LoginController {
     @FXML
     private void unmaskPassword() {
         currentPasswordEntry = passwordField.getText();
-        passwordField.clear();
-        passwordField.setPromptText(currentPasswordEntry);
+
+        if ((currentPasswordEntry == null) || (currentPasswordEntry.length() == 0)) {
+            return;
+        }
+        else {
+            passwordField.clear();
+            passwordField.setPromptText(currentPasswordEntry);
+        }
     }
 
     /**
@@ -132,7 +151,12 @@ public class LoginController {
      */
     @FXML
     private void maskPassword() {
-        passwordField.setText(currentPasswordEntry);
-        passwordField.setPromptText("Password");
+        if ((currentPasswordEntry == null) || (currentPasswordEntry.length() == 0)) {
+            return;
+        }
+        else {
+            passwordField.setText(currentPasswordEntry);
+            passwordField.setPromptText("Password");
+        }
     }
 }

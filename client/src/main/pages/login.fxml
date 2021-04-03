@@ -34,7 +34,7 @@
                   </VBox>
                   <AnchorPane prefHeight="28.0" prefWidth="382.0">
                      <children>
-                        <JFXTextField fx:id="usernameField" prefHeight="26.0" prefWidth="374.0" promptText="Username" />
+                        <JFXTextField fx:id="usernameField" prefHeight="26.0" prefWidth="374.0" promptText="Username                                                                        &lt; 12 caractères" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="28.0" prefWidth="382.0">
@@ -43,7 +43,7 @@
                         <JFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" layoutX="336.0" layoutY="1.0" onMousePressed="#unmaskPassword" onMouseReleased="#maskPassword" pickOnBounds="false" prefHeight="24.0" prefWidth="24.0" style="-fx-graphic: url('eye-icon.png');" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
-                  <JFXButton id="loginButton" buttonType="RAISED" contentDisplay="CENTER" onAction="#makeLogin" ripplerFill="#f20000" text="Login" textAlignment="CENTER" />
+                  <JFXButton id="loginButton" buttonType="RAISED" contentDisplay="CENTER" onAction="#actionLoginButton" ripplerFill="#f20000" text="Login" textAlignment="CENTER" />
                </children>
                <padding>
                   <Insets top="25.0" />

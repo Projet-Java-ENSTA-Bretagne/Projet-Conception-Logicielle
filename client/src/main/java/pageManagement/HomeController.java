@@ -112,8 +112,8 @@ public class HomeController {
      * @param groupThumbnailObject The group thumbnail object to add
      */
     public static void addGroup(GroupThumbnailObject groupThumbnailObject) {
-        groupThumbnailHBox.getChildren().add(groupThumbnailObject.getRoot());
         groupThumbnailObjectList.add(groupThumbnailObject);
+        groupThumbnailHBox.getChildren().add(groupThumbnailObject.getRoot());
     }
 
     /**
@@ -143,10 +143,6 @@ public class HomeController {
                 return;
             }
         }
-
-        // just in case (but should theoretically never happen)
-        System.out.println("");
-        log.error("Le nom de groupe \"" + nameOfTheGroupToDelete + "\" n'existe pas !\n");
     }
 
     private static Stage currentGroupSettingsStage;
