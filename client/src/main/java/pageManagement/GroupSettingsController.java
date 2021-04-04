@@ -28,8 +28,8 @@ public class GroupSettingsController {
     private void initialize() {
         log.info("Initializing group settings controller");
 
-        operationType = OperationType.JOIN_GROUP;
-        groupStatus = GroupStatus.PUBLIC;
+        operationType = OperationTypesEnum.JOIN_GROUP;
+        groupStatus = GroupStatusesEnum.PUBLIC;
 
         /* ---------------------------------------------------------- */
 
@@ -50,15 +50,9 @@ public class GroupSettingsController {
 
     /* ------------- 1st toggle group : Operation Type ------------- */
 
-    public enum OperationType {
-        JOIN_GROUP,
-        CREATE_GROUP,
-        CREATE_PM
-    }
+    private OperationTypesEnum operationType;
 
-    private OperationType operationType;
-
-    public void setOperationType(OperationType operationType) {
+    public void setOperationType(OperationTypesEnum operationType) {
         this.operationType = operationType;
     }
 
@@ -67,7 +61,7 @@ public class GroupSettingsController {
 
     @FXML
     private void actionJoinGroupRadioButton() {
-        setOperationType(OperationType.JOIN_GROUP);
+        setOperationType(OperationTypesEnum.JOIN_GROUP);
         log.debug("Operation type : " + operationType.toString());
     }
 
@@ -76,7 +70,7 @@ public class GroupSettingsController {
 
     @FXML
     private void actionCreateGroupRadioButton() {
-        setOperationType(OperationType.CREATE_GROUP);
+        setOperationType(OperationTypesEnum.CREATE_GROUP);
         log.debug("Operation type : " + operationType.toString());
     }
 
@@ -85,14 +79,14 @@ public class GroupSettingsController {
 
     @FXML
     private void actionCreatePmRadioButton() {
-        setOperationType(OperationType.CREATE_PM);
+        setOperationType(OperationTypesEnum.CREATE_PM);
         log.debug("Operation type : " + operationType.toString());
 
         if (publicGroupStatusRadioButton.isSelected()) {
             publicGroupStatusRadioButton.setSelected(false);
 
             privateGroupStatusRadioButton.setSelected(true);
-            setGroupStatus(GroupStatus.PRIVATE);
+            setGroupStatus(GroupStatusesEnum.PRIVATE);
             log.debug("Group status : " + groupStatus.toString());
         }
     }
@@ -121,14 +115,9 @@ public class GroupSettingsController {
 
     /* ------------- 2nd toggle group : Group Status ------------- */
 
-    public enum GroupStatus {
-        PUBLIC,
-        PRIVATE
-    }
+    private GroupStatusesEnum groupStatus;
 
-    private GroupStatus groupStatus;
-
-    public void setGroupStatus(GroupStatus groupStatus) {
+    public void setGroupStatus(GroupStatusesEnum groupStatus) {
         this.groupStatus = groupStatus;
     }
 
@@ -137,16 +126,16 @@ public class GroupSettingsController {
 
     @FXML
     private void actionPublicGroupStatusRadioButton() {
-        if (operationType == OperationType.CREATE_PM) {
+        if (operationType == OperationTypesEnum.CREATE_PM) {
             log.warn("A PM discussion cannot be public !");
 
             publicGroupStatusRadioButton.setSelected(false);
 
             privateGroupStatusRadioButton.setSelected(true);
-            setGroupStatus(GroupStatus.PRIVATE);
+            setGroupStatus(GroupStatusesEnum.PRIVATE);
         }
         else {
-            setGroupStatus(GroupStatus.PUBLIC);
+            setGroupStatus(GroupStatusesEnum.PUBLIC);
         }
 
         log.debug("Group status : " + groupStatus.toString());
@@ -157,7 +146,7 @@ public class GroupSettingsController {
 
     @FXML
     private void actionPrivateGroupStatusRadioButton() {
-        setGroupStatus(GroupStatus.PRIVATE);
+        setGroupStatus(GroupStatusesEnum.PRIVATE);
         log.debug("Group status : " + groupStatus.toString());
     }
 
@@ -293,13 +282,13 @@ public class GroupSettingsController {
             DiscussionController.addGroupObject(newGroupObject);
 
             System.out.println("");
-            if (operationType == OperationType.JOIN_GROUP) {
+            if (operationType == OperationTypesEnum.JOIN_GROUP) {
                 log.debug("Vous venez de rejoindre le groupe \"" + groupName + "\" !");
             }
-            else if (operationType == OperationType.CREATE_GROUP) {
+            else if (operationType == OperationTypesEnum.CREATE_GROUP) {
                 log.debug("Vous venez de créer le groupe \"" + groupName + "\" !");
             }
-            else if (operationType == OperationType.CREATE_PM) {
+            else if (operationType == OperationTypesEnum.CREATE_PM) {
                 log.debug("Vous venez de créer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !");
             }
             System.out.println("");

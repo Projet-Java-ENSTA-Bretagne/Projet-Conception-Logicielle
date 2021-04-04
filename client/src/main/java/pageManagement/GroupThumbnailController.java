@@ -32,10 +32,10 @@ public class GroupThumbnailController {
 
     // displayed features
     private String groupName;
-    private GroupSettingsController.GroupStatus groupStatus;
+    private GroupStatusesEnum groupStatus;
     private String groupDescription;
 
-    private GroupSettingsController.OperationType operationType;
+    private OperationTypesEnum operationType;
     private String serverIpAddress;
     private int serverPort;
     private int groupId;
@@ -44,7 +44,7 @@ public class GroupThumbnailController {
         return groupName;
     }
 
-    public GroupSettingsController.GroupStatus getGroupStatus() {
+    public GroupStatusesEnum getGroupStatus() {
         return groupStatus;
     }
 
@@ -52,7 +52,7 @@ public class GroupThumbnailController {
         return groupDescription;
     }
 
-    public GroupSettingsController.OperationType getOperationType() {
+    public OperationTypesEnum getOperationType() {
         return operationType;
     }
 
@@ -78,8 +78,8 @@ public class GroupThumbnailController {
     private Label groupDescriptionLabel;
 
     // it's cleaner if we do NOT use constructors when updating FXML templates
-    public void build(String groupName, GroupSettingsController.GroupStatus groupStatus, String groupDescription,
-                      GroupSettingsController.OperationType operationType, String serverIpAddress,
+    public void build(String groupName, GroupStatusesEnum groupStatus, String groupDescription,
+                      OperationTypesEnum operationType, String serverIpAddress,
                       int serverPort, int groupId) {
 
         this.groupName = groupName;
@@ -103,15 +103,15 @@ public class GroupThumbnailController {
     private void updateDesign() {
         groupNameLabel.setText(groupName);
 
-        if (operationType == GroupSettingsController.OperationType.CREATE_PM) {
+        if (operationType == OperationTypesEnum.CREATE_PM) {
             groupStatusLabel.setText("Messages privés (MP)");
             discussionNameText = "MP avec : " + groupName;
         }
         else {
-            if (groupStatus == GroupSettingsController.GroupStatus.PUBLIC) {
+            if (groupStatus == GroupStatusesEnum.PUBLIC) {
                 groupStatusLabel.setText("Groupe public");
             }
-            else if (groupStatus == GroupSettingsController.GroupStatus.PRIVATE) {
+            else if (groupStatus == GroupStatusesEnum.PRIVATE) {
                 groupStatusLabel.setText("Groupe privé");
             }
 

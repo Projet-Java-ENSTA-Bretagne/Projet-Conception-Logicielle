@@ -43,17 +43,10 @@ public class MainController {
         return discussionScene;
     }
 
-    private enum MainScene {
-        NONE_YET,
-        LOGIN,
-        HOME,
-        DISCUSSION
-    }
+    // NB : Here "currentScene" is only a descriptive feature, not a Scene object !
+    private static MainScenesEnum currentScene;
 
-    // NB : here "currentScene" is only a descriptive feature, not a Scene object !
-    private static MainScene currentScene;
-
-    private static void setCurrentScene(MainScene scene) {
+    private static void setCurrentScene(MainScenesEnum scene) {
         currentScene = scene;
     }
 
@@ -77,7 +70,7 @@ public class MainController {
         discussionScene = new Scene(discussionRoot, 659, 402);
 
         mainStage.getIcons().add(new Image("duck-icon.png")); // adding duck icon to main stage
-        setCurrentScene(MainScene.NONE_YET);
+        setCurrentScene(MainScenesEnum.NONE_YET);
 
         hasAlreadySwitchedToHomeScene = false;
         hasAlreadySwitchedToDiscussionScene = false;
@@ -123,8 +116,8 @@ public class MainController {
      * Switches to the Login scene. If already in the Login scene, nothing is done.
      */
     public static void switchToLoginScene() {
-        if (currentScene != MainScene.LOGIN) {
-            setCurrentScene(MainScene.LOGIN);
+        if (currentScene != MainScenesEnum.LOGIN) {
+            setCurrentScene(MainScenesEnum.LOGIN);
 
             mainStage.setTitle("Login");
             mainStage.setScene(loginScene);
@@ -142,8 +135,8 @@ public class MainController {
      * Switches to the Home scene. If already in the Home scene, nothing is done.
      */
     public static void switchToHomeScene() {
-        if (currentScene != MainScene.HOME) {
-            setCurrentScene(MainScene.HOME);
+        if (currentScene != MainScenesEnum.HOME) {
+            setCurrentScene(MainScenesEnum.HOME);
 
             mainStage.setTitle("Home");
             mainStage.setScene(homeScene);
@@ -166,8 +159,8 @@ public class MainController {
      * Switches to the Discussion scene. If already in the Discussion scene, nothing is done.
      */
     public static void switchToDiscussionScene() {
-        if (currentScene != MainScene.DISCUSSION) {
-            setCurrentScene(MainScene.DISCUSSION);
+        if (currentScene != MainScenesEnum.DISCUSSION) {
+            setCurrentScene(MainScenesEnum.DISCUSSION);
 
             mainStage.setTitle("Discussion");
             mainStage.setScene(discussionScene);
