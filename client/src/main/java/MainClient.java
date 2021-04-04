@@ -29,6 +29,11 @@ public class MainClient extends Application {
         MainController.initializeMainStage(mainStage);
         MainController.initializeMainScenes();
         MainController.initializeFSM();
+
+        String serverIpAddress = "localhost";
+        int serverPort = 6666;
+        MainController.initializeTcpClient(serverIpAddress, serverPort);
+
         MainController.switchToLoginScene();
     }
 
@@ -43,14 +48,5 @@ public class MainClient extends Application {
 
         // Executes the "start" method
         launch(args);
-
-        /*
-        networking.TCPClient tcpClient = new networking.TCPClient("localhost", 6666);
-        if (tcpClient.connectToServer()) {
-            String request = networking.RequestBuilder.buildWithoutData("PING").toString();
-            tcpClient.sendRequest(request);
-            tcpClient.disconnectFromServer();
-        }
-        */
     }
 }

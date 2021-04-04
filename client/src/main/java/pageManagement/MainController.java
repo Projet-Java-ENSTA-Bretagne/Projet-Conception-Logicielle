@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.File;
 import java.net.URL;
 
+import networking.TCPClient;
 import fsm.*;
 
 /**
@@ -46,8 +47,12 @@ public class MainController {
     // NB : Here "currentScene" is only a descriptive feature, not a Scene object !
     private static MainScenesEnum currentScene;
 
-    private static void setCurrentScene(MainScenesEnum scene) {
-        currentScene = scene;
+    public static MainScenesEnum getCurrentScene() {
+        return currentScene;
+    }
+
+    private static void setCurrentScene(MainScenesEnum newCurrentScene) {
+        currentScene = newCurrentScene;
     }
 
     /**
@@ -69,9 +74,10 @@ public class MainController {
         Parent discussionRoot = FXMLLoader.load(discussionURL);
         discussionScene = new Scene(discussionRoot, 659, 402);
 
-        mainStage.getIcons().add(new Image("duck-icon.png")); // adding duck icon to main stage
-        setCurrentScene(MainScenesEnum.NONE_YET);
+        // adding duck icon to main stage
+        mainStage.getIcons().add(new Image("duck-icon.png"));
 
+        setCurrentScene(MainScenesEnum.NONE_YET);
         hasAlreadySwitchedToHomeScene = false;
         hasAlreadySwitchedToDiscussionScene = false;
     }
@@ -87,12 +93,12 @@ public class MainController {
      * the state of the current user/client (relative to the server).
      */
     public static void initializeFSM() {
-        // FSM
-
+        // TODO : create StatesEnum
         IState idleState = new State("Idle");
         IState waitState = new State("Wait");
         IState sendingState = new State("Sending");
 
+        // TODO : create ActionsEnum
         Action connected =  new Action("Connected");
         Action disconnected = new Action("Disconnected");
         Action sending = new Action("Sending");
@@ -102,14 +108,26 @@ public class MainController {
         fsm.setStartState(idleState);
 
         log.info("Initializing FSM - Current state : " + fsm.getCurrentState().getStateDesc());
-        System.out.println("");
 
         fsm.addState(idleState, waitState, connected);
         fsm.addState(waitState, sendingState, sending);
         fsm.addState(sendingState, waitState, quitSending);
         fsm.addState(waitState, idleState, disconnected);
 
-        // --> to switch states, do "fsm.transit(Action)"
+        // --> to switch states, do "fsm.transit(action)"
+    }
+
+    private static TCPClient tcpClient;
+
+    public static TCPClient getTcpClient() {
+        return tcpClient;
+    }
+
+    public static void initializeTcpClient(String serverIpAddress, int serverPort) {
+        log.info("Initializing TCP client");
+        System.out.println("");
+
+        tcpClient = new TCPClient(serverIpAddress, serverPort);
     }
 
     /**

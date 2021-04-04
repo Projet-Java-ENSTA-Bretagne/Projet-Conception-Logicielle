@@ -43,18 +43,18 @@ public class TCPClient {
         boolean ok = false;
 
         try {
-            log.info("Trying to connect to: " + host + ":" + port);
+            log.info("Trying to connect to : " + host + ":" + port);
             serverSocket = new Socket(host, port);
             outStream = new PrintStream(serverSocket.getOutputStream());
             inStream = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            log.info("Connexion successful");
+            log.info("The connection to the server was successful");
             ok = true;
         } catch (UnknownHostException e) {
             log.error("Unknown host", e);
         } catch (ConnectException e) {
-            log.error("Error during connexion", e);
+            log.error("Error during connexion : ", e);
         } catch (IOException e) {
-            log.error("Error during data exchange", e);
+            log.error("Error during data exchange : ", e);
         }
 
         return ok;
@@ -70,7 +70,7 @@ public class TCPClient {
             inStream.close();
             serverSocket.close();
         } catch (Exception e) {
-            log.error("Error during disconnect...");
+            log.error("Error while trying to disconnect from the server");
         }
     }
 
@@ -85,12 +85,12 @@ public class TCPClient {
 
         // Trying to send the request
         try {
-            log.debug("Client request: " + request);
+            log.debug("Client request : " + request);
             outStream.println(request);
             outStream.flush();
             // Waiting for the main.java.server response
             serverResponse = inStream.readLine();
-            log.debug("Server response: " + serverResponse);
+            log.debug("Server response : " + serverResponse);
         } catch (UnknownHostException e) {
             log.error("Unknown host : " + e);
         } catch (IOException e) {

@@ -198,10 +198,11 @@ public class HomeController {
     /**
      * Action linked to the "Déconnexion" JFXButton.
      * Disconnects from the server, leaves the Home page, then switches to the Login scene.
-     * TODO : Link this method to network
      */
     @FXML
     private void actionDisconnectButton() {
+        MainController.getTcpClient().disconnectFromServer();
+
         System.out.println("");
         log.info("Déconnexion");
         MainController.switchToLoginScene();

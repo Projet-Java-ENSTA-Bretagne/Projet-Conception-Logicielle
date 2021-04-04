@@ -2,9 +2,13 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import org.json.JSONException;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXPasswordField;
 import javafx.fxml.FXML;
+
+import networking.RequestBuilder;
 
 /**
  * Class handling the JavaFX objects from the Login scene (defined in login.fxml).
@@ -21,61 +25,26 @@ public class LoginController {
         System.out.println("");
         log.info("Initializing login controller");
 
-        nbSuccessfulLogins = 0;
-
-        allowedToChangeUsername = false;
-        username = "";
         currentUsernameEntry = "";
-
-        allowedToChangePassword = false;
-        password = "";
         currentPasswordEntry = "";
     }
 
     @FXML
     private JFXTextField usernameField;
 
-    private static boolean allowedToChangeUsername;
-    private static String username;
     private static String currentUsernameEntry;
-
-    private static void setUsername(String newUsername) {
-        if (allowedToChangeUsername) {
-            username = newUsername;
-            DiscussionController.setCurrentSender(username);
-            allowedToChangeUsername = false;
-        }
-    }
 
     @FXML
     private JFXPasswordField passwordField;
 
-    private static boolean allowedToChangePassword;
-    private static String password;
     private static String currentPasswordEntry;
 
-    private static void setPassword(String newPassword) {
-        if (allowedToChangePassword) {
-            password = newPassword;
-            allowedToChangePassword = false;
-        }
-    }
-
-    private static int nbSuccessfulLogins;
-
     /**
-     * Action linked to the "Login" JFXButton.
-     * Checks if the username and the password entries are valid, then
-     * tries to connect to the server.
-     * TODO : Link this method to network
+     * Action linked to the "Login" JFXButton. Checks if the username and the password entries
+     * are valid, then tries to connect to the server.
      */
     @FXML
     private void actionLoginButton() {
-        if (nbSuccessfulLogins == 0) {
-            allowedToChangeUsername = true;
-            allowedToChangePassword = true;
-        }
-
         currentUsernameEntry = usernameField.getText();
         boolean usernameIsValid;
         if ((currentUsernameEntry == null) || (currentUsernameEntry.length() == 0)) {
@@ -88,7 +57,7 @@ public class LoginController {
                 log.error("The current username entry has more than 12 characters !");
             }
             else {
-                usernameIsValid = (allowedToChangeUsername || currentUsernameEntry.equals(username));
+                usernameIsValid = true;
             }
         }
 
@@ -98,26 +67,71 @@ public class LoginController {
             passwordIsValid = false;
         }
         else {
-            passwordIsValid = (allowedToChangePassword || currentPasswordEntry.equals(password));
+            passwordIsValid = true;
         }
 
         if (usernameIsValid && passwordIsValid) {
-            nbSuccessfulLogins += 1;
+            boolean connectionIsSuccessful = MainController.getTcpClient().connectToServer();
 
-            if (allowedToChangeUsername) {
-                setUsername(currentUsernameEntry);
-                System.out.println("");
-                log.debug("New username : \"" + username + "\"");
+            if (connectionIsSuccessful) {
+                try {
+                    String pingStatus = pingRequest();
+
+                    if (pingStatus.equals("OK")) {
+                        // communicating the login data (username + password) to the server
+
+                        JSONObject loginData = new JSONObject();
+                        loginData.put("username", currentUsernameEntry);
+                        loginData.put("password", currentPasswordEntry);
+
+                        // attempting to create a user
+                        String createUserStatus = createUserRequest(loginData);
+
+                        if (createUserStatus.equals("OK") || createUserStatus.equals("DENIED")) {
+                            // attempting to login
+                            String loginStatus = loginRequest(loginData);
+
+                            if (loginStatus.equals("OK")) {
+                                // if we reach this "if" block, then it means that (at least) the login
+                                // was successful ! (indeed, the creation of the new user might not have been
+                                // successful, which isn't the end of the world)
+
+                                System.out.println("");
+                                log.debug("New username entry : \"" + currentUsernameEntry + "\"");
+                                log.debug("New password entry : \"" + currentPasswordEntry + "\"");
+
+                                DiscussionController.setCurrentSender(currentUsernameEntry);
+
+                                System.out.println("");
+                                log.info("Welcome !");
+                                MainController.switchToHomeScene();
+                            }
+                            else {
+                                log.error("Invalid username or password. Please try again ! (loginStatus : \"" + loginStatus + "\")");
+                            }
+                        }
+
+                        else {
+                            log.error("La communication avec le serveur pour le login est corrompue (createUserStatus : \"" + createUserStatus + "\")");
+                            System.exit(1);
+                        }
+                    }
+
+                    else {
+                        log.error("La communication initiale avec le serveur est corrompue (pingStatus : \"" + pingStatus + "\")");
+                        System.exit(1);
+                    }
+                }
+                catch (JSONException jsonException) {
+                    log.error("Erreur JSON détectée : " + jsonException);
+                    System.exit(1);
+                }
             }
 
-            if (allowedToChangePassword) {
-                setPassword(currentPasswordEntry);
-                log.debug("New password : \"" + password + "\"");
+            else {
+                log.error("Le client n'a pas pu se connecter au serveur");
+                System.exit(1);
             }
-
-            System.out.println("");
-            log.info("Welcome !");
-            MainController.switchToHomeScene();
         }
 
         else {
@@ -126,6 +140,36 @@ public class LoginController {
             }
             log.error("Invalid username or password. Please try again !");
         }
+    }
+
+    private static String pingRequest() {
+        String pingRequest = RequestBuilder.buildWithoutData("PING").toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(pingRequest);
+
+        JSONObject pingStatusData = new JSONObject(responseFromServer);
+        String pingStatus = pingStatusData.getString("status");
+
+        return pingStatus;
+    }
+
+    private String createUserRequest(JSONObject loginData) {
+        String createUserRequest = RequestBuilder.buildWithData("createUser", "args", loginData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(createUserRequest);
+
+        JSONObject createUserStatusData = new JSONObject(responseFromServer);
+        String createUserStatus = createUserStatusData.getString("status");
+
+        return createUserStatus;
+    }
+
+    private String loginRequest(JSONObject loginData) {
+        String loginRequest = RequestBuilder.buildWithData("login", "args", loginData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(loginRequest);
+
+        JSONObject loginStatusData = new JSONObject(responseFromServer);
+        String loginStatus = loginStatusData.getString("status");
+
+        return loginStatus;
     }
 
     /**
