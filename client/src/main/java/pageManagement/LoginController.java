@@ -89,7 +89,10 @@ public class LoginController {
 
                         if (createUserStatus.equals("OK") || createUserStatus.equals("DENIED")) {
                             // attempting to login
-                            String loginStatus = loginRequest(loginData);
+                            String[] loginStatusAndUserID = loginRequest(loginData);
+
+                            String loginStatus = loginStatusAndUserID[0];
+                            String currentUserID = loginStatusAndUserID[1];
 
                             if (loginStatus.equals("OK")) {
                                 // if we reach this "if" block, then it means that (at least) the login
@@ -97,14 +100,24 @@ public class LoginController {
                                 // successful, which isn't the end of the world)
 
                                 System.out.println("");
-                                log.debug("New username entry : \"" + currentUsernameEntry + "\"");
-                                log.debug("New password entry : \"" + currentPasswordEntry + "\"");
+                                log.debug("Current valid username entry : \"" + currentUsernameEntry + "\"");
+                                log.debug("Current valid password entry : \"" + currentPasswordEntry + "\"");
 
                                 DiscussionController.setCurrentSender(currentUsernameEntry);
+                                DiscussionController.setCurrentSenderID(currentUserID);
 
                                 System.out.println("");
                                 log.info("Welcome !");
                                 MainController.switchToHomeScene();
+
+                                HomeController.getGroupThumbnailObjectList().clear();
+                                HomeController.clearGroupThumbnailHBox();
+                                HomeController.resetNbGroupsYouAreStillPartOf();
+                                HomeController.aGroupIsCurrentlyBeingDeleted = false;
+                                DiscussionController.getGroupObjectList().clear();
+
+                                HomeController.clearHashMap();
+                                HomeController.loadExistingGroups();
                             }
                             else {
                                 log.error("Invalid username or password. Please try again ! (loginStatus : \"" + loginStatus + "\")");
@@ -146,30 +159,36 @@ public class LoginController {
         String pingRequest = RequestBuilder.buildWithoutData("PING").toString();
         String responseFromServer = MainController.getTcpClient().sendRequest(pingRequest);
 
-        JSONObject pingStatusData = new JSONObject(responseFromServer);
-        String pingStatus = pingStatusData.getString("status");
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String pingStatus = wholeReceivedData.getString("status");
 
         return pingStatus;
     }
 
     private String createUserRequest(JSONObject loginData) {
-        String createUserRequest = RequestBuilder.buildWithData("createUser", "args", loginData).toString();
+        String createUserRequest = RequestBuilder.buildWithData("createUser", loginData).toString();
         String responseFromServer = MainController.getTcpClient().sendRequest(createUserRequest);
 
-        JSONObject createUserStatusData = new JSONObject(responseFromServer);
-        String createUserStatus = createUserStatusData.getString("status");
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String createUserStatus = wholeReceivedData.getString("status");
 
         return createUserStatus;
     }
 
-    private String loginRequest(JSONObject loginData) {
-        String loginRequest = RequestBuilder.buildWithData("login", "args", loginData).toString();
+    private String[] loginRequest(JSONObject loginData) {
+        String loginRequest = RequestBuilder.buildWithData("login", loginData).toString();
         String responseFromServer = MainController.getTcpClient().sendRequest(loginRequest);
 
-        JSONObject loginStatusData = new JSONObject(responseFromServer);
-        String loginStatus = loginStatusData.getString("status");
+        // getting login status
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String loginStatus = wholeReceivedData.getString("status");
 
-        return loginStatus;
+        // getting userID
+        JSONObject usefulReceivedData = wholeReceivedData.getJSONObject("data");
+        String userID = usefulReceivedData.getString("user_id");
+
+        String[] loginStatusAndUserID = {loginStatus, userID};
+        return loginStatusAndUserID;
     }
 
     /**

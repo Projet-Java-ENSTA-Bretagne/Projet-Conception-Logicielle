@@ -1,6 +1,6 @@
 package pageManagement;
 
 public enum GroupStatusesEnum {
-    PUBLIC,
+    PUBLIC, // the "public" status doesn't really mean anything (for now at least)
     PRIVATE
 }

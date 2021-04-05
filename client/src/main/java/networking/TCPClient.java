@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 public class TCPClient {
     private int port;
     private String host;
-    private Socket serverSocket;
+    private Socket clientSocket;
     private PrintStream outStream;
     private BufferedReader inStream;
 
@@ -41,12 +41,13 @@ public class TCPClient {
      */
     public boolean connectToServer() {
         boolean ok = false;
+        System.out.println("");
 
         try {
             log.info("Trying to connect to : " + host + ":" + port);
-            serverSocket = new Socket(host, port);
-            outStream = new PrintStream(serverSocket.getOutputStream());
-            inStream = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+            clientSocket = new Socket(host, port);
+            outStream = new PrintStream(clientSocket.getOutputStream());
+            inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             log.info("The connection to the server was successful");
             ok = true;
         } catch (UnknownHostException e) {
@@ -65,10 +66,11 @@ public class TCPClient {
      */
     public void disconnectFromServer() {
         try {
-            log.info("Client : " + serverSocket);
+            System.out.println("");
+            log.info("Client en train de se déconnecter : " + clientSocket);
             outStream.close();
             inStream.close();
-            serverSocket.close();
+            clientSocket.close();
         } catch (Exception e) {
             log.error("Error while trying to disconnect from the server");
         }

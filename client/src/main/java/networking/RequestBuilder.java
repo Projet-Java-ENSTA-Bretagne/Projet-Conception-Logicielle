@@ -29,14 +29,13 @@ public class RequestBuilder {
     /**
      * Builds a request (JSON format) with some given data.
      *
-     * @param command       The command (String) to put inside the request (JSON object)
-     * @param secondCommand The command associated with the data ("args", "data", etc)
-     * @param data          The data (JSON format) to build the request with
-     * @return              The desired request (JSON format)
+     * @param command The command (String) to put inside the request (JSON object)
+     * @param data    The data (JSON format) to build the request with
+     * @return        The desired request (JSON format)
      */
-    public static JSONObject buildWithData(String command, String secondCommand, JSONObject data) {
+    public static JSONObject buildWithData(String command, JSONObject data) {
         JSONObject res = buildWithoutData(command);
-        res.put(secondCommand, data);
+        res.put("args", data);
 
         return res;
     }

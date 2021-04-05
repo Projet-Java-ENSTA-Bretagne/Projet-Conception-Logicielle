@@ -2,6 +2,9 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -16,9 +19,12 @@ import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.event.EventHandler;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
+
+import networking.RequestBuilder;
 
 /**
  * Class handling the JavaFX objects from the Home scene (defined in home.fxml).
@@ -37,6 +43,7 @@ public class HomeController {
         groupThumbnailObjectList = new ArrayList<>();
         nbGroupsYouAreStillPartOf = 0;
         aGroupIsCurrentlyBeingDeleted = false;
+        groupNamesToGroupIDs = new HashMap<>();
     }
 
     private static HBox groupThumbnailHBox;
@@ -83,10 +90,76 @@ public class HomeController {
         });
     }
 
+    public static void clearGroupThumbnailHBox() {
+        groupThumbnailHBox.getChildren().clear();
+    }
+
+    private static HashMap<String, String> groupNamesToGroupIDs;
+
+    public static void addItemToHashMap(String groupName, String groupID) {
+        groupNamesToGroupIDs.put(groupName, groupID);
+    }
+
+    /**
+     * Adds the newest item (groupName, groupID) to the associated HashMap. By "newest" we mean
+     * the group/PM chat that has just been created. We do this because the group ID isn't
+     * sent back by the server when we create a group.
+     */
+    public static void addNewestItemToHashMap(String referenceGroupName) {
+        try {
+            JSONObject userIdData = new JSONObject();
+            userIdData.put("user_id", DiscussionController.getCurrentSenderID());
+
+            String[] requestStatusAndGroupsInfo = getUserGroupsRequest(userIdData);
+
+            String requestStatus = requestStatusAndGroupsInfo[0];
+            JSONArray groupsInfo = new JSONArray(requestStatusAndGroupsInfo[1]);
+
+            if (requestStatus.equals("OK")) {
+                if (groupsInfo.length() != groupNamesToGroupIDs.size() + 1) {
+                    log.fatal("Error while adding the newest group");
+                    System.exit(1);
+                }
+
+                for (int i = 0; i < groupsInfo.length(); i++) {
+                    JSONObject groupData = groupsInfo.getJSONObject(i);
+
+                    String groupName = groupData.getString("name");
+                    String groupID = groupData.getString("id");
+
+                    if ((!groupNamesToGroupIDs.containsKey(groupName)) && (!groupNamesToGroupIDs.containsValue(groupID)) && (groupName.equals(referenceGroupName))) {
+                        addItemToHashMap(groupName, groupID);
+                        log.debug("GroupNames --> GroupIDs : " + groupNamesToGroupIDs.toString());
+                        return;
+                    }
+                }
+
+                log.fatal("Error while adding the newest group");
+                System.exit(1);
+            }
+            else {
+                log.error("La communication avec le serveur est corrompue (getUserGroupsStatus : \"" + requestStatus + "\")");
+                System.exit(1);
+            }
+        }
+        catch (JSONException jsonException) {
+            log.error("Erreur JSON détectée : " + jsonException);
+            System.exit(1);
+        }
+    }
+
+    public static void clearHashMap() {
+        groupNamesToGroupIDs.clear();
+    }
+
     private static int nbGroupsYouAreStillPartOf;
 
     public static int getNbGroupsYouAreStillPartOf() {
         return nbGroupsYouAreStillPartOf;
+    }
+
+    public static void resetNbGroupsYouAreStillPartOf() {
+        nbGroupsYouAreStillPartOf = 0;
     }
 
     public static void incrementNbGroupsYouAreStillPartOf() {
@@ -145,6 +218,107 @@ public class HomeController {
         }
     }
 
+    public static void loadExistingGroups() {
+        try {
+            JSONObject userIdData = new JSONObject();
+            userIdData.put("user_id", DiscussionController.getCurrentSenderID());
+
+            String[] requestStatusAndGroupsInfo = getUserGroupsRequest(userIdData);
+
+            String requestStatus = requestStatusAndGroupsInfo[0];
+            JSONArray groupsInfo = new JSONArray(requestStatusAndGroupsInfo[1]);
+
+            if (requestStatus.equals("OK")) {
+                log.debug("Groups info : " + groupsInfo.toString());
+
+                for (int i = 0; i < groupsInfo.length(); i++) {
+                    JSONObject groupData = groupsInfo.getJSONObject(i);
+
+                    String groupName = groupData.getString("name");
+                    boolean isPM = groupData.getBoolean("is_pm");
+
+                    String groupID = groupData.getString("id");
+                    log.debug(String.format("ID du groupe n°%d/%d (groupName : \"%s\", isPM : %b) : \"%s\"", i + 1, groupsInfo.length(), groupName, isPM, groupID));
+
+                    String rawUserIDs = groupData.getString("members");
+                    String[] userIDs = rawUserIDs.split(",");
+                    // converting from String[] to JSONArray
+                    JSONArray userIDsJSONArray = new JSONArray();
+                    for (String userID : userIDs) {
+                        userIDsJSONArray.put(userID);
+                    }
+                    log.debug("User IDs : " + userIDsJSONArray.toString());
+
+                    addItemToHashMap(groupName, groupID);
+
+                    /* ------------------------------------------------------ */
+
+                    // adding group thumbnail + the group object
+
+                    incrementNbGroupsYouAreStillPartOf();
+
+                    URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
+                    FXMLLoader groupThumbnailLoader = new FXMLLoader(groupVisualizerURL);
+                    Parent groupThumbnailRoot = groupThumbnailLoader.load();
+
+                    GroupThumbnailController groupThumbnailController = groupThumbnailLoader.getController();
+
+                    OperationTypesEnum operationType;
+                    GroupStatusesEnum groupStatus;
+                    String groupDescription;
+                    if (isPM) {
+                        operationType = OperationTypesEnum.CREATE_PM;
+                        groupStatus = GroupStatusesEnum.PRIVATE;
+                        groupDescription = "MP pré-existant";
+                    }
+                    else {
+                        operationType = OperationTypesEnum.CREATE_GROUP;
+                        groupStatus = GroupStatusesEnum.PUBLIC;
+                        groupDescription = "Groupe pré-existant";
+                    }
+
+                    groupThumbnailController.build(groupName, groupStatus, groupDescription, operationType);
+
+                    //
+
+                    GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
+                    addGroup(newGroupThumbnailObject);
+
+                    GroupObject newGroupObject = new GroupObject(groupName, userIDsJSONArray);
+                    DiscussionController.addGroupObject(newGroupObject);
+                }
+
+                log.debug("GroupNames --> GroupIDs : " + groupNamesToGroupIDs.toString());
+            }
+            else {
+                log.error("La communication avec le serveur est corrompue (getUserGroupsStatus : \"" + requestStatus + "\")");
+                System.exit(1);
+            }
+        }
+        catch (JSONException jsonException) {
+            log.error("Erreur JSON détectée : " + jsonException);
+            System.exit(1);
+        }
+        catch (IOException ioException) {
+            log.error("Erreur lors de l'appel à FXMLLoader.load() : " + ioException);
+            System.exit(1);
+        }
+    }
+
+    public static String[] getUserGroupsRequest(JSONObject userIdData) {
+        String getUserGroupsRequest = RequestBuilder.buildWithData("getUserGroups", userIdData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(getUserGroupsRequest);
+
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String requestStatus = wholeReceivedData.getString("status");
+
+        JSONObject usefulReceivedData = wholeReceivedData.getJSONObject("data");
+        JSONArray groupsInfo = usefulReceivedData.getJSONArray("groups");
+
+        String[] requestStatusAndGroupsInfo = {requestStatus, groupsInfo.toString()};
+        return requestStatusAndGroupsInfo;
+    }
+
     private static Stage currentGroupSettingsStage;
 
     public static void setCurrentGroupSettingsStage(Stage groupSettingsStage) {
@@ -171,7 +345,6 @@ public class HomeController {
      * Action linked to the "join or create group" icon/JFXButton.
      * Opens a new GroupSettings stage, where it's possible to configurate
      * the settings of the group you want to join/create.
-     * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called
      */
@@ -181,7 +354,7 @@ public class HomeController {
 
         URL groupSettingsURL = new File("src/main/pages/groupSettings.fxml").toURI().toURL();
         Parent groupSettingsRoot = FXMLLoader.load(groupSettingsURL);
-        Scene scene = new Scene(groupSettingsRoot, 415, 415);
+        Scene scene = new Scene(groupSettingsRoot, 415, 330);
 
         Stage currentGroupSettingsStage = new Stage();
         currentGroupSettingsStage.getIcons().add(new Image("settings-icon.png"));
@@ -196,14 +369,12 @@ public class HomeController {
     }
 
     /**
-     * Action linked to the "Déconnexion" JFXButton.
-     * Disconnects from the server, leaves the Home page, then switches to the Login scene.
+     * Action linked to the "Déconnexion" JFXButton. Disconnects from the server,
+     * leaves the Home page, then switches to the Login scene.
      */
     @FXML
     private void actionDisconnectButton() {
         MainController.getTcpClient().disconnectFromServer();
-
-        System.out.println("");
         log.info("Déconnexion");
         MainController.switchToLoginScene();
     }

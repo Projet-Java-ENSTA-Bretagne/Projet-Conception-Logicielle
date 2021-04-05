@@ -88,8 +88,22 @@ public class DiscussionController {
         currentSender = newSenderName;
     }
 
+    private static String currentSenderID;
+
+    public static String getCurrentSenderID() {
+        return currentSenderID;
+    }
+
+    public static void setCurrentSenderID(String newSenderID) {
+        currentSenderID = newSenderID;
+    }
+
     // Object containing all the current groups (with their respective messages)
     private static ArrayList<GroupObject> groupObjectList;
+
+    public static ArrayList<GroupObject> getGroupObjectList() {
+        return groupObjectList;
+    }
 
     public static void addGroupObject(GroupObject groupObject) {
         groupObjectList.add(groupObject);

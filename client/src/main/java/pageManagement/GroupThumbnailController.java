@@ -36,9 +36,6 @@ public class GroupThumbnailController {
     private String groupDescription;
 
     private OperationTypesEnum operationType;
-    private String serverIpAddress;
-    private int serverPort;
-    private int groupId;
 
     public String getGroupName() {
         return groupName;
@@ -56,18 +53,6 @@ public class GroupThumbnailController {
         return operationType;
     }
 
-    public String getServerIpAddress() {
-        return serverIpAddress;
-    }
-
-    public int getServerPort() {
-        return serverPort;
-    }
-
-    public int getGroupId() {
-        return groupId;
-    }
-
     @FXML
     private Label groupNameLabel;
 
@@ -79,17 +64,13 @@ public class GroupThumbnailController {
 
     // it's cleaner if we do NOT use constructors when updating FXML templates
     public void build(String groupName, GroupStatusesEnum groupStatus, String groupDescription,
-                      OperationTypesEnum operationType, String serverIpAddress,
-                      int serverPort, int groupId) {
+                      OperationTypesEnum operationType) {
 
         this.groupName = groupName;
         this.groupStatus = groupStatus;
         this.groupDescription = groupDescription;
 
         this.operationType = operationType;
-        this.serverIpAddress = serverIpAddress;
-        this.serverPort = serverPort;
-        this.groupId = groupId;
 
         System.out.println("");
         log.info("Initializing group thumbnail controller, groupName = \"" + this.groupName + "\"");
