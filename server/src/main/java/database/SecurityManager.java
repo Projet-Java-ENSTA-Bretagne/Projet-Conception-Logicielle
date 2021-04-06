@@ -69,6 +69,11 @@ public class SecurityManager {
         this.loggedUser = null;
     }
 
+    /**
+     * Check if the role of the user is high enough to perform an action
+     * @param requiredRole : The user role
+     * @throws UnauthorizedException
+     */
     public void hasRoleHighEnoughTo(User.Role requiredRole) throws UnauthorizedException {
         // comparing roles to check if the user can do it
         if (this.loggedUser.getRole().compareTo(requiredRole) < 0) {
@@ -76,6 +81,11 @@ public class SecurityManager {
         }
     }
 
+    /**
+     * Function allow to create a JWT (Json Web Token)
+     * @param user : The user
+     * @return the token in string format
+     */
     public String createJWT(User user)
     {
         try {
@@ -105,6 +115,12 @@ public class SecurityManager {
         }
     }
 
+    /**
+     * Function allow you to decode token
+     * @param token : the token JWT
+     * @return the JWT decoded
+     * @throws JWTVerificationException
+     */
     public DecodedJWT decodeJWT(String token) throws JWTVerificationException {
         ConfigurationManagement configurationManagement = new ConfigurationManagement();
         ServerConfiguration serverConfiguration = configurationManagement.getServerConfiguration();
@@ -117,6 +133,11 @@ public class SecurityManager {
         return verifier.verify(token);
     }
 
+    /**
+     * Check if the token is valid
+     * @param token : the token JWT
+     * @return true if the token is valid, false else
+     */
     public boolean isTokenValid(String token) {
         try {
             // testing the validity of the token
