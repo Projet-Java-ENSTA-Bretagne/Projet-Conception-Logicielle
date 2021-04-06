@@ -49,7 +49,7 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
         groupDao.delete(group);
     }
 
-    public void testUserNotExisting() throws SQLException, UserNotLoggedException {
+    public void testUserNotBelonging() throws SQLException, UserNotLoggedException {
         ProtocolTestingHelper helper = new ProtocolTestingHelper();
         Dao<User, String> userDao = ((DatabaseContext) helper.context).getDatabaseManager().getUserDao();
         Dao<Group, String> groupDao = ((DatabaseContext) helper.context).getDatabaseManager().getGroupDao();
@@ -74,6 +74,62 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
         System.out.println(response.toString());
         assertEquals(response.getString("status"),"DENIED");
         assertEquals(response.getJSONObject("data").getString("message"), "The user d48cdb48-15e0-49e2-8304-e4e0589f6319 doesn't belong to the group " + group.getId());
+
+        groupDao.delete(group);
+    }
+
+    public void testUserNotFound() throws SQLException, UserNotLoggedException {
+        ProtocolTestingHelper helper = new ProtocolTestingHelper();
+        Dao<User, String> userDao = ((DatabaseContext) helper.context).getDatabaseManager().getUserDao();
+        Dao<Group, String> groupDao = ((DatabaseContext) helper.context).getDatabaseManager().getGroupDao();
+
+        User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId());
+        groupDao.create(group);
+
+        // Forging the request
+        JSONObject request = new JSONObject();
+        JSONObject args = new JSONObject();
+
+        args.put("group_id", group.getId());
+        args.put("user_id", "notfoundid");
+        request.put("args", args);
+        request.put("command", RemoveUserFromGroupProtocol.requestName);
+
+        JSONObject response = ProtocolTestingHelper.executeProtocol(new RemoveUserFromGroupProtocol(), request);
+
+        // Checking the response data
+        System.out.println(response.toString());
+        assertEquals(response.getString("status"),"NOT_FOUND");
+        assertEquals(response.getJSONObject("data").getString("message"), "There is no user with the id: notfoundid");
+
+        groupDao.delete(group);
+    }
+
+    public void testGroupNotFound() throws SQLException, UserNotLoggedException {
+        ProtocolTestingHelper helper = new ProtocolTestingHelper();
+        Dao<User, String> userDao = ((DatabaseContext) helper.context).getDatabaseManager().getUserDao();
+        Dao<Group, String> groupDao = ((DatabaseContext) helper.context).getDatabaseManager().getGroupDao();
+
+        User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId());
+        groupDao.create(group);
+
+        // Forging the request
+        JSONObject request = new JSONObject();
+        JSONObject args = new JSONObject();
+
+        args.put("group_id", "notfoundid");
+        args.put("user_id", "d48cdb48-15e0-49e2-8304-e4e0589f6319");
+        request.put("args", args);
+        request.put("command", RemoveUserFromGroupProtocol.requestName);
+
+        JSONObject response = ProtocolTestingHelper.executeProtocol(new RemoveUserFromGroupProtocol(), request);
+
+        // Checking the response data
+        System.out.println(response.toString());
+        assertEquals(response.getString("status"),"NOT_FOUND");
+        assertEquals(response.getJSONObject("data").getString("message"), "There is no group with the id: notfoundid");
 
         groupDao.delete(group);
     }
