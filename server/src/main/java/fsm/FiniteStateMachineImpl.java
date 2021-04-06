@@ -9,9 +9,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FiniteStateMachineImpl implements IFiniteStateMachine {
+    /**
+     * Initial state of the state machine
+     */
     private IState startState;
+
+    /**
+     * Final state of the state machine
+     */
     private IState endState;
+
+    /**
+     * The current state of the state machine
+     */
     private IState currentState;
+
+    /**
+     * List of states
+     */
     private ArrayList<IState> allStates = new ArrayList<>();
     private HashMap<String, ArrayList<IState>> mapForAllStates = new HashMap<>();
 

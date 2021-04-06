@@ -3,11 +3,33 @@ package server;
 import org.json.JSONObject;
 
 public class ServerConfiguration {
+    /**
+     * The hostname of the server
+     */
     private String host;
+
+    /**
+     * The port of the server
+     */
     private int port;
+
+    /**
+     * The number of max clients on this server
+     */
     private int maxClients;
+
+    /**
+     * The unique token key
+     */
     private String tokenKey;
 
+    /**
+     * Constructeur of ServerConfiguration
+     * @param host : the hostname
+     * @param port : the port
+     * @param maxClients : the number of max clients
+     * @param masterKey : the master key
+     */
     public ServerConfiguration(String host, int port, int maxClients, String masterKey) {
         this.host = host;
         this.maxClients = maxClients;
@@ -15,6 +37,11 @@ public class ServerConfiguration {
         this.tokenKey = masterKey;
     }
 
+    /**
+     * Get server configuration from a json object
+     * @param jsonObject : the server configuration in json format
+     * @return a ServerConfiguration object
+     */
     public static ServerConfiguration fromJsonObject(JSONObject jsonObject) {
         return new ServerConfiguration(
                 jsonObject.getString("host"),

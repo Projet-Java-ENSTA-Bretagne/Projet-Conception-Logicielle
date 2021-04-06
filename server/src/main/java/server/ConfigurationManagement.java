@@ -38,6 +38,9 @@ public class ConfigurationManagement {
 
     }
 
+    /**
+     * Function which init the configuration file
+     */
     public void initConfigFile()
     {
         this.serverConfiguration = new ServerConfiguration(
