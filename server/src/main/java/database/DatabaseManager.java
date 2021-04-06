@@ -26,6 +26,10 @@ public class DatabaseManager {
     private Dao<Group, String> groupDao;
     private Dao<Message, String> messageDao;
 
+    /**
+     * Constructor of DatabaseManager
+     * @param filename : the path of sqlite file
+     */
     public DatabaseManager(String filename) {
         this.dbURL = "jdbc:sqlite:" + filename;
 
@@ -38,6 +42,10 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Function allow you to create a Database
+     * @throws SQLException
+     */
     private void createDatabase() throws SQLException {
         // Trying to connect to the database
         Connection conn = DriverManager.getConnection(this.dbURL);
@@ -48,6 +56,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Function allow you to create a table
+     */
     public void createTables() {
         try {
             log.debug("Creating tables from ORMLite");
@@ -59,6 +70,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Link the DAOs from DB to entities
+     */
     public void linkDaos() {
         try {
             log.debug("Linking Daos from DB to entities");
