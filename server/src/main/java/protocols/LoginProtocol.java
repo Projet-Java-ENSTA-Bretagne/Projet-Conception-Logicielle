@@ -29,11 +29,22 @@ public class LoginProtocol implements IProtocol {
     public static String requestName = "login";
 
     /**
+     * Function allow to execute the command login send by a client.
      *
-     * @param ctx Le contexte du serveur
-     * @param outStream Le stream de sortie vers le client
-     * @param request La requête émise par le client
-     * @throws SQLException Retourne une erreur sql si il y a un soucis avec la base de données
+     * Example of request send by the client :
+     *
+     *      {
+     *          command: "login",
+     *          "args" : {
+     *              username : "cookiehacker",
+     *              password: "myGreatPassword"
+     *          }
+     *      }
+     *
+     * @param ctx : The context
+     * @param outStream :  The output stream of the server
+     * @param request : The request of the client
+     * @throws SQLException
      */
     public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException {
         JSONObject data = request.getJSONObject("args");

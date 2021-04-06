@@ -21,6 +21,10 @@ public class CheckTokenProtocol implements IProtocol {
      *
      * Example of request send by the client :
      *
+     *      {
+     *          command: "checkToken",
+     *          token: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9[...]nSCXI95cyegDg"
+     *      }
      *
      * @param ctx : The context
      * @param outStream : The output stream of the server

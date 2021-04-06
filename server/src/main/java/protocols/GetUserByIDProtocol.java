@@ -24,12 +24,12 @@ public class GetUserByIDProtocol implements IProtocol {
      *
      * Example of request send by the client :
      *
-     * {
-     *     "command" : "getUserByID",
-     *     "args" : {
-     *         "user_id" : "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
-     *     }
-     * }
+     *      {
+     *          "command" : "getUserByID",
+     *          "args" : {
+     *              "user_id" : "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
+     *          }
+     *      }
      *
      * @param ctx : The context
      * @param outStream : The output stream of the server

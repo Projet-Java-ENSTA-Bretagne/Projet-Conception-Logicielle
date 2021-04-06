@@ -21,6 +21,24 @@ public class BlockUserProtocol implements IProtocol {
 
     public static String requestName = "blockUser";
 
+    /**
+     * Function allow to execute the command blockUser send by a client.
+     *
+     * Example of request send by the client :
+     *
+     *      {
+     *          command: "blockUser",
+     *          args: {
+     *              id: "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
+     *          }
+     *      }
+     *
+     * @param ctx: The context
+     * @param outStream: The output stream of the server
+     * @param request: The request of the client
+     * @throws SQLException
+     * @throws UserNotLoggedException
+     */
     public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException, UserNotLoggedException {
         JSONObject data = request.getJSONObject("args");
         String id = data.getString("id");

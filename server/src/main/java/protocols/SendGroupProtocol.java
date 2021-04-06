@@ -25,6 +25,25 @@ public class SendGroupProtocol implements IProtocol {
 
     public static String requestName = "sendPM";
 
+    /**
+     * Function allow to execute the command sendPM send by a client.
+     *
+     * Example of request send by the client :
+     *
+     *      {
+     *          command : "sendPM",
+     *          args : {
+     *              group_id: "c9d36c97-4e3d-4b0c-9a78-50f76e7f5589",
+     *              message: "I love cookies, and you ?"
+     *          }
+     *      }
+     *
+     * @param ctx
+     * @param outStream
+     * @param request
+     * @throws SQLException
+     * @throws UserNotLoggedException
+     */
     public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException, UserNotLoggedException {
         JSONObject data = request.getJSONObject("args");
         String groupId = data.getString("group_id");

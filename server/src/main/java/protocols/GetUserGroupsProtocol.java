@@ -23,6 +23,16 @@ public class GetUserGroupsProtocol implements IProtocol {
 
     /**
      * Function allow to execute the command getUserByName send by a client.
+     *
+     * Example of request send by the client :
+     *
+     *      {
+     *          command: "getUserGroups",
+     *          args: {
+     *              user_id: "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
+     *          }
+     *      }
+     *
      * @param ctx : The context
      * @param outStream : The output stream of the server
      * @param request : The request of the client

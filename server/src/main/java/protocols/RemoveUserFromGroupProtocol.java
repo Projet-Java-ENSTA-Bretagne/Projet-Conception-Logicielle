@@ -22,6 +22,24 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
 
     public static String requestName = "removeUserFromGroup";
 
+    /**
+     * Function allow to execute the command removeUserFromGroup send by a client.
+     *
+     * Example of request send by the client :
+     *
+     *      {
+     *          command: "removeUserFromGroup",
+     *          args: {
+     *              group_id: "c9d36c97-4e3d-4b0c-9a78-50f76e7f5589",
+     *              user_id: "3ce9300b-e66c-4fe0-b2bf-756ebf07d4e4"
+     *          }
+     *      }
+     *
+     * @param ctx: The context
+     * @param outStream : The output stream of the server
+     * @param request : The request of the client
+     * @throws SQLException
+     */
     public void execute(IContext ctx, PrintStream outStream, JSONObject request) throws SQLException {
         JSONObject data = request.getJSONObject("args");
         String groupId = data.getString("group_id");
