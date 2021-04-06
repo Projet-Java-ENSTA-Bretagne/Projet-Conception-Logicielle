@@ -8,28 +8,56 @@ import org.json.JSONObject;
 @DatabaseTable(tableName = "users")
 public class User {
 
+    /**
+     * The differennt roles of a User :
+     *  - ROLE_USER : For a lambda user
+     *  - ROLE_ADMIN : For the administrator
+     */
     public enum Role {
         ROLE_USER,
         ROLE_ADMIN
     }
 
+    /**
+     * The User ID
+     */
     @DatabaseField(id = true)
     private String id;
 
+    /**
+     * The user name
+     */
     @DatabaseField(canBeNull = false)
     private String name;
 
+    /**
+     * The password of this user
+     */
     @DatabaseField(canBeNull = false)
     private String password;
 
+    /**
+     * The role of this user
+     */
     @DatabaseField(canBeNull = false)
     private Role role;
 
+    /**
+     * The blacklist of this user in String format ("bad_user1, bad_user2,...")
+     */
     @DatabaseField
     private String blacklist;
 
     public User() {}
 
+    /**
+     * Constructor of user entitie
+     * @param id : the user ID
+     * @param name : the user name
+     * @param password : the password of this user
+     * @param role : the role of this user
+     * @param blacklist : the blacklist of this user in String format
+     */
     public User(String id, String name, String password, Role role, String blacklist) {
         this.id = id;
         this.name = name;
@@ -78,6 +106,10 @@ public class User {
         this.blacklist = blacklist;
     }
 
+    /**
+     * Function which allow you get the entitie in JSON format
+     * @return a JSONObject which is the entitie in JSON format
+     */
     public JSONObject toJSON() {
         JSONObject res = new JSONObject();
         res.put("id",           this.getId());
