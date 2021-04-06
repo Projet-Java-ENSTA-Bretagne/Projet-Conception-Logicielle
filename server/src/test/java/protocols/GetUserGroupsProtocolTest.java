@@ -41,7 +41,7 @@ public class GetUserGroupsProtocolTest extends TestCase {
 
         // Checking the response data
         assertEquals(response.getString("status"), "OK");
-        assertEquals(response.getJSONObject("data").getJSONArray("groups").length(), 0);
+        assertEquals(response.getJSONObject("data").getJSONArray("groups").length(), 1);
 
         // Debug printing of response
         System.out.println(response);

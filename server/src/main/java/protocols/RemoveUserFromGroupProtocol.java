@@ -81,6 +81,7 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
 
         // else we update the group
         groupToChange.setMembers(String.join(";", membersList));
+        groupDao.update(groupToChange);
 
         // say to the user that everything went fine
         resBuilder.ok("The user " + userId + " has been successfully removed from the group " + groupId + ".");
