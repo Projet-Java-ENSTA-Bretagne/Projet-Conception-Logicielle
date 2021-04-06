@@ -55,7 +55,7 @@ public class SendGroupProtocol implements IProtocol {
 
         // check that the group already exists
         if (matchingGroups.size() == 0) {
-            ResponseBuilder.forRequest(request, outStream).deniedError("There is no group with the id: " + groupId);
+            ResponseBuilder.forRequest(request, outStream).notFoundError("There is no group with the id: " + groupId);
             return;
         }
 
