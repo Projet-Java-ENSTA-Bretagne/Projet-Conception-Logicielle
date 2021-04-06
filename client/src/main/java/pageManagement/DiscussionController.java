@@ -21,11 +21,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Observable;
 
 /**
  * Class handling the JavaFX objects from the Discussion scene (defined in discussion.fxml).
  */
-public class DiscussionController {
+public class DiscussionController extends Observable {
     // Logging
     private static final Logger log = LogManager.getLogger(DiscussionController.class);
 
@@ -36,6 +37,7 @@ public class DiscussionController {
     private void initialize() {
         log.info("Initializing discussion controller");
         groupObjectList = new ArrayList<>();
+        this.addObserver(new MessageSender());
     }
 
     private static VBox discussionVBox;
@@ -267,13 +269,20 @@ public class DiscussionController {
         return currentDate;
     }
 
+    public JFXTextField getMessageTextField() {
+        return messageTextField;
+    }
+
     @FXML
     private JFXTextField messageTextField;
 
     @FXML
     private void checkIfEnterIsPressedThenSendMessage(KeyEvent keyEvent) throws IOException {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            sendMessage();
+            // notification pour permettre l'envoi au serveur
+            this.setChanged();
+            this.notifyObservers();
+
         }
     }
 

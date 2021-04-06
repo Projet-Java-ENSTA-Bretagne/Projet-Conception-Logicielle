@@ -57,7 +57,11 @@ public class BlockUserProtocol implements IProtocol {
 
         // updating current user blacklist
         User currentUser = SecurityManager.getInstance().getLoggedUser();
-        currentUser.setBlacklist(currentUser + ";" + id);
+        if (currentUser.getBlacklist().split(";").length == 0) {
+            currentUser.setBlacklist(id);
+        } else {
+            currentUser.setBlacklist(currentUser.getBlacklist() + ";" + id);
+        }
         userDao.update(currentUser);
 
         // say to the user that everything went fine

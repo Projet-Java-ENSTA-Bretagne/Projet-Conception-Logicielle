@@ -21,6 +21,8 @@ public class SecurityManager {
     private boolean loggedIn = false;
     private User loggedUser;
 
+    private final String ISSUER = "ENSTA-Bretagne";
+
     /* Logger */
     Logger log = LogManager.getLogger(SecurityManager.class);
 
@@ -102,7 +104,7 @@ public class SecurityManager {
             payload.put("user_id", user.getId());
 
             return JWT.create()
-                    .withIssuer("Ensta-Bretagne")
+                    .withIssuer(ISSUER)
                     .withIssuedAt(new Timestamp(now.getTime()))
                     .withExpiresAt(new Timestamp(end.getTime()))
                     .withPayload(payload)
@@ -127,7 +129,7 @@ public class SecurityManager {
         Algorithm algorithm = Algorithm.HMAC512(serverConfiguration.getTokenKey());
 
         JWTVerifier verifier = JWT.require(algorithm)
-                .withIssuer("ensta-bretagne")
+                .withIssuer(ISSUER)
                 .build();
 
         return verifier.verify(token);
