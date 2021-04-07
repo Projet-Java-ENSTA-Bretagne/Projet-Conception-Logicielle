@@ -97,8 +97,7 @@ public class HomeController {
     private static HashMap<String, String> groupNamesToGroupIDs;
 
     public static String getGroupID(String groupName) {
-        String groupID = groupNamesToGroupIDs.get(groupName);
-        return groupID;
+        return groupNamesToGroupIDs.get(groupName);
     }
 
     public static void addItemToHashMap(String groupName, String groupID) {
@@ -327,7 +326,14 @@ public class HomeController {
         String requestStatus = wholeReceivedData.getString("status");
 
         JSONObject usefulReceivedData = wholeReceivedData.getJSONObject("data");
-        JSONArray groupsInfo = usefulReceivedData.getJSONArray("groups");
+
+        JSONArray groupsInfo;
+        if (requestStatus.equals("OK")) {
+            groupsInfo = usefulReceivedData.getJSONArray("groups");
+        }
+        else {
+            groupsInfo = new JSONArray();
+        }
 
         String[] requestStatusAndGroupsInfo = {requestStatus, groupsInfo.toString()};
         return requestStatusAndGroupsInfo;
@@ -390,6 +396,14 @@ public class HomeController {
     private void actionDisconnectButton() {
         MainController.getTcpClient().disconnectFromServer();
         log.info("Déconnexion");
+
+        resetNbGroupsYouAreStillPartOf();
+        aGroupIsCurrentlyBeingDeleted = false;
+        clearHashMap();
+        clearGroupThumbnailHBox();
+        groupThumbnailObjectList.clear();
+        DiscussionController.getGroupObjectList().clear();
+
         MainController.switchToLoginScene();
     }
 }

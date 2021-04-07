@@ -22,14 +22,6 @@ public class GroupThumbnailController {
     // Logging
     private final Logger log = LogManager.getLogger(GroupThumbnailController.class);
 
-    /**
-     * Method that is automatically executed right after "groupThumbnail.fxml" is loaded.
-     */
-    @FXML
-    private void initialize() {
-        theGroupHasAlreadyBeenOpened = false;
-    }
-
     // displayed features
     private String groupName;
     private GroupStatusesEnum groupStatus;
@@ -102,8 +94,6 @@ public class GroupThumbnailController {
         groupDescriptionLabel.setText(groupDescription);
     }
 
-    private boolean theGroupHasAlreadyBeenOpened;
-
     /**
      * Action linked to the "OPEN" JFXButton. Opens the discussion scene associated with the
      * chosen group. Loads the message from that same group.
@@ -117,14 +107,9 @@ public class GroupThumbnailController {
 
         DiscussionController.setCurrentlyOpenedGroup(groupName);
 
-        if (!theGroupHasAlreadyBeenOpened) {
-            DiscussionController.loadCurrentGroupObjectWithDummyData();
-            theGroupHasAlreadyBeenOpened = true;
-        }
-
         MainController.switchToDiscussionScene();
         DiscussionController.updateDiscussionNameLabel(discussionNameText);
-        DiscussionController.loadMessages();
+        DiscussionController.loadMessages(0, false);
     }
 
     /**

@@ -33,4 +33,33 @@ public class MessageObject {
     public MessageController getController() {
         return controller;
     }
+
+    public String getSender() {
+        return controller.getSender();
+    }
+
+    public String getSenderID() {
+        return controller.getSenderID();
+    }
+
+    public String getDate() {
+        return controller.getDate();
+    }
+
+    public String getContent() {
+        return controller.getContent();
+    }
+
+    public String getMsgID() {
+        return controller.getMsgID();
+    }
+
+    public void delete() {
+        groupName = null;
+        groupID = null;
+        index = 0;
+
+        controller.delete();
+        controller = null;
+    }
 }

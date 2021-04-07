@@ -63,13 +63,18 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <HBox id="sendMessageLowerHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="659.0" spacing="15.0">
+            <HBox id="sendMessageLowerHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="659.0" spacing="45.0">
                <children>
                   <JFXTextField id="messageTextField" alignment="CENTER" onKeyPressed="#checkIfEnterIsPressedThenSendMessage" prefHeight="25.0" prefWidth="461.0" promptText="Message à envoyer, &lt; 20 caractères">
                      <HBox.margin>
-                        <Insets left="90.0" />
+                        <Insets left="50.0" />
                      </HBox.margin>
                   </JFXTextField>
+                  <JFXButton id="updateMessagesButton" buttonType="RAISED" onAction="#actionUpdateMessagesButton" ripplerFill="#5a99eb" text="UPDATE" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </HBox>
          </children>

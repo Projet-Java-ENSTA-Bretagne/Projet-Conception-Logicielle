@@ -44,26 +44,7 @@ public class GroupObject {
         for (int i = 0; i < userIdList.length(); i++) {
             try {
                 String userID = userIdList.getString(i);
-
-                JSONObject userIdData = new JSONObject();
-                userIdData.put("user_id", userID);
-
-                String getUserByIdRequest = RequestBuilder.buildWithData("getUserByID", userIdData).toString();
-                String responseFromServer = MainController.getTcpClient().sendRequest(getUserByIdRequest);
-
-                JSONObject wholeReceivedData = new JSONObject(responseFromServer);
-                String requestStatus = wholeReceivedData.getString("status");
-
-                if (!requestStatus.equals("OK")) {
-                    log.error("L'utilisateur d'ID \"" + userID + "\" n'existe pas !");
-                    System.exit(1);
-                }
-
-                // getting associated username
-                JSONObject data = wholeReceivedData.getJSONObject("data");
-                JSONObject user = data.getJSONObject("user");
-                String username = user.getString("name");
-
+                String username = DiscussionController.getUsernameFromID(userID);
                 usernameList.put(username);
             }
             catch (JSONException jsonException) {
@@ -99,8 +80,22 @@ public class GroupObject {
         messageList.add(newMessage);
     }
 
+    public int getTotalNbOfMessages() {
+        return messageIndex + 1;
+    }
+
     public void delete() {
         groupName = null;
-        messageList = null;
+        groupID = null;
+        userIdList = null;
+        usernameList = null;
+
+        for (MessageObject messageObject : messageList) {
+            messageObject.delete();
+            messageList.remove(messageObject);
+            messageObject = null;
+        }
+
+        messageIndex = 0;
     }
 }

@@ -2,8 +2,12 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import org.json.JSONException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+
+import networking.RequestBuilder;
 
 /**
  * Class handling the JavaFX objects from the ConfirmLeaveGroup secondary stage (defined
@@ -13,15 +17,8 @@ public class ConfirmLeaveGroupController {
     // Logging
     private final Logger log = LogManager.getLogger(ConfirmLeaveGroupController.class);
 
-    /**
-     * Method that is automatically executed right after "confirmLeaveGroup.fxml" is loaded.
-     */
-    @FXML
-    private void initialize() {
-        // useless method atm (but can potentially be useful in the future)
-    }
-
     private String groupName;
+    private String groupID;
 
     @FXML
     private Label groupNameLabel;
@@ -29,9 +26,8 @@ public class ConfirmLeaveGroupController {
     // it's cleaner if we do NOT use constructors when updating FXML templates
     public void build(String groupName) {
         this.groupName = groupName;
-
+        groupID = HomeController.getGroupID(this.groupName);
         log.info("Initializing confirmLeaveGroup controller, groupName = \"" + this.groupName + "\"");
-
         updateDesign();
     }
 
@@ -54,21 +50,52 @@ public class ConfirmLeaveGroupController {
      * TODO : Link this method to network
      */
     @FXML
-    private void actionYesButton() {
+    private void actionYesButton() throws JSONException {
         log.info("Bouton \"Oui\" appuyé (confirmLeaveGroup), groupName = \"" + groupName + "\"");
         HomeController.closeCurrentConfirmLeaveGroupStage();
 
-        HomeController.aGroupIsCurrentlyBeingDeleted = true;
+        /* ----------------------------------------------------------------- */
 
-        HomeController.deleteGroupThumbnailByGroupName(groupName);
-        DiscussionController.deleteGroupObjectByGroupName(groupName);
+        // asking server if we can remove the user from the group
 
-        // if HomeController.getNbGroupsYouAreStillPartOf() > 2, the boolean
-        // "HomeController.aGroupIsCurrentlyBeingDeleted" will be automatically set to "false"
-        // by the ChangeListener "observing" the width of the group thumbnail HBox (cf. the method
-        // "HomeController.initializeStaticComponents")
-        if (HomeController.getNbGroupsYouAreStillPartOf() <= 2) {
-            HomeController.aGroupIsCurrentlyBeingDeleted = false;
+        JSONObject userData = new JSONObject();
+        userData.put("group_id", groupID);
+        userData.put("user_id", DiscussionController.getCurrentSenderID());
+
+        String requestStatus = removeUserFromGroupRequest(userData);
+
+        if (requestStatus.equals("OK")) {
+            HomeController.aGroupIsCurrentlyBeingDeleted = true;
+
+            HomeController.deleteGroupThumbnailByGroupName(groupName);
+            DiscussionController.deleteGroupObjectByGroupName(groupName);
+
+            // if HomeController.getNbGroupsYouAreStillPartOf() > 2, the boolean
+            // "HomeController.aGroupIsCurrentlyBeingDeleted" will be automatically set to "false"
+            // by the ChangeListener "observing" the width of the group thumbnail HBox (cf. the method
+            // "HomeController.initializeStaticComponents")
+            if (HomeController.getNbGroupsYouAreStillPartOf() <= 2) {
+                HomeController.aGroupIsCurrentlyBeingDeleted = false;
+            }
         }
+        // TODO : bug fix
+        else if (requestStatus.equals("DENIED")) {
+            log.error("Pas de System.exit() ici mais il devrait y en avoir un (removeUserFromGroupStatus : \"DENIED\")");
+            log.error("Bug à trouver (côté client et/ou serveur)");
+        }
+        else {
+            log.error("La communication avec le serveur est corrompue (removeUserFromGroupStatus : \"" + requestStatus + "\")");
+            System.exit(1);
+        }
+    }
+
+    private String removeUserFromGroupRequest(JSONObject userData) {
+        String removeUserRequest = RequestBuilder.buildWithData("removeUserFromGroup", userData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(removeUserRequest);
+
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String requestStatus = wholeReceivedData.getString("status");
+
+        return requestStatus;
     }
 }

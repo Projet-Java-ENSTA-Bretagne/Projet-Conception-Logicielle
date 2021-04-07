@@ -2,7 +2,6 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.Date;
 
 /**
  * Class handling the JavaFX objects from the messages (defined in sentMessage.fxml and
@@ -17,24 +16,44 @@ public class MessageController {
     // dynamically from the Discussion scene)
 
     private String sender;
-    private Date date;
+    private String senderID;
+    private String date;
     private String content;
+    private String msgID;
 
     public String getSender() {
         return sender;
     }
 
+    public String getSenderID() {
+        return senderID;
+    }
+
     public String getDate() {
-        return DiscussionController.formatDate(date);
+        return date;
     }
 
     public String getContent() {
         return content;
     }
 
-    public MessageController(String sender, Date date, String content) {
+    public String getMsgID() {
+        return msgID;
+    }
+
+    public MessageController(String sender, String senderID, String date, String content, String msgID) {
         this.sender = sender;
+        this.senderID = senderID;
         this.date = date;
         this.content = content;
+        this.msgID = msgID;
+    }
+
+    public void delete() {
+        sender = null;
+        senderID = null;
+        date = null;
+        content = null;
+        msgID = null;
     }
 }

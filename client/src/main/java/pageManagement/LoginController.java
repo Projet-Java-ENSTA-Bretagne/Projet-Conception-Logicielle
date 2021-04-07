@@ -110,13 +110,6 @@ public class LoginController {
                                 log.info("Welcome !");
                                 MainController.switchToHomeScene();
 
-                                HomeController.getGroupThumbnailObjectList().clear();
-                                HomeController.clearGroupThumbnailHBox();
-                                HomeController.resetNbGroupsYouAreStillPartOf();
-                                HomeController.aGroupIsCurrentlyBeingDeleted = false;
-                                DiscussionController.getGroupObjectList().clear();
-
-                                HomeController.clearHashMap();
                                 HomeController.loadExistingGroups();
                             }
                             else {

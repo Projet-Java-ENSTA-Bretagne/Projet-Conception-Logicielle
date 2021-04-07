@@ -2,6 +2,9 @@ package pageManagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,10 +21,12 @@ import javafx.event.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.Observable;
+
+import networking.RequestBuilder;
 
 /**
  * Class handling the JavaFX objects from the Discussion scene (defined in discussion.fxml).
@@ -133,56 +138,21 @@ public class DiscussionController extends Observable {
         }
     }
 
-    /**
-     * Adds "dummy messages" to the current (empty) group chat.
-     */
-    public static void loadCurrentGroupObjectWithDummyData() {
-        Date currentDate = getCurrentDate();
-
-        // generating a random number between 0 and 1
-        double random_number = Math.random();
-
-        if (random_number > 0.5) {
-            // 1st set of dummy data
-
-            MessageController message1 = new MessageController(currentSender, currentDate, "hey");
-            MessageController message2 = new MessageController("Mec 1", currentDate, "hey !");
-            MessageController message3 = new MessageController(currentSender, currentDate, "ça va ?");
-            MessageController message4 = new MessageController("Mec 1", currentDate, "yes et toi ?");
-            MessageController message5 = new MessageController("Mec 2", currentDate, "re !");
-            MessageController message6 = new MessageController(currentSender, currentDate, "aaaye re");
-            MessageController message7 = new MessageController("Mec 1", currentDate, "re mdr");
-
-            addMessageToAssociatedMessageList(message1);
-            addMessageToAssociatedMessageList(message2);
-            addMessageToAssociatedMessageList(message3);
-            addMessageToAssociatedMessageList(message4);
-            addMessageToAssociatedMessageList(message5);
-            addMessageToAssociatedMessageList(message6);
-            addMessageToAssociatedMessageList(message7);
-        }
-
-        else {
-            // 2nd set of dummy data
-
-            MessageController message1 = new MessageController("Mec 1", currentDate, "qqn a vu mes clés ?");
-            MessageController message2 = new MessageController(currentSender, currentDate, "euh ... non pk ?");
-            MessageController message3 = new MessageController(currentSender, currentDate, "ah si c possible");
-            MessageController message4 = new MessageController("Mec 1", currentDate, "nice ! où ça ?");
-
-            addMessageToAssociatedMessageList(message1);
-            addMessageToAssociatedMessageList(message2);
-            addMessageToAssociatedMessageList(message3);
-            addMessageToAssociatedMessageList(message4);
-        }
-    }
-
     private static String currentlyOpenedGroup;
-    private static String currentlyOpenedGroupID;
+
+    public static String getCurrentlyOpenedGroup() {
+        return currentlyOpenedGroup;
+    }
 
     public static void setCurrentlyOpenedGroup(String newCurrentlyOpenedGroup) {
         currentlyOpenedGroup = newCurrentlyOpenedGroup;
         currentlyOpenedGroupID = HomeController.getGroupID(currentlyOpenedGroup);
+    }
+
+    private static String currentlyOpenedGroupID;
+
+    public static String getCurrentlyOpenedGroupID() {
+        return currentlyOpenedGroupID;
     }
 
     public static void addMessageToAssociatedMessageList(MessageController messageController) {
@@ -230,20 +200,142 @@ public class DiscussionController extends Observable {
     }
 
     /**
-     * Loads all the messages stored in the group object associated to the discussion page
-     * that was just opened from the Home scene.
-     * TODO : Link this method to network
+     * Loads all the messages from the group that has just been opened.
      *
      * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
      */
-    public static void loadMessages() throws IOException {
+    public static void loadMessages(int indexOfFirstMsg, boolean isAnUpdate) throws IOException, JSONException {
         for (GroupObject groupObject : groupObjectList) {
             String groupName = groupObject.getGroupName();
 
             if (groupName.equals(currentlyOpenedGroup)) {
-                for (MessageObject message : groupObject.getMessageList()) {
-                    displayMessageFromController(message.getController());
+                boolean loadedAllMessages = false;
+                int nbOfMessagesLoadedAtOnce = 10;
+
+                int index = indexOfFirstMsg;
+                int limit = nbOfMessagesLoadedAtOnce;
+
+                while (!loadedAllMessages) {
+                    JSONObject groupData = new JSONObject();
+                    groupData.put("group_id", getCurrentlyOpenedGroupID());
+                    groupData.put("index", index);
+                    groupData.put("limit", limit);
+
+                    String[] requestStatusAndMsgInfo = getGroupMsgProtocol(groupData);
+                    String requestStatus = requestStatusAndMsgInfo[0];
+                    JSONArray msgInfo = new JSONArray(requestStatusAndMsgInfo[1]);
+
+                    if (!requestStatus.equals("OK")) {
+                        log.error("La communication avec le serveur est corrompue (getGroupMsgStatus : \"" + requestStatus + "\")");
+                        System.exit(1);
+                    }
+
+                    if (msgInfo.length() < nbOfMessagesLoadedAtOnce) {
+                        loadedAllMessages = true;
+
+                        if (msgInfo.length() == 0) {
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < msgInfo.length(); i++) {
+                        JSONObject msgData = msgInfo.getJSONObject(i);
+                        MessageController messageController = convertMsgDataToController(msgData);
+
+                        String msgID = messageController.getMsgID();
+                        boolean isADuplicate = messageIsADuplicate(msgID, groupObject);
+
+                        if ((!isAnUpdate) || (!isADuplicate)) {
+                            addMessageToAssociatedMessageList(messageController);
+                            displayMessageFromController(messageController);
+                        }
+                    }
+
+                    index += nbOfMessagesLoadedAtOnce;
+                    limit += nbOfMessagesLoadedAtOnce;
                 }
+
+                return;
+            }
+        }
+    }
+
+    private static String[] getGroupMsgProtocol(JSONObject groupData) {
+        String getGroupMsgRequest = RequestBuilder.buildWithData("getGroupMsg", groupData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(getGroupMsgRequest);
+
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String requestStatus = wholeReceivedData.getString("status");
+
+        JSONArray msgInfo;
+        if (requestStatus.equals("OK")) {
+            JSONObject data = wholeReceivedData.getJSONObject("data");
+            msgInfo = data.getJSONArray("msg");
+        }
+        else {
+            msgInfo = new JSONArray();
+        }
+
+        String[] requestStatusAndMsgInfo = {requestStatus, msgInfo.toString()};
+        return requestStatusAndMsgInfo;
+    }
+
+    private static MessageController convertMsgDataToController(JSONObject msgData) {
+        String senderID = msgData.getString("sender_id");
+        String sender = getUsernameFromID(senderID);
+        String date = formatDateFromString(msgData.getString("date"));
+        String content = msgData.getString("content");
+        String msgID = msgData.getString("id");
+
+        MessageController messageController = new MessageController(sender, senderID, date, content, msgID);
+        return messageController;
+    }
+
+    private static boolean messageIsADuplicate(String msgIdToTest, GroupObject groupObject) {
+        for (MessageObject messageObject : groupObject.getMessageList()) {
+            String msgID = messageObject.getMsgID();
+            if (msgID.equals(msgIdToTest)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getUsernameFromID(String userID) {
+        JSONObject userIdData = new JSONObject();
+        userIdData.put("user_id", userID);
+
+        String getUserByIdRequest = RequestBuilder.buildWithData("getUserByID", userIdData).toString();
+        String responseFromServer = MainController.getTcpClient().sendRequest(getUserByIdRequest);
+
+        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+        String requestStatus = wholeReceivedData.getString("status");
+
+        if (!requestStatus.equals("OK")) {
+            log.error("L'utilisateur d'ID \"" + userID + "\" n'existe pas !");
+            System.exit(1);
+        }
+
+        // getting associated username
+        JSONObject data = wholeReceivedData.getJSONObject("data");
+        JSONObject user = data.getJSONObject("user");
+        String username = user.getString("name");
+
+        return username;
+    }
+
+    @FXML
+    private void actionUpdateMessagesButton() throws IOException {
+        updateMessages();
+    }
+
+    public static void updateMessages() throws IOException {
+        for (GroupObject groupObject : groupObjectList) {
+            String groupName = groupObject.getGroupName();
+
+            if (groupName.equals(currentlyOpenedGroup)) {
+                int initialIndex = groupObject.getTotalNbOfMessages();
+                loadMessages(initialIndex, true);
                 return;
             }
         }
@@ -256,9 +348,9 @@ public class DiscussionController extends Observable {
     /**
      * Returns the current date.
      */
-    public static Date getCurrentDate() {
+    public static String getCurrentDate() {
         Date currentDate = new Date();
-        return currentDate;
+        return formatDate(currentDate);
     }
 
     /**
@@ -275,6 +367,12 @@ public class DiscussionController extends Observable {
 
         String formattedDate = "Le " + splitFormattedDate[0] + " à " + splitTime[0] + "h" + splitTime[1];
         return formattedDate;
+    }
+
+    public static String formatDateFromString(String dateString) {
+        // TODO
+
+        return dateString;
     }
 
     private static JFXTextField messageTextField;

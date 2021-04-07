@@ -214,6 +214,14 @@
     -fx-border-width: 1px 0px 0px 0px; /* top right bottom left */
 }
 
+#updateMessagesButton {
+    -fx-border-color: Transparent;
+    -fx-border-width: 1px;
+}
+#updateMessagesButton:hover {
+    -fx-border-color: black;
+}
+
 /* --------------------- Message ----------------------- */
 
 /* for both types of messages (sent and received) */
