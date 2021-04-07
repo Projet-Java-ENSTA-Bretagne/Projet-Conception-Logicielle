@@ -185,7 +185,14 @@ public class LoginController {
 
         // getting userID
         JSONObject usefulReceivedData = wholeReceivedData.getJSONObject("data");
-        String userID = usefulReceivedData.getString("user_id");
+
+        String userID;
+        if (loginStatus.equals("OK")) {
+            userID = usefulReceivedData.getString("user_id");
+        }
+        else {
+            userID = "none";
+        }
 
         String[] loginStatusAndUserID = {loginStatus, userID};
         return loginStatusAndUserID;
@@ -210,7 +217,7 @@ public class LoginController {
 
     /**
      * Action that is executed when the eye icon/JFXButton is released.
-     * Masks the current password entry.
+     * Masks the current (unmasked) password entry.
      */
     @FXML
     private void maskPassword() {

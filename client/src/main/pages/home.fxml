@@ -19,14 +19,14 @@
          <children>
             <HBox id="topLayerHBox" alignment="CENTER" prefHeight="40.0" prefWidth="631.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="315.0" spacing="65.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="343.0" spacing="15.0">
                      <children>
                         <Label text="DISCUSSIONS" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                            <padding>
-                              <Insets left="15.0" />
+                              <Insets left="15.0" right="8.0" />
                            </padding>
                         </Label>
                         <JFXButton id="disconnectButton" buttonType="RAISED" onAction="#actionDisconnectButton" ripplerFill="WHITE" text="Déconnexion" textAlignment="CENTER" textFill="WHITE">
@@ -34,9 +34,14 @@
                               <Font name="System Italic" size="13.0" />
                            </font>
                         </JFXButton>
+                        <JFXButton id="updateThumbnailsButton" buttonType="RAISED" onAction="#actionUpdateThumbnailsButton" ripplerFill="WHITE" text="UPDATE" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </JFXButton>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="316.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="288.0">
                      <opaqueInsets>
                         <Insets right="50.0" />
                      </opaqueInsets>

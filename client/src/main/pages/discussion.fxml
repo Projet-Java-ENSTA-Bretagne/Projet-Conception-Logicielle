@@ -65,7 +65,7 @@
             </ScrollPane>
             <HBox id="sendMessageLowerHBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="659.0" spacing="15.0">
                <children>
-                  <JFXTextField fx:id="messageTextField" alignment="CENTER" onKeyPressed="#checkIfEnterIsPressedThenSendMessage" prefHeight="25.0" prefWidth="461.0" promptText="Message à envoyer, &lt; 20 caractères">
+                  <JFXTextField id="messageTextField" alignment="CENTER" onKeyPressed="#checkIfEnterIsPressedThenSendMessage" prefHeight="25.0" prefWidth="461.0" promptText="Message à envoyer, &lt; 20 caractères">
                      <HBox.margin>
                         <Insets left="90.0" />
                      </HBox.margin>

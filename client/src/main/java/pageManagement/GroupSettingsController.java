@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
 import java.io.File;
@@ -149,7 +150,6 @@ public class GroupSettingsController {
      * Checks if the group settings are valid, then, according to the chosen
      * operation type, creates a new group or connects the current tcpClient
      * to the desired group chat (or to the desired PM chat).
-     * TODO : Link this method to network
      *
      * @throws IOException If error when FXMLLoader.load() is called
      */
@@ -162,7 +162,7 @@ public class GroupSettingsController {
         boolean parametersAreValid = true;
         boolean anErrorWasCaught = false;
 
-        String[] members = new String[0];
+        ArrayList<String> members = null;
         JSONArray userIDs = new JSONArray();
 
         try {
@@ -178,56 +178,61 @@ public class GroupSettingsController {
 
             /* ---------------------------------------------------------------- */
 
-            // checking (with server) if group members really exist
+            // checking (with the server) if the group members really exist
 
             groupMembers = groupMembersTextField.getText();
-            members = groupMembers.split(", ");
-
-            if (members.length <= 1) {
-                log.error("Pas assez de noms d'utilisateurs renseignés ! Il en faut au moins 2");
+            String[] splitMemberList = groupMembers.split(", ");
+            if (currentSenderIsInMemberList(splitMemberList)) {
+                log.error("Vous vous êtes inclus dans la liste des membres !");
                 parametersAreValid = false;
             }
-            else if (!currentSenderIsInMemberList(members)) {
-                log.error("Vous ne vous êtes pas inclus dans la liste des membres !");
-                parametersAreValid = false;
-            }
-            else if ((operationType == OperationTypesEnum.CREATE_GROUP) && (members.length == 2)) {
-                log.error("Un groupe doit contenir plus de 3 utilisateurs !");
-                parametersAreValid = false;
-            }
-            else if ((operationType == OperationTypesEnum.CREATE_PM) && (members.length > 2)) {
-                log.error("Une page de discussion privée (MP) ne doit contenir qu'un seul autre utilisateur !");
-                parametersAreValid = false;
-            }
-            else {
-                for (String member : members) {
-                    try {
-                        JSONObject usernameData = new JSONObject();
-                        usernameData.put("user_name", member);
 
-                        String getUserByNameRequest = RequestBuilder.buildWithData("getUserByName", usernameData).toString();
-                        String responseFromServer = MainController.getTcpClient().sendRequest(getUserByNameRequest);
+            if (parametersAreValid) {
+                members = new ArrayList<>(Arrays.asList(splitMemberList));
+                members.add(DiscussionController.getCurrentSender());
 
-                        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
-                        String requestStatus = wholeReceivedData.getString("status");
+                if (members.size() <= 1) {
+                    log.error("Pas assez de noms d'utilisateurs renseignés !");
+                    parametersAreValid = false;
+                }
+                else if ((operationType == OperationTypesEnum.CREATE_GROUP) && (members.size() == 2)) {
+                    log.error("Un groupe doit contenir plus de 3 utilisateurs !");
+                    parametersAreValid = false;
+                }
+                else if ((operationType == OperationTypesEnum.CREATE_PM) && (members.size() > 2)) {
+                    log.error("Une page de discussion privée (MP) ne doit contenir qu'un seul autre utilisateur !");
+                    parametersAreValid = false;
+                }
+                else {
+                    for (String member : members) {
+                        try {
+                            JSONObject usernameData = new JSONObject();
+                            usernameData.put("user_name", member);
 
-                        if (!requestStatus.equals("OK")) {
-                            log.error("L'utilisateur \"" + member + "\" n'existe pas !");
-                            parametersAreValid = false;
-                            break;
+                            String getUserByNameRequest = RequestBuilder.buildWithData("getUserByName", usernameData).toString();
+                            String responseFromServer = MainController.getTcpClient().sendRequest(getUserByNameRequest);
+
+                            JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+                            String requestStatus = wholeReceivedData.getString("status");
+
+                            if (!requestStatus.equals("OK")) {
+                                log.error("L'utilisateur \"" + member + "\" n'existe pas !");
+                                parametersAreValid = false;
+                                break;
+                            }
+
+                            // getting associated user ID
+                            JSONObject data = wholeReceivedData.getJSONObject("data");
+                            JSONObject user = data.getJSONObject("user");
+                            String userID = user.getString("id");
+                            log.debug(String.format("ID de l'utilisateur \"%s\" : \"%s\"", member, userID));
+
+                            userIDs.put(userID);
                         }
-
-                        // getting associated user ID
-                        JSONObject data = wholeReceivedData.getJSONObject("data");
-                        JSONObject user = data.getJSONObject("user");
-                        String userID = user.getString("id");
-                        log.debug(String.format("ID de l'utilisateur \"%s\" : \"%s\"", member, userID));
-
-                        userIDs.put(userID);
-                    }
-                    catch (JSONException jsonException) {
-                        log.error("Erreur JSON détectée : " + jsonException);
-                        System.exit(1);
+                        catch (JSONException jsonException) {
+                            log.error("Erreur JSON détectée : " + jsonException);
+                            System.exit(1);
+                        }
                     }
                 }
             }
@@ -255,7 +260,7 @@ public class GroupSettingsController {
             System.out.println("");
             log.debug("Type de l'opération : " + operationType.toString());
             log.debug("Nom du groupe : \"" + groupName + "\"");
-            log.debug("Pseudos des membres du groupe : " + Arrays.toString(members));
+            log.debug("Pseudos des membres du groupe : " + members.toString());
             log.debug("User IDs associés (aux pseudos) : " + userIDs.toString());
             log.debug("Statut du groupe : " + groupStatus.toString());
             log.debug("Description du groupe : \"" + groupDescription + "\"");
@@ -277,7 +282,16 @@ public class GroupSettingsController {
                 String requestStatus = wholeReceivedData.getString("status");
 
                 if (requestStatus.equals("OK")) {
-                    HomeController.addNewestItemToHashMap(groupName);
+                    HomeController.updateThumbnails();
+
+                    System.out.println("");
+                    if (operationType == OperationTypesEnum.CREATE_GROUP) {
+                        log.debug("Vous venez de créer le groupe \"" + groupName + "\" !");
+                    }
+                    else if (operationType == OperationTypesEnum.CREATE_PM) {
+                        log.debug("Vous venez de créer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !");
+                    }
+                    System.out.println("");
                 }
                 else {
                     if (requestStatus.equals("DENIED")) {
@@ -294,34 +308,6 @@ public class GroupSettingsController {
                 log.error("Erreur JSON détectée : " + jsonException);
                 System.exit(1);
             }
-
-            /* ---------------------------------------------------------- */
-
-            // adding new group thumbnail + the new group object
-
-            HomeController.incrementNbGroupsYouAreStillPartOf();
-
-            URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
-            FXMLLoader groupThumbnailLoader = new FXMLLoader(groupVisualizerURL);
-            Parent groupThumbnailRoot = groupThumbnailLoader.load();
-
-            GroupThumbnailController groupThumbnailController = groupThumbnailLoader.getController();
-            groupThumbnailController.build(groupName, groupStatus, groupDescription, operationType);
-
-            GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
-            HomeController.addGroup(newGroupThumbnailObject);
-
-            GroupObject newGroupObject = new GroupObject(groupName, userIDs);
-            DiscussionController.addGroupObject(newGroupObject);
-
-            System.out.println("");
-            if (operationType == OperationTypesEnum.CREATE_GROUP) {
-                log.debug("Vous venez de créer le groupe \"" + groupName + "\" !");
-            }
-            else if (operationType == OperationTypesEnum.CREATE_PM) {
-                log.debug("Vous venez de créer une page de discussion privée avec l'utilisateur \"" + groupName + "\" !");
-            }
-            System.out.println("");
         }
 
         else {
@@ -337,7 +323,6 @@ public class GroupSettingsController {
                 return true;
             }
         }
-
         return false;
     }
 }

@@ -51,6 +51,7 @@ public class DiscussionController extends Observable {
         discussionVBox = (VBox) discussionRoot.lookup("#discussionVBox");
         discussionScrollPane = (ScrollPane) discussionRoot.lookup("#discussionScrollPane");
         discussionNameLabel = (Label) discussionRoot.lookup("#discussionNameLabel");
+        messageTextField = (JFXTextField) discussionRoot.lookup("#messageTextField");
 
         // preventing horizontal scrolling in the discussion ScrollPane
         discussionScrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
@@ -136,7 +137,7 @@ public class DiscussionController extends Observable {
      * Adds "dummy messages" to the current (empty) group chat.
      */
     public static void loadCurrentGroupObjectWithDummyData() {
-        String currentDate = getCurrentDate();
+        Date currentDate = getCurrentDate();
 
         // generating a random number between 0 and 1
         double random_number = Math.random();
@@ -177,9 +178,11 @@ public class DiscussionController extends Observable {
     }
 
     private static String currentlyOpenedGroup;
+    private static String currentlyOpenedGroupID;
 
     public static void setCurrentlyOpenedGroup(String newCurrentlyOpenedGroup) {
         currentlyOpenedGroup = newCurrentlyOpenedGroup;
+        currentlyOpenedGroupID = HomeController.getGroupID(currentlyOpenedGroup);
     }
 
     public static void addMessageToAssociatedMessageList(MessageController messageController) {
@@ -238,10 +241,9 @@ public class DiscussionController extends Observable {
             String groupName = groupObject.getGroupName();
 
             if (groupName.equals(currentlyOpenedGroup)) {
-                for (MessageController messageController : groupObject.getMessageList()) {
-                    displayMessageFromController(messageController);
+                for (MessageObject message : groupObject.getMessageList()) {
+                    displayMessageFromController(message.getController());
                 }
-
                 return;
             }
         }
@@ -252,82 +254,46 @@ public class DiscussionController extends Observable {
     }
 
     /**
-     * Generates the current date, formatted in a relevant way for the group messages.
-     *
-     * @return The current date (example : "Le 21/03 à 17h53")
+     * Returns the current date.
      */
-    public static String getCurrentDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
-        Date date = new Date();
-        String formattedDate = formatter.format(date);
-
-        String[] splitFormattedDate = formattedDate.split(" ");
-        String[] splitTime = splitFormattedDate[1].split(":");
-
-        String currentDate = "Le " + splitFormattedDate[0] + " à " + splitTime[0] + "h" + splitTime[1];
-
+    public static Date getCurrentDate() {
+        Date currentDate = new Date();
         return currentDate;
     }
 
-    public JFXTextField getMessageTextField() {
+    /**
+     * Formats a date object in a relevant way for the group messages.
+     *
+     * @return The formatted date (example : "Le 21/03 à 17h53")
+     */
+    public static String formatDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
+        String rawFormattedDate = formatter.format(date);
+
+        String[] splitFormattedDate = rawFormattedDate.split(" ");
+        String[] splitTime = splitFormattedDate[1].split(":");
+
+        String formattedDate = "Le " + splitFormattedDate[0] + " à " + splitTime[0] + "h" + splitTime[1];
+        return formattedDate;
+    }
+
+    private static JFXTextField messageTextField;
+
+    public static JFXTextField getMessageTextField() {
         return messageTextField;
     }
 
     @FXML
-    private JFXTextField messageTextField;
-
-    @FXML
     private void checkIfEnterIsPressedThenSendMessage(KeyEvent keyEvent) throws IOException {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            // notification pour permettre l'envoi au serveur
             this.setChanged();
             this.notifyObservers();
-
-        }
-    }
-
-    /**
-     * Sends the message to all the users in the current group chat (or the PM chat).
-     * TODO : Link this method to network
-     *
-     * @throws IOException If error when FXMLLoader.load() is called (in displayMessageFromController())
-     */
-    private void sendMessage() throws IOException {
-        String currentWholeMessage = messageTextField.getText();
-
-        if ((currentWholeMessage == null) || (currentWholeMessage.length() == 0)) {
-            // we don't want to send empty messages
-            return;
-        }
-
-        else {
-            System.out.println("");
-            log.info("Vous venez d'envoyer un nouveau message !");
-
-            // adding the new message to the Discussion scene
-
-            // the sent message has to be less than 20 characters (for now)
-            String currentMessage = currentWholeMessage.substring(0, Math.min(currentWholeMessage.length(), 20));
-
-            // resetting the message TextField
-            messageTextField.setText("");
-
-            MessageController messageController = new MessageController(getCurrentSender(),
-                                                      getCurrentDate(), currentMessage);
-
-            log.debug("Émetteur : \"" + messageController.getSender() + "\"");
-            log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
-            log.debug("Contenu : \"" + messageController.getContent() + "\"");
-
-            addMessageToAssociatedMessageList(messageController);
-            displayMessageFromController(messageController);
         }
     }
 
     /**
      * Action linked to the "Quitter" JFXButton.
      * Leaves the current Discussions page, then switches to the Home scene.
-     * TODO : Link this method to network
      */
     @FXML
     private void actionExitButton() {

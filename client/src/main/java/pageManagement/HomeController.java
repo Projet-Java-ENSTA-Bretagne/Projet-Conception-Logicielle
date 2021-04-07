@@ -96,56 +96,13 @@ public class HomeController {
 
     private static HashMap<String, String> groupNamesToGroupIDs;
 
-    public static void addItemToHashMap(String groupName, String groupID) {
-        groupNamesToGroupIDs.put(groupName, groupID);
+    public static String getGroupID(String groupName) {
+        String groupID = groupNamesToGroupIDs.get(groupName);
+        return groupID;
     }
 
-    /**
-     * Adds the newest item (groupName, groupID) to the associated HashMap. By "newest" we mean
-     * the group/PM chat that has just been created. We do this because the group ID isn't
-     * sent back by the server when we create a group.
-     */
-    public static void addNewestItemToHashMap(String referenceGroupName) {
-        try {
-            JSONObject userIdData = new JSONObject();
-            userIdData.put("user_id", DiscussionController.getCurrentSenderID());
-
-            String[] requestStatusAndGroupsInfo = getUserGroupsRequest(userIdData);
-
-            String requestStatus = requestStatusAndGroupsInfo[0];
-            JSONArray groupsInfo = new JSONArray(requestStatusAndGroupsInfo[1]);
-
-            if (requestStatus.equals("OK")) {
-                if (groupsInfo.length() != groupNamesToGroupIDs.size() + 1) {
-                    log.fatal("Error while adding the newest group");
-                    System.exit(1);
-                }
-
-                for (int i = 0; i < groupsInfo.length(); i++) {
-                    JSONObject groupData = groupsInfo.getJSONObject(i);
-
-                    String groupName = groupData.getString("name");
-                    String groupID = groupData.getString("id");
-
-                    if ((!groupNamesToGroupIDs.containsKey(groupName)) && (!groupNamesToGroupIDs.containsValue(groupID)) && (groupName.equals(referenceGroupName))) {
-                        addItemToHashMap(groupName, groupID);
-                        log.debug("GroupNames --> GroupIDs : " + groupNamesToGroupIDs.toString());
-                        return;
-                    }
-                }
-
-                log.fatal("Error while adding the newest group");
-                System.exit(1);
-            }
-            else {
-                log.error("La communication avec le serveur est corrompue (getUserGroupsStatus : \"" + requestStatus + "\")");
-                System.exit(1);
-            }
-        }
-        catch (JSONException jsonException) {
-            log.error("Erreur JSON détectée : " + jsonException);
-            System.exit(1);
-        }
+    public static void addItemToHashMap(String groupName, String groupID) {
+        groupNamesToGroupIDs.put(groupName, groupID);
     }
 
     public static void clearHashMap() {
@@ -233,59 +190,7 @@ public class HomeController {
 
                 for (int i = 0; i < groupsInfo.length(); i++) {
                     JSONObject groupData = groupsInfo.getJSONObject(i);
-
-                    String groupName = groupData.getString("name");
-                    boolean isPM = groupData.getBoolean("is_pm");
-
-                    String groupID = groupData.getString("id");
-                    log.debug(String.format("ID du groupe n°%d/%d (groupName : \"%s\", isPM : %b) : \"%s\"", i + 1, groupsInfo.length(), groupName, isPM, groupID));
-
-                    String rawUserIDs = groupData.getString("members");
-                    String[] userIDs = rawUserIDs.split(",");
-                    // converting from String[] to JSONArray
-                    JSONArray userIDsJSONArray = new JSONArray();
-                    for (String userID : userIDs) {
-                        userIDsJSONArray.put(userID);
-                    }
-                    log.debug("User IDs : " + userIDsJSONArray.toString());
-
-                    addItemToHashMap(groupName, groupID);
-
-                    /* ------------------------------------------------------ */
-
-                    // adding group thumbnail + the group object
-
-                    incrementNbGroupsYouAreStillPartOf();
-
-                    URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
-                    FXMLLoader groupThumbnailLoader = new FXMLLoader(groupVisualizerURL);
-                    Parent groupThumbnailRoot = groupThumbnailLoader.load();
-
-                    GroupThumbnailController groupThumbnailController = groupThumbnailLoader.getController();
-
-                    OperationTypesEnum operationType;
-                    GroupStatusesEnum groupStatus;
-                    String groupDescription;
-                    if (isPM) {
-                        operationType = OperationTypesEnum.CREATE_PM;
-                        groupStatus = GroupStatusesEnum.PRIVATE;
-                        groupDescription = "MP pré-existant";
-                    }
-                    else {
-                        operationType = OperationTypesEnum.CREATE_GROUP;
-                        groupStatus = GroupStatusesEnum.PUBLIC;
-                        groupDescription = "Groupe pré-existant";
-                    }
-
-                    groupThumbnailController.build(groupName, groupStatus, groupDescription, operationType);
-
-                    //
-
-                    GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
-                    addGroup(newGroupThumbnailObject);
-
-                    GroupObject newGroupObject = new GroupObject(groupName, userIDsJSONArray);
-                    DiscussionController.addGroupObject(newGroupObject);
+                    addGroupFromGroupData(groupData, true);
                 }
 
                 log.debug("GroupNames --> GroupIDs : " + groupNamesToGroupIDs.toString());
@@ -299,10 +204,119 @@ public class HomeController {
             log.error("Erreur JSON détectée : " + jsonException);
             System.exit(1);
         }
-        catch (IOException ioException) {
-            log.error("Erreur lors de l'appel à FXMLLoader.load() : " + ioException);
+    }
+
+    @FXML
+    private void actionUpdateThumbnailsButton() {
+        updateThumbnails();
+    }
+
+    /**
+     * Updates the thumbnails in the Home scene.
+     */
+    public static void updateThumbnails() {
+        try {
+            JSONObject userIdData = new JSONObject();
+            userIdData.put("user_id", DiscussionController.getCurrentSenderID());
+
+            String[] requestStatusAndGroupsInfo = getUserGroupsRequest(userIdData);
+
+            String requestStatus = requestStatusAndGroupsInfo[0];
+            JSONArray groupsInfo = new JSONArray(requestStatusAndGroupsInfo[1]);
+
+            if (requestStatus.equals("OK")) {
+                for (int i = 0; i < groupsInfo.length(); i++) {
+                    JSONObject groupData = groupsInfo.getJSONObject(i);
+
+                    String groupName = groupData.getString("name");
+                    String groupID = groupData.getString("id");
+
+                    if ((!groupNamesToGroupIDs.containsKey(groupName)) && (!groupNamesToGroupIDs.containsValue(groupID))) {
+                        addGroupFromGroupData(groupData, false);
+                    }
+                }
+            }
+            else {
+                log.error("La communication avec le serveur est corrompue (getUserGroupsStatus : \"" + requestStatus + "\")");
+                System.exit(1);
+            }
+        }
+        catch (JSONException jsonException) {
+            log.error("Erreur JSON détectée : " + jsonException);
             System.exit(1);
         }
+    }
+
+    public static void addGroupFromGroupData(JSONObject groupData, boolean existedBeforeCurrentSession) {
+        String groupName = groupData.getString("name");
+        boolean isPM = groupData.getBoolean("is_pm");
+
+        String groupID = groupData.getString("id");
+
+        String rawUserIDs = groupData.getString("members");
+        String[] userIDs = rawUserIDs.split(",");
+        // converting from String[] to JSONArray
+        JSONArray userIDsJSONArray = new JSONArray();
+        for (String rawUserID : userIDs) {
+            String userID = rawUserID.substring(1, rawUserID.length() - 1);
+            userIDsJSONArray.put(userID);
+        }
+
+        addItemToHashMap(groupName, groupID);
+
+        /* ------------------------------------------------------ */
+
+        // adding group thumbnail + the group object
+
+        incrementNbGroupsYouAreStillPartOf();
+
+        FXMLLoader groupThumbnailLoader = null;
+        Parent groupThumbnailRoot = null;
+        try {
+            URL groupVisualizerURL = new File("src/main/pages/groupThumbnail.fxml").toURI().toURL();
+            groupThumbnailLoader = new FXMLLoader(groupVisualizerURL);
+            groupThumbnailRoot = groupThumbnailLoader.load();
+        }
+        catch (IOException e) {
+            log.error("Erreur lors de l'appel à FXMLLoader.load() : " + e);
+            System.exit(1);
+        }
+
+        GroupThumbnailController groupThumbnailController = groupThumbnailLoader.getController();
+
+        OperationTypesEnum operationType;
+        GroupStatusesEnum groupStatus;
+        String groupDescription;
+        if (isPM) {
+            operationType = OperationTypesEnum.CREATE_PM;
+            groupStatus = GroupStatusesEnum.PRIVATE;
+
+            if (existedBeforeCurrentSession) {
+                groupDescription = "Page de MP pré-existante";
+            }
+            else {
+                groupDescription = "Nouvelle page de MP !";
+            }
+        }
+        else {
+            operationType = OperationTypesEnum.CREATE_GROUP;
+            groupStatus = GroupStatusesEnum.PUBLIC;
+
+            if (existedBeforeCurrentSession) {
+                groupDescription = "Groupe pré-existant";
+            }
+            else {
+                groupDescription = "Nouveau groupe !";
+            }
+        }
+
+        groupThumbnailController.build(groupName, groupStatus, groupDescription, operationType);
+
+        GroupThumbnailObject newGroupThumbnailObject = new GroupThumbnailObject(groupThumbnailController, groupThumbnailRoot);
+        addGroup(newGroupThumbnailObject);
+
+        GroupObject newGroupObject = new GroupObject(groupName, userIDsJSONArray);
+        DiscussionController.addGroupObject(newGroupObject);
     }
 
     public static String[] getUserGroupsRequest(JSONObject userIdData) {

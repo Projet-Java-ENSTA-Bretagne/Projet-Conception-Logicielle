@@ -1,21 +1,17 @@
 package pageManagement;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.io.IOException;
 
+/**
+ * Allows the client to send a message by looking at the "Enter" keystroke.
+ */
 public class MessageSender implements Observer {
-    /*
-    allows the client to send a message by looking at the enter keystroke
-     */
 
-    private static final Logger log = LogManager.getLogger(MessageSender.class);
-
+    private final Logger log = LogManager.getLogger(MessageSender.class);
 
     private void sendMessage(String messageText) throws IOException {
         String currentWholeMessage = messageText;
@@ -35,7 +31,7 @@ public class MessageSender implements Observer {
             String currentMessage = currentWholeMessage.substring(0, Math.min(currentWholeMessage.length(), 20));
 
             MessageController messageController = new MessageController(DiscussionController.getCurrentSender(),
-                    DiscussionController.getCurrentDate(), currentMessage);
+                                                      DiscussionController.getCurrentDate(), currentMessage);
 
             log.debug("Émetteur : \"" + messageController.getSender() + "\"");
             log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
@@ -48,14 +44,14 @@ public class MessageSender implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        DiscussionController controller = (DiscussionController) o;
-        String text = controller.getMessageTextField().getText();
+        String messageText = DiscussionController.getMessageTextField().getText();
         try {
-            this.sendMessage(text);
+            sendMessage(messageText);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         // resetting the message TextField
-        controller.getMessageTextField().setText("");
+        DiscussionController.getMessageTextField().setText("");
     }
 }
