@@ -25,6 +25,12 @@ public class MainController {
 
     public static void initializeMainStage(Stage newMainStage) {
         mainStage = newMainStage;
+
+        mainStage.setOnCloseRequest(e -> {
+            if (tcpClient.isConnectedToServer) {
+                tcpClient.disconnectFromServer();
+            }
+        });
     }
 
     // the 3 main scenes

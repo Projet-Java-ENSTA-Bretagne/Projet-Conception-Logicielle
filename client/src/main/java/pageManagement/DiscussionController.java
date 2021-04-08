@@ -21,9 +21,9 @@ import javafx.event.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 
 import networking.RequestBuilder;
@@ -43,6 +43,7 @@ public class DiscussionController extends Observable {
         log.info("Initializing discussion controller");
         groupObjectList = new ArrayList<>();
         this.addObserver(new MessageSender());
+        initializeMonthsHashMap();
     }
 
     private static VBox discussionVBox;
@@ -210,9 +211,9 @@ public class DiscussionController extends Observable {
 
             if (groupName.equals(currentlyOpenedGroup)) {
                 boolean loadedAllMessages = false;
-                int nbOfMessagesLoadedAtOnce = 5; // can easily be changed here
 
                 int index = indexOfFirstMsg;
+                int nbOfMessagesLoadedAtOnce = 5; // can easily be changed here
 
                 while (!loadedAllMessages) {
                     JSONObject groupData = new JSONObject();
@@ -225,7 +226,7 @@ public class DiscussionController extends Observable {
                     JSONArray msgInfo = new JSONArray(requestStatusAndMsgInfo[1]);
 
                     if (!requestStatus.equals("OK")) {
-                        log.error("corrupted communication between client and server (getGroupMsgStatus : \"" + requestStatus + "\")");
+                        log.error("Corrupted communication between client and server (getGroupMsgStatus : \"" + requestStatus + "\")");
                         System.exit(1);
                     }
 
@@ -343,34 +344,51 @@ public class DiscussionController extends Observable {
         discussionVBox.getChildren().clear();
     }
 
+    private static HashMap<String, String> months;
+
+    private static void initializeMonthsHashMap() {
+        months = new HashMap<>();
+
+        months.put("Jan", "01");
+        months.put("Feb", "02");
+        months.put("Mar", "03");
+        months.put("Apr", "04");
+        months.put("May", "05");
+        months.put("Jun", "06");
+        months.put("Jul", "07");
+        months.put("Aug", "08");
+        months.put("Sep", "09");
+        months.put("Oct", "10");
+        months.put("Nov", "11");
+        months.put("Dec", "12");
+    }
+
     /**
      * Returns the current date.
      */
     public static String getCurrentDate() {
         Date currentDate = new Date();
-        return formatDate(currentDate);
+        return formatDateFromString(currentDate.toString());
     }
 
     /**
-     * Formats a date object in a relevant way for the group messages.
+     * Formats a date string in a relevant way for the group messages.
      *
-     * @return The formatted date (example : "Le 21/03 à 17h53")
+     * @param dateString The complete date string to format (example : "Wed Apr 07 16:29:19 CEST 2021")
+     * @return The formatted date string (associated example : "Le 07/04 à 16h29")
      */
-    public static String formatDate(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
-        String rawFormattedDate = formatter.format(date);
-
-        String[] splitFormattedDate = rawFormattedDate.split(" ");
-        String[] splitTime = splitFormattedDate[1].split(":");
-
-        String formattedDate = "Le " + splitFormattedDate[0] + " à " + splitTime[0] + "h" + splitTime[1];
-        return formattedDate;
-    }
-
     public static String formatDateFromString(String dateString) {
-        // TODO
+        String[] splitDateString = dateString.split(" ");
 
-        return dateString;
+        String day = splitDateString[2];
+        String month = months.get(splitDateString[1]);
+
+        String[] splitTime = splitDateString[3].split(":");
+        String hours = splitTime[0];
+        String minutes = splitTime[1];
+
+        String currentDate = "Le " + day + "/" + month + " à " + hours + "h" + minutes;
+        return currentDate;
     }
 
     private static JFXTextField messageTextField;

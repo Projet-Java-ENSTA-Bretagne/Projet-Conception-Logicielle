@@ -25,7 +25,7 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
 
         User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
         User user2 = userDao.queryForId("d48cdb48-15e0-49e2-8304-e4e0589f6319");
-        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId() + ";" + user2.getId());
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), "\"" + user1.getId() + "\",\"" + user2.getId() + "\"");
         groupDao.create(group);
 
         // Forging the request
@@ -56,7 +56,7 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
 
         User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
         User user2 = userDao.queryForId("d48cdb48-15e0-49e2-8304-e4e0589f6319");
-        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId());
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), "\"" + user1.getId() + "\"");
         groupDao.create(group);
 
         // Forging the request
@@ -84,7 +84,7 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
         Dao<Group, String> groupDao = ((DatabaseContext) helper.context).getDatabaseManager().getGroupDao();
 
         User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
-        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId());
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), "\"" + user1.getId() + "\"");
         groupDao.create(group);
 
         // Forging the request
@@ -112,7 +112,7 @@ public class RemoveUserFromGroupProtocolTest extends TestCase {
         Dao<Group, String> groupDao = ((DatabaseContext) helper.context).getDatabaseManager().getGroupDao();
 
         User user1 = userDao.queryForId("45fabc9a-83f2-4069-83ad-529740094efc");
-        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), user1.getId());
+        Group group = new Group(UUID.randomUUID().toString(), "testing_group", false, Date.from(Instant.now()), "\"" + user1.getId() + "\"");
         groupDao.create(group);
 
         // Forging the request
