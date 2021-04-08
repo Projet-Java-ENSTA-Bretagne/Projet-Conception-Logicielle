@@ -1,8 +1,7 @@
-import junit.framework.TestCase;
+
 import networking.RequestBuilder;
 import org.json.JSONObject;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 public class RequestBuilderTest {

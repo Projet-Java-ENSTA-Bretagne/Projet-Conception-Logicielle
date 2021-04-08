@@ -109,7 +109,6 @@ public class LoginController {
                                 System.out.println("");
                                 log.info("Welcome !");
                                 MainController.switchToHomeScene();
-
                                 HomeController.loadExistingGroups();
                             }
                             else {
