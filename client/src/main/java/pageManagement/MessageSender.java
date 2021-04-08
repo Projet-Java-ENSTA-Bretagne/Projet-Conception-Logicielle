@@ -25,8 +25,6 @@ public class MessageSender implements Observer {
         }
 
         else {
-            DiscussionController.updateMessages();
-
             // adding the new message to the Discussion scene
 
             // the sent message has to be less than 20 characters (for now)
@@ -41,24 +39,16 @@ public class MessageSender implements Observer {
                 msgData.put("group_id", DiscussionController.getCurrentlyOpenedGroupID());
                 msgData.put("message", currentMessage);
 
-                String[] requestStatusAndMsgInfo = sendGroupRequest(msgData);
-
-                String requestStatus = requestStatusAndMsgInfo[0];
-                String msgID = requestStatusAndMsgInfo[1];
+                String requestStatus = sendGroupRequest(msgData);
 
                 if (requestStatus.equals("OK")) {
-                    MessageController messageController = new MessageController(DiscussionController.getCurrentSender(),
-                            DiscussionController.getCurrentSenderID(), DiscussionController.getCurrentDate(),
-                            currentMessage, msgID);
-
-                    DiscussionController.addMessageToAssociatedMessageList(messageController);
-                    DiscussionController.displayMessageFromController(messageController);
+                    DiscussionController.updateMessages();
 
                     System.out.println("");
                     log.info("Vous venez d'envoyer un nouveau message !");
-                    log.debug("Émetteur : \"" + messageController.getSender() + "\"");
-                    log.debug("Date d'envoi : \"" + messageController.getDate() + "\"");
-                    log.debug("Contenu : \"" + messageController.getContent() + "\"");
+                    log.debug("Émetteur : \"" + DiscussionController.getCurrentSender() + "\"");
+                    log.debug("Date d'envoi : \"" + DiscussionController.getCurrentDate() + "\"");
+                    log.debug("Contenu : \"" + currentMessage + "\"");
 
                     // resetting the message TextField
                     DiscussionController.getMessageTextField().setText("");
@@ -75,27 +65,14 @@ public class MessageSender implements Observer {
         }
     }
 
-    private String[] sendGroupRequest(JSONObject msgData) {
+    private String sendGroupRequest(JSONObject msgData) {
         String getUserGroupsRequest = RequestBuilder.buildWithData("sendPM", msgData).toString();
         String responseFromServer = MainController.getTcpClient().sendRequest(getUserGroupsRequest);
 
         JSONObject wholeReceivedData = new JSONObject(responseFromServer);
         String requestStatus = wholeReceivedData.getString("status");
 
-        String msgID;
-        if (requestStatus.equals("OK")) {
-            // getting the message ID the received data
-            JSONObject data = wholeReceivedData.getJSONObject("data");
-            String message = data.getString("message");
-            msgID = message.substring(35, message.length());
-            log.debug("Checking the ID of the current message : " + msgID);
-        }
-        else {
-            msgID = "none";
-        }
-
-        String[] requestStatusAndMsgID = {requestStatus, msgID};
-        return requestStatusAndMsgID;
+        return requestStatus;
     }
 
     @Override

@@ -210,15 +210,15 @@ public class DiscussionController extends Observable {
 
             if (groupName.equals(currentlyOpenedGroup)) {
                 boolean loadedAllMessages = false;
-                int nbOfMessagesLoadedAtOnce = 10;
+                int nbOfMessagesLoadedAtOnce = 5; // can easily be changed here
+
                 int index = indexOfFirstMsg;
-                int limit = nbOfMessagesLoadedAtOnce;
 
                 while (!loadedAllMessages) {
                     JSONObject groupData = new JSONObject();
                     groupData.put("group_id", getCurrentlyOpenedGroupID());
                     groupData.put("index", index);
-                    groupData.put("limit", limit);
+                    groupData.put("limit", nbOfMessagesLoadedAtOnce);
 
                     String[] requestStatusAndMsgInfo = getGroupMsgProtocol(groupData);
                     String requestStatus = requestStatusAndMsgInfo[0];
@@ -251,7 +251,6 @@ public class DiscussionController extends Observable {
                     }
 
                     index += nbOfMessagesLoadedAtOnce;
-                    limit += nbOfMessagesLoadedAtOnce;
                 }
 
                 return;

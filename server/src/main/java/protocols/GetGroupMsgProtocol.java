@@ -13,6 +13,7 @@ import server.ResponseBuilder;
 
 import java.io.PrintStream;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class GetGroupMsgProtocol implements IProtocol {
@@ -60,17 +61,13 @@ public class GetGroupMsgProtocol implements IProtocol {
 
         List<Message> matchingMessages = messageDao.queryBuilder().where().in("groupID", group_id).query();
 
-        int sizeneed = ((index+limit)+1);
-
         List<Message> showMessage;
-
-        if(matchingMessages.size() < sizeneed) {
-
-            showMessage = matchingMessages.subList(index, sizeneed - (sizeneed-matchingMessages.size()));
+        if (matchingMessages.size() <= index) {
+            showMessage = Collections.emptyList();
         }
-        else
-        {
-            showMessage = matchingMessages.subList(index, index+limit);
+        else {
+            int realLimit = Math.min(limit, matchingMessages.size() - index);
+            showMessage = matchingMessages.subList(index, index + realLimit);
         }
 
         JSONObject jsonObject = new JSONObject();
