@@ -1,0 +1,201 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ConfirmLeaveGroupController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">pageManagement</a>
+</div>
+
+<h1>Coverage Summary for Class: ConfirmLeaveGroupController (pageManagement)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConfirmLeaveGroupController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package pageManagement;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import org.apache.logging.log4j.LogManager;
+<i class="no-highlight">4</i>&nbsp;import org.apache.logging.log4j.Logger;
+<i class="no-highlight">5</i>&nbsp;import org.json.JSONObject;
+<i class="no-highlight">6</i>&nbsp;import org.json.JSONException;
+<i class="no-highlight">7</i>&nbsp;import javafx.fxml.FXML;
+<i class="no-highlight">8</i>&nbsp;import javafx.scene.control.Label;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import networking.RequestBuilder;
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;/**
+<i class="no-highlight">13</i>&nbsp; * Class handling the JavaFX objects from the ConfirmLeaveGroup secondary stage (defined
+<i class="no-highlight">14</i>&nbsp; * in confirmLeaveGroup.fxml).
+<i class="no-highlight">15</i>&nbsp; */
+<b class="nc"><i class="no-highlight">16</i>&nbsp;public class ConfirmLeaveGroupController {</b>
+<i class="no-highlight">17</i>&nbsp;    // Logging
+<b class="nc"><i class="no-highlight">18</i>&nbsp;    private final Logger log = LogManager.getLogger(ConfirmLeaveGroupController.class);</b>
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    private String groupName;
+<i class="no-highlight">21</i>&nbsp;    private String groupID;
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    @FXML
+<i class="no-highlight">24</i>&nbsp;    private Label groupNameLabel;
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;    // it&#39;s cleaner if we do NOT use constructors when updating FXML templates
+<i class="no-highlight">27</i>&nbsp;    public void build(String groupName) {
+<b class="nc"><i class="no-highlight">28</i>&nbsp;        this.groupName = groupName;</b>
+<b class="nc"><i class="no-highlight">29</i>&nbsp;        groupID = HomeController.getGroupID(this.groupName);</b>
+<b class="nc"><i class="no-highlight">30</i>&nbsp;        log.info(&quot;Initializing confirmLeaveGroup controller, groupName = \&quot;&quot; + this.groupName + &quot;\&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">31</i>&nbsp;        updateDesign();</b>
+<i class="no-highlight">32</i>&nbsp;    }
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;    private void updateDesign() {
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        groupNameLabel.setText(&quot;\&quot;&quot; + groupName + &quot;\&quot; ?&quot;);</b>
+<i class="no-highlight">36</i>&nbsp;    }
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;    /**
+<i class="no-highlight">39</i>&nbsp;     * Action linked to the &quot;Non&quot; JFXButton. Clicking this button means that you actually chose
+<i class="no-highlight">40</i>&nbsp;     * not to leave the group. Thus no further action will be taken.
+<i class="no-highlight">41</i>&nbsp;     */
+<i class="no-highlight">42</i>&nbsp;    @FXML
+<i class="no-highlight">43</i>&nbsp;    private void actionNoButton() {
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        log.info(&quot;Bouton \&quot;Non\&quot; appuyé (confirmLeaveGroup), groupName = \&quot;&quot; + groupName + &quot;\&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        HomeController.closeCurrentConfirmLeaveGroupStage();</b>
+<i class="no-highlight">46</i>&nbsp;    }
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;    /**
+<i class="no-highlight">49</i>&nbsp;     * Action linked to the &quot;Oui&quot; JFXButton. Effectively leaves the selected group.
+<i class="no-highlight">50</i>&nbsp;     * TODO : Link this method to network
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    @FXML
+<i class="no-highlight">53</i>&nbsp;    private void actionYesButton() throws JSONException {
+<b class="nc"><i class="no-highlight">54</i>&nbsp;        log.info(&quot;Bouton \&quot;Oui\&quot; appuyé (confirmLeaveGroup), groupName = \&quot;&quot; + groupName + &quot;\&quot;&quot;);</b>
+<b class="nc"><i class="no-highlight">55</i>&nbsp;        HomeController.closeCurrentConfirmLeaveGroupStage();</b>
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;        /* ----------------------------------------------------------------- */
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;        // asking server if we can remove the user from the group
+<i class="no-highlight">60</i>&nbsp;
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        JSONObject userData = new JSONObject();</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        userData.put(&quot;group_id&quot;, groupID);</b>
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        userData.put(&quot;user_id&quot;, DiscussionController.getCurrentSenderID());</b>
+<i class="no-highlight">64</i>&nbsp;
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        String requestStatus = removeUserFromGroupRequest(userData);</b>
+<i class="no-highlight">66</i>&nbsp;
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        if (requestStatus.equals(&quot;OK&quot;)) {</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;            HomeController.aGroupIsCurrentlyBeingDeleted = true;</b>
+<i class="no-highlight">69</i>&nbsp;
+<b class="nc"><i class="no-highlight">70</i>&nbsp;            HomeController.deleteGroupThumbnailByGroupName(groupName);</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            DiscussionController.deleteGroupObjectByGroupName(groupName);</b>
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;            // if HomeController.getNbGroupsYouAreStillPartOf() &gt; 2, the boolean
+<i class="no-highlight">74</i>&nbsp;            // &quot;HomeController.aGroupIsCurrentlyBeingDeleted&quot; will be automatically set to &quot;false&quot;
+<i class="no-highlight">75</i>&nbsp;            // by the ChangeListener &quot;observing&quot; the width of the group thumbnail HBox (cf. the method
+<i class="no-highlight">76</i>&nbsp;            // &quot;HomeController.initializeStaticComponents&quot;)
+<b class="nc"><i class="no-highlight">77</i>&nbsp;            if (HomeController.getNbGroupsYouAreStillPartOf() &lt;= 2) {</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;                HomeController.aGroupIsCurrentlyBeingDeleted = false;</b>
+<i class="no-highlight">79</i>&nbsp;            }
+<i class="no-highlight">80</i>&nbsp;        }
+<i class="no-highlight">81</i>&nbsp;        else {
+<b class="nc"><i class="no-highlight">82</i>&nbsp;            log.error(&quot;Corrupted communication between server and client (removeUserFromGroupStatus : \&quot;&quot; + requestStatus + &quot;\&quot;)&quot;);</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            System.exit(1);</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;        }</b>
+<i class="no-highlight">85</i>&nbsp;    }
+<i class="no-highlight">86</i>&nbsp;
+<b class="nc"><i class="no-highlight">87</i>&nbsp;    private String removeUserFromGroupRequest(JSONObject userData) {</b>
+<b class="nc"><i class="no-highlight">88</i>&nbsp;        String removeUserRequest = RequestBuilder.buildWithData(&quot;removeUserFromGroup&quot;, userData).toString();</b>
+<i class="no-highlight">89</i>&nbsp;        String responseFromServer = MainController.getTcpClient().sendRequest(removeUserRequest);
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;        JSONObject wholeReceivedData = new JSONObject(responseFromServer);
+<i class="no-highlight">92</i>&nbsp;        String requestStatus = wholeReceivedData.getString(&quot;status&quot;);
+<i class="no-highlight">93</i>&nbsp;
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        return requestStatus;</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;    }</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;}</b>
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-04-08 21:37</div>
+</div>
+</body>
+</html>
