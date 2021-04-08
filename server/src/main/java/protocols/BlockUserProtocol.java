@@ -56,7 +56,7 @@ public class BlockUserProtocol implements IProtocol {
         }
 
         // updating current user blacklist
-        User currentUser = SecurityManager.getInstance().getLoggedUser();
+        User currentUser = SecurityManager.getInstance().getLoggedUser(((DatabaseContext) ctx).client);
         if (currentUser.getBlacklist().split(";").length == 0) {
             currentUser.setBlacklist(id);
         } else {

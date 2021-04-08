@@ -47,7 +47,7 @@ public class MainServer {
         protocols.put(CheckTokenProtocol.requestName,           new CheckTokenProtocol());
         protocols.put(GetUserGroupsProtocol.requestName,        new GetUserGroupsProtocol());
 
-        TCPServer server = new TCPServer(new DatabaseContext(db), protocols, serverConfig.getPort());
+        TCPServer server = new TCPServer(new DatabaseContext(db, null), protocols, serverConfig.getPort());
         server.start();
     }
 

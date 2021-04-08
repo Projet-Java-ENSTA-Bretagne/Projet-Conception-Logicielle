@@ -13,13 +13,14 @@ import org.json.JSONObject;
 import server.ConfigurationManagement;
 import server.ServerConfiguration;
 
+import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.*;
 
 public class SecurityManager {
 
-    private boolean loggedIn = false;
-    private User loggedUser;
+    private HashMap<Socket, Boolean> loggedIn = new HashMap<Socket, Boolean>();
+    private HashMap<Socket, User> loggedUsers = new HashMap<>();
 
     private final String ISSUER = "ENSTA-Bretagne";
 
@@ -48,27 +49,27 @@ public class SecurityManager {
         return INSTANCE;
     }
 
-    public boolean isUserLoggedIn() {
-        return this.loggedIn;
+    public boolean isUserLoggedIn(Socket client) {
+        return this.loggedIn.get(client);
     }
 
-    public User getLoggedUser() throws UserNotLoggedException {
+    public User getLoggedUser(Socket client) throws UserNotLoggedException {
         // security if the user is note logged in
-        if (!this.isUserLoggedIn()) {
+        if (!this.isUserLoggedIn(client)) {
             throw new UserNotLoggedException("An user needs to be logged in in order to do that");
         }
 
-        return this.loggedUser;
+        return this.loggedUsers.get(client);
     }
 
-    public void setLoggedUser(User newUser) {
-        this.loggedIn = true;
-        this.loggedUser = newUser;
+    public void setLoggedUser(User newUser, Socket client) {
+        this.loggedIn.put(client, true);
+        this.loggedUsers.put(client, newUser);
     }
 
-    public void removeLoggedUser() {
-        this.loggedIn = false;
-        this.loggedUser = null;
+    public void removeLoggedUser(Socket client) {
+        this.loggedIn.remove(client);
+        this.loggedUsers.remove(client);
     }
 
     /**
@@ -76,9 +77,9 @@ public class SecurityManager {
      * @param requiredRole : The user role
      * @throws UnauthorizedException
      */
-    public void hasRoleHighEnoughTo(User.Role requiredRole) throws UnauthorizedException {
+    public void hasRoleHighEnoughTo(Socket client, User.Role requiredRole) throws UnauthorizedException {
         // comparing roles to check if the user can do it
-        if (this.loggedUser.getRole().compareTo(requiredRole) < 0) {
+        if (this.loggedUsers.get(client).getRole().compareTo(requiredRole) < 0) {
             throw new UnauthorizedException("Role not high enough to perform action");
         }
     }

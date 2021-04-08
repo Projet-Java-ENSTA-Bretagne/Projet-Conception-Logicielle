@@ -20,7 +20,7 @@ public class ProtocolTestingHelper {
     public ProtocolTestingHelper() {
         // 1. Creating context
         DatabaseManager dm = new DatabaseManager("database.db");
-        context = new DatabaseContext(dm);
+        context = new DatabaseContext(dm, null);
         dm.createTables();
         dm.linkDaos();
 

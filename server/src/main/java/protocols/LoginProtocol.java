@@ -71,7 +71,7 @@ public class LoginProtocol implements IProtocol {
             }
 
             User matchedUser = matchingUsers.get(0);
-            SecurityManager.getInstance().setLoggedUser(matchedUser);
+            SecurityManager.getInstance().setLoggedUser(matchedUser, ((DatabaseContext) ctx).client);
             // then tell the user everything went ok and sending the data
             JSONObject res = new JSONObject();
             res.put("message", "Successfully logged in.");

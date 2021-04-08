@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > DatabaseManager</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">database</a>
+</div>
+
+<h1>Coverage Summary for Class: DatabaseManager (database)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DatabaseManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77,1%
+  </span>
+  <span class="absValue">
+    (27/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package database;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.j256.ormlite.dao.Dao;
+<i class="no-highlight">4</i>&nbsp;import com.j256.ormlite.dao.DaoManager;
+<i class="no-highlight">5</i>&nbsp;import com.j256.ormlite.jdbc.JdbcConnectionSource;
+<i class="no-highlight">6</i>&nbsp;import com.j256.ormlite.support.ConnectionSource;
+<i class="no-highlight">7</i>&nbsp;import com.j256.ormlite.table.TableUtils;
+<i class="no-highlight">8</i>&nbsp;import database.entities.Group;
+<i class="no-highlight">9</i>&nbsp;import database.entities.Message;
+<i class="no-highlight">10</i>&nbsp;import database.entities.User;
+<i class="no-highlight">11</i>&nbsp;import org.apache.logging.log4j.LogManager;
+<i class="no-highlight">12</i>&nbsp;import org.apache.logging.log4j.Logger;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;import java.sql.Connection;
+<i class="no-highlight">15</i>&nbsp;import java.sql.DatabaseMetaData;
+<i class="no-highlight">16</i>&nbsp;import java.sql.DriverManager;
+<i class="no-highlight">17</i>&nbsp;import java.sql.SQLException;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;public class DatabaseManager {
+<i class="no-highlight">20</i>&nbsp;
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    private final Logger log = LogManager.getLogger(DatabaseManager.class);</b>
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    private String dbURL;
+<i class="no-highlight">24</i>&nbsp;    private ConnectionSource conn;
+<i class="no-highlight">25</i>&nbsp;    private Dao&lt;User, String&gt; userDao;
+<i class="no-highlight">26</i>&nbsp;    private Dao&lt;Group, String&gt; groupDao;
+<i class="no-highlight">27</i>&nbsp;    private Dao&lt;Message, String&gt; messageDao;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Constructor of DatabaseManager
+<i class="no-highlight">31</i>&nbsp;     * @param filename : the path of sqlite file
+<i class="no-highlight">32</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    public DatabaseManager(String filename) {</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        this.dbURL = &quot;jdbc:sqlite:&quot; + filename;</b>
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">37</i>&nbsp;            this.conn = new JdbcConnectionSource(this.dbURL);</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;            this.createDatabase();</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;            log.fatal(&quot;constructor - &quot; + e.getMessage());</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;            System.exit(1);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;    }</b>
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * Function allow you to create a Database
+<i class="no-highlight">47</i>&nbsp;     * @throws SQLException
+<i class="no-highlight">48</i>&nbsp;     */
+<i class="no-highlight">49</i>&nbsp;    private void createDatabase() throws SQLException {
+<i class="no-highlight">50</i>&nbsp;        // Trying to connect to the database
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        Connection conn = DriverManager.getConnection(this.dbURL);</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        if (conn != null) {</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;            DatabaseMetaData meta = conn.getMetaData();</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;            log.debug(&quot;The driver name is &quot; + meta.getDriverName());</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;            log.debug(&quot;A new database has been created at: &quot; + this.dbURL);</b>
+<i class="no-highlight">56</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">57</i>&nbsp;    }</b>
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;    /**
+<i class="no-highlight">60</i>&nbsp;     * Function allow you to create a table
+<i class="no-highlight">61</i>&nbsp;     */
+<i class="no-highlight">62</i>&nbsp;    public void createTables() {
+<i class="no-highlight">63</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">64</i>&nbsp;            log.debug(&quot;Creating tables from ORMLite&quot;);</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;            TableUtils.createTable(conn, User.class);</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;            TableUtils.createTable(conn, Group.class);</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;            TableUtils.createTable(conn, Message.class);</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;            log.error(&quot;createTables - &quot; + e.getMessage());</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;    }</b>
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;    /**
+<i class="no-highlight">74</i>&nbsp;     * Link the DAOs from DB to entities
+<i class="no-highlight">75</i>&nbsp;     */
+<i class="no-highlight">76</i>&nbsp;    public void linkDaos() {
+<i class="no-highlight">77</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">78</i>&nbsp;            log.debug(&quot;Linking Daos from DB to entities&quot;);</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;            userDao = DaoManager.createDao(conn, User.class);</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;            groupDao = DaoManager.createDao(conn, Group.class);</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;            messageDao = DaoManager.createDao(conn, Message.class);</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            log.error(&quot;linkDaos - &quot; + e.getMessage());</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">85</i>&nbsp;    }</b>
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;    public Dao&lt;User, String&gt; getUserDao() {
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        return userDao;</b>
+<i class="no-highlight">89</i>&nbsp;    }
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;    public Dao&lt;Group, String&gt; getGroupDao() {
+<b class="fc"><i class="no-highlight">92</i>&nbsp;        return groupDao;</b>
+<i class="no-highlight">93</i>&nbsp;    }
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;    public Dao&lt;Message, String&gt; getMessageDao() {
+<b class="fc"><i class="no-highlight">96</i>&nbsp;        return messageDao;</b>
+<i class="no-highlight">97</i>&nbsp;    }
+<i class="no-highlight">98</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-04-08 21:42</div>
+</div>
+</body>
+</html>

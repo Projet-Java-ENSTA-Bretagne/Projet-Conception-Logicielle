@@ -63,7 +63,7 @@ public class SendGroupProtocol implements IProtocol {
         Dao<Message, String> messagesDao = ((DatabaseContext) ctx).getDatabaseManager().getMessageDao();
         Message newMsg = new Message(
                 UUID.randomUUID().toString(),
-                SecurityManager.getInstance().getLoggedUser().getId(),
+                SecurityManager.getInstance().getLoggedUser(((DatabaseContext) ctx).client).getId(),
                 groupId,
                 Date.from(Instant.now()),
                 message,

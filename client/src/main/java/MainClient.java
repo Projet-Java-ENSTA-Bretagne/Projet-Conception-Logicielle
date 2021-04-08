@@ -42,7 +42,7 @@ public class MainClient extends Application {
      *
      * @param args Default argument
      */
-    public static void main(String[] args) {
+    public static void startApp(String[] args) {
         // Setting logging level
         Configurator.setRootLevel(Level.DEBUG);
 
