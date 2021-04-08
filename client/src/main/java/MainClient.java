@@ -30,7 +30,7 @@ public class MainClient extends Application {
         MainController.initializeMainScenes();
         MainController.initializeFSM();
 
-        String serverIpAddress = "localhost";
+        String serverIpAddress = "ieta-docs.ddns.net";
         int serverPort = 6666;
         MainController.initializeTcpClient(serverIpAddress, serverPort);
 
@@ -42,7 +42,7 @@ public class MainClient extends Application {
      *
      * @param args Default argument
      */
-    public static void main(String[] args) {
+    public static void startApp(String[] args) {
         // Setting logging level
         Configurator.setRootLevel(Level.DEBUG);
 

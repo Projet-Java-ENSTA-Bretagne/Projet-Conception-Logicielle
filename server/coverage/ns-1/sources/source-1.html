@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MainServer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: MainServer (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainServer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import context.DatabaseContext;
+<i class="no-highlight">2</i>&nbsp;import database.DatabaseManager;
+<i class="no-highlight">3</i>&nbsp;import database.SecurityManager;
+<i class="no-highlight">4</i>&nbsp;import database.entities.User;
+<i class="no-highlight">5</i>&nbsp;import org.apache.logging.log4j.Level;
+<i class="no-highlight">6</i>&nbsp;import org.apache.logging.log4j.core.config.Configurator;
+<i class="no-highlight">7</i>&nbsp;import protocols.*;
+<i class="no-highlight">8</i>&nbsp;import server.*;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import java.sql.SQLException;
+<i class="no-highlight">11</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">12</i>&nbsp;
+<b class="nc"><i class="no-highlight">13</i>&nbsp;public class MainServer {</b>
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    public static void main(String[] args) throws SQLException {
+<i class="no-highlight">16</i>&nbsp;        // Setting logging level
+<b class="nc"><i class="no-highlight">17</i>&nbsp;        Configurator.setRootLevel(Level.DEBUG);</b>
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;        // Getting configuration
+<b class="nc"><i class="no-highlight">20</i>&nbsp;        ConfigurationManagement.getInstance().fromPath(&quot;config.json&quot;);</b>
+<b class="nc"><i class="no-highlight">21</i>&nbsp;        ServerConfiguration serverConfig = ConfigurationManagement.getInstance().getServerConfiguration();</b>
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;        // Setting up database
+<b class="nc"><i class="no-highlight">24</i>&nbsp;        DatabaseManager db = new DatabaseManager(&quot;database.db&quot;);</b>
+<b class="nc"><i class="no-highlight">25</i>&nbsp;        db.createTables();</b>
+<b class="nc"><i class="no-highlight">26</i>&nbsp;        db.linkDaos();</b>
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;        // User alex = new User(&quot;0&quot;, &quot;alexandre&quot;, &quot;1234&quot;, User.Role.ROLE_ADMIN, &quot;0;1&quot;);
+<i class="no-highlight">29</i>&nbsp;        // db.getUserDao().create(alex);
+<i class="no-highlight">30</i>&nbsp;        // System.out.println(db.getUserDao().queryForId(&quot;0&quot;).getName());
+<i class="no-highlight">31</i>&nbsp;
+<b class="nc"><i class="no-highlight">32</i>&nbsp;        User cookie = new User(&quot;0&quot;, &quot;cookie&quot;, &quot;1234&quot;, User.Role.ROLE_ADMIN, &quot;0;1&quot;);</b>
+<b class="nc"><i class="no-highlight">33</i>&nbsp;        SecurityManager.getInstance().createJWT(cookie);</b>
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;        // Setup protocols
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        HashMap&lt;String, IProtocol&gt; protocols = new HashMap&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        protocols.put(PingProtocol.requestName,                 new PingProtocol());</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        protocols.put(LoginProtocol.requestName,                new LoginProtocol());</b>
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        protocols.put(CreateGroupProtocol.requestName,          new CreateGroupProtocol());</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        protocols.put(SendGroupProtocol.requestName,            new SendGroupProtocol());</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        protocols.put(GetGroupMsgProtocol.requestName,          new GetGroupMsgProtocol());</b>
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        protocols.put(GetUserByIDProtocol.requestName,          new GetUserByIDProtocol());</b>
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        protocols.put(GetUserByNameProtocol.requestName,        new GetUserByNameProtocol());</b>
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        protocols.put(CreateUserProtocol.requestName,           new CreateUserProtocol());</b>
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        protocols.put(RemoveUserFromGroupProtocol.requestName,  new RemoveUserFromGroupProtocol());</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        protocols.put(BlockUserProtocol.requestName,            new BlockUserProtocol());</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        protocols.put(CheckTokenProtocol.requestName,           new CheckTokenProtocol());</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        protocols.put(GetUserGroupsProtocol.requestName,        new GetUserGroupsProtocol());</b>
+<i class="no-highlight">49</i>&nbsp;
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        TCPServer server = new TCPServer(new DatabaseContext(db), protocols, serverConfig.getPort());</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;        server.start();</b>
+<i class="no-highlight">52</i>&nbsp;    }
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-04-08 21:20</div>
+</div>
+</body>
+</html>

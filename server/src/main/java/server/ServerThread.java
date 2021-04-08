@@ -1,5 +1,6 @@
 package server;
 
+import context.DatabaseContext;
 import database.UserNotLoggedException;
 import fsm.ActionsEnum;
 import fsm.IFiniteStateMachine;
@@ -72,6 +73,7 @@ public class ServerThread extends Thread {
                         if (fsm.getCurrentState() == StatesEnum.RECEIVING.getState()) {
                             // we accept the request
                             fsm.transit(ActionsEnum.RECEIVE.getAction());
+                            ((DatabaseContext) tcpServer.getContext()).client = clientSocket;
                             tcpServer.getProtocols().get(request.getString("command")).
                                     execute(tcpServer.getContext(),
                                             outStream,
