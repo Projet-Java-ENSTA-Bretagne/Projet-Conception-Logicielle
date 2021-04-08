@@ -18,13 +18,16 @@ Le serveur est capable de :
 
 * Importer les données d'une base de donnée dans le serveur. 
 * Répondre à une requête du client (format JSON) avec une fonctionnalité d'exclusion mutuelle implémenté par une machine à états finis : en bloquant le serveur sur un état défini, on empêche la création de requêtes en doublon et on évite la saturation du serveur (SPAM ou DDOS). 
-* [à Compléter]
+* D'accepter de multiples connexions clients le tout en concurrence
+* De vérifier l'authenticité d'un client au travers d'un jeton de sécurité généré et vérifié par le serveur
+* De modifier la base de donnée en fonction des requêtes client
 
 Le client peut quand à lui :
 - permettre à l'utilisateur de **s'authentifier** par un login et mdp
 - accéder aux discussions auquel l'utilisateur est inscrit
 - créer une nouvelle discussion ainsi que de modifier les paramètres d'une discussion
 - retrouver les messages précédemment envoyés par soi-meme ou d'autres utilisateurs
+- et enfin d'envoyer un message dans une discussion
 
 De manière commune, un **logger** permet un retour d'information clair dans le terminal exécution pour chaque application. 
 
@@ -38,18 +41,14 @@ Enfin, les profils, groupes de discussions et messages sont tous stockés sur un
 
 ### Patterns 
 Pour ce projet nous avons utilisé un certains nombre de patterns de programmations : 
-<<<<<<< HEAD
-- serveur TCP concurrent : implémenté au niveau du serveur. Permettant de créer le serveur en lui même et écouter la connection de divers clients.
-- motif sujet-observateur et délégation : ce motif est implémenté au niveau du client. L'envoi de message n'est pas supervisé par le controlleur de discussion mais par une classe observateur. Le Controlleur est un observable et un clic sur le bouton "ENTRER" va enclencher une notification envoyé via l'API Java à l'oservateur "MessageSender". C'est lui qui se charge de l'envoi de message. On a donc à la fois une classe observatrice qui interagit pas avec l'élément observé, et une classe qui permet une délégation d'une fonctionnalité.  
-- motif stratégie : implémenté au niveau du serveur. Permettant de classer et faciliter le développement des différents protocoles présents, afin que l'utilisateur client puisse interagir avec le serveur.
-- motif composant-composite : implémenté au niveau du serveur. Permet de créer une machine à état fini afini de gérer le fait que le serveur accepte la connection, envoie des messages, reçois des messages et ferme la connection.
-=======
-- serveur TCP concurrent : implémenté au niveau du serveur [ a compléter ]
-- motif sujet-observateur et délégation : ce motif est implémenté au niveau du client. L'envoi de message n'est pas supervisé par le contrôleur de discussion mais par une classe observateur. Le Contrôleur est un observable et un clic sur le bouton "ENTRER" va enclencher une notification envoyé via l'API Java à observateur "MessageSender". C'est lui qui se charge de l'envoi de message. On a donc à la fois une classe observatrice qui interagit pas avec l'élément observé, et une classe qui permet une délégation d'une fonctionnalité.  
-- motif stratégie : implémenté au niveau du serveur [ a compléter ]
-- motif composant-composite : implémenté au niveau du serveur [ a compléter ]
->>>>>>> 9c664b9f5244808300e6099ad87c1f47ccb0d2f6
 
+- serveur TCP concurrent : implémenté au niveau du serveur. Permettant de créer le serveur en lui même et écouter la connexion de divers clients.
+- motif sujet-observateur et délégation : ce motif est implémenté au niveau du client. L'envoi de message n'est pas supervisé par le contrôleur de discussion mais par une classe observateur. Le Contrôleur est un observable et un clic sur le bouton "ENTRER" va enclencher une notification envoyé via l'API Java à observateur "MessageSender". C'est lui qui se charge de l'envoi de message. On a donc à la fois une classe observatrice qui interagit pas avec l'élément observé, et une classe qui permet une délégation d'une fonctionnalité.  
+- motif stratégie : implémenté au niveau du serveur. Permettant de classer et faciliter le développement des différents protocoles présents, afin que l'utilisateur client puisse interagir avec le serveur.
+
+- motif composant-composite : implémenté au niveau du serveur. Permet de créer une machine à état fini afin de gérer le fait que le serveur accepte la connexion, envoie des messages, reçois des messages et ferme la connexion.
+
+  
  ### Conception : Cartes CRC 
 
 Nous nous sommes servis de fiches CRC que nous avons complété au fur et à mesure des implémentations du projet. 
@@ -72,6 +71,10 @@ Serveur :
 
 ![coverage serveur](README.assets/coverage-serveur.jpg)
 
+Coverage en fonction des commit :  
+
+![test](README.assets/test.png)
+
 Client : 
 
 ![coverage client](README.assets/coverage-client.jpg)
@@ -89,14 +92,22 @@ Il permet une répartition des taches entre les membres du groupe.
 génération d'un Jar : 
 
 ```bash
-mvn install 
+mvn clean compile install package
 ```
 
 Pour le lancement de l'application 
 
 ```shell
-java -jar target/serveur-conception-logicielle-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/serveur-xxx.jar # a changer selon le cas
 ```
+
+Si le binaire à été téléchargé depuis moodle ou github il suffit de lancer : 
+
+```
+java -jar server-binaire.jar
+```
+
+Pensez bien à lancer le jar dans le meme dossier que la BDD et le fichier config.json
 
 ## Développement futur
 
@@ -108,7 +119,7 @@ Nous avons ajouter sur le client une FSM à 3 etats : **idle, waiting, sending.*
 
 Cependant nous n'avons pas encore implémenté la fsm dans le client. Toutefois les classes existent et sont testés donc il reste juste l'implémentation. 
 
-Il aurait été aussi souhaitable de **hashé** les messages, mais nous sommes limités en caractères pour un message et un hash en augmente trop la taille. 
+Il aurait été aussi souhaitable de **haché** les messages, mais nous sommes limités en caractères pour un message et un hash en augmente trop la taille. 
 
 
 
