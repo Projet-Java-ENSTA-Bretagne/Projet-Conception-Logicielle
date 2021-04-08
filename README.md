@@ -80,6 +80,10 @@ Client :
 
 Le suivi de projet, en mode Agile, a été effectué par l'utilitaire Zenhub. 
 
+![zenhub](README.assets/zenhub.png)
+
+Il permet une répartition des taches entre les membres du groupe. 
+
 ## Utilisation
 
 génération d'un Jar : 
