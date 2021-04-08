@@ -16,16 +16,12 @@ public class FiniteStateMachine implements IFiniteStateMachine {
     private ArrayList<IState> allStates = new ArrayList<>();
     private HashMap<String, ArrayList<IState>> mapForAllStates = new HashMap<>();
 
-    public void FiniteStateMachineImpl(){
-        // TODO
-    }
 
     @Override
     public void setStartState(IState startState) {
         this.startState = startState;
         currentState = startState;
         allStates.add(startState);
-        // TODO : might have some value
         mapForAllStates.put(startState.getStateDesc(), new ArrayList<IState>());
     }
 

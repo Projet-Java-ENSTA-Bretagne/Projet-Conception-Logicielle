@@ -56,7 +56,6 @@ public class GroupSettingsController {
     /* ------------- 1st toggle group : Operation Type ------------- */
 
     private OperationTypesEnum operationType;
-
     public void setOperationType(OperationTypesEnum operationType) {
         this.operationType = operationType;
     }

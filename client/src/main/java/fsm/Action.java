@@ -11,10 +11,6 @@ public class Action {
         this.actionName = actionName;
     }
 
-    String getActionName() {
-        return actionName;
-    }
-
     @Override
     public String toString() {
         return actionName;

@@ -211,7 +211,6 @@ public class DiscussionController extends Observable {
             if (groupName.equals(currentlyOpenedGroup)) {
                 boolean loadedAllMessages = false;
                 int nbOfMessagesLoadedAtOnce = 10;
-
                 int index = indexOfFirstMsg;
                 int limit = nbOfMessagesLoadedAtOnce;
 
@@ -226,7 +225,7 @@ public class DiscussionController extends Observable {
                     JSONArray msgInfo = new JSONArray(requestStatusAndMsgInfo[1]);
 
                     if (!requestStatus.equals("OK")) {
-                        log.error("La communication avec le serveur est corrompue (getGroupMsgStatus : \"" + requestStatus + "\")");
+                        log.error("corrupted communication between client and server (getGroupMsgStatus : \"" + requestStatus + "\")");
                         System.exit(1);
                     }
 
@@ -312,7 +311,7 @@ public class DiscussionController extends Observable {
         String requestStatus = wholeReceivedData.getString("status");
 
         if (!requestStatus.equals("OK")) {
-            log.error("L'utilisateur d'ID \"" + userID + "\" n'existe pas !");
+            log.error("user with ID \"" + userID + "\" doesn't exist !");
             System.exit(1);
         }
 

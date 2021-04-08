@@ -80,19 +80,19 @@ public class ConfirmLeaveGroupController {
         }
         // TODO : bug fix
         else if (requestStatus.equals("DENIED")) {
-            log.error("Pas de System.exit() ici mais il devrait y en avoir un (removeUserFromGroupStatus : \"DENIED\")");
-            log.error("Bug à trouver (côté client et/ou serveur)");
+            log.error("should be system.exit() here but it's not :/ (removeUserFromGroupStatus : \"DENIED\")");
+            log.error("Bug to fix");
         }
         else {
-            log.error("La communication avec le serveur est corrompue (removeUserFromGroupStatus : \"" + requestStatus + "\")");
+            log.error("corrupted communication between server and client (removeUserFromGroupStatus : \"" + requestStatus + "\")");
             System.exit(1);
         }
     }
 
     private String removeUserFromGroupRequest(JSONObject userData) {
+
         String removeUserRequest = RequestBuilder.buildWithData("removeUserFromGroup", userData).toString();
         String responseFromServer = MainController.getTcpClient().sendRequest(removeUserRequest);
-
         JSONObject wholeReceivedData = new JSONObject(responseFromServer);
         String requestStatus = wholeReceivedData.getString("status");
 

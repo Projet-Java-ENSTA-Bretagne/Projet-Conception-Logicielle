@@ -18,11 +18,9 @@ public class RequestBuilder {
      * @return        The desired request (JSON format)
      */
     public static JSONObject buildWithoutData(String command) {
+
         JSONObject res = new JSONObject();
-
-        // Setting the command
         res.put("command", command);
-
         return res;
     }
 
@@ -34,9 +32,9 @@ public class RequestBuilder {
      * @return        The desired request (JSON format)
      */
     public static JSONObject buildWithData(String command, JSONObject data) {
+
         JSONObject res = buildWithoutData(command);
         res.put("args", data);
-
         return res;
     }
 }
