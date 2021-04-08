@@ -18,7 +18,7 @@ Le serveur est capable de :
 
 * Importer les données d'une base de donnée dans le serveur. 
 * Répondre à une requête du client (format JSON) avec une fonctionnalité d'exclusion mutuelle implémenté par une machine à états finis : en bloquant le serveur sur un état défini, on empêche la création de requêtes en doublon et on évite la saturation du serveur (SPAM ou DDOS). 
-* [à Completer]
+* [à Compléter]
 
 Le client peut quand à lui :
 - permettre à l'utilisateur de **s'authentifier** par un login et mdp
@@ -30,7 +30,7 @@ De manière commune, un **logger** permet un retour d'information clair dans le 
 
 Il est important de noter que la **sécurité** à été un point intérêt particulier au cours de ce projet. Ainsi, les mots de passes sont **hachés** et ne transite pas en clair par le réseau, et l'identifiant est lui transité par une **chaine de caractère aléatoire** créé lors de la création d'un profil. Aussi le programme est analysé par un bot hébergé sur GitHub qui renseigne sur les failles : SNYK 
 
-![vulnérabilité](C:\Users\guill\git\Projet-Conception-Logicielle\README.assets\vulnérabilité.jpg)
+![vulnérabilité](README.assets/vulnérabilité.jpg)
 
 Ici le bot à corrigé les vulnérabilités liés à des bibliothèques non définitives ou pas à jour. 
 
@@ -38,10 +38,10 @@ Enfin, les profils, groupes de discussions et messages sont tous stockés sur un
 
 ### Patterns 
 Pour ce projet nous avons utilisé un certains nombre de patterns de programmations : 
-- serveur TCP concurrent : implémenté au niveau du serveur [ a completer ]
+- serveur TCP concurrent : implémenté au niveau du serveur [ a compléter ]
 - motif sujet-observateur et délégation : ce motif est implémenté au niveau du client. L'envoi de message n'est pas supervisé par le contrôleur de discussion mais par une classe observateur. Le Contrôleur est un observable et un clic sur le bouton "ENTRER" va enclencher une notification envoyé via l'API Java à observateur "MessageSender". C'est lui qui se charge de l'envoi de message. On a donc à la fois une classe observatrice qui interagit pas avec l'élément observé, et une classe qui permet une délégation d'une fonctionnalité.  
-- motif stratégie : implémenté au niveau du serveur [ a completer ]
-- motif composant-composite : implémenté au niveau du serveur [ a completer ]
+- motif stratégie : implémenté au niveau du serveur [ a compléter ]
+- motif composant-composite : implémenté au niveau du serveur [ a compléter ]
 
  ### Conception : Cartes CRC 
 
@@ -63,11 +63,11 @@ Voici les coverages relatifs à ces tests :
 
 Serveur : 
 
-![coverage serveur](C:\Users\guill\git\Projet-Conception-Logicielle\README.assets\coverage-serveur.jpg)
+![coverage serveur](README.assets/coverage-serveur.jpg)
 
 Client : 
 
-![coverage client](C:\Users\guill\git\Projet-Conception-Logicielle\README.assets\coverage-client.jpg)
+![coverage client](README.assets/coverage-client.jpg)
 
 ### Conception: suivi Agile 
 
@@ -75,7 +75,17 @@ Le suivi de projet, en mode Agile, a été effectué par l'utilitaire Zenhub.
 
 ## Utilisation
 
-[build du projet]
+génération d'un Jar : 
+
+```bash
+mvn install 
+```
+
+Pour le lancement de l'application 
+
+```shell
+java -jar target/serveur-conception-logicielle-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
 
 ## Développement futur
 
