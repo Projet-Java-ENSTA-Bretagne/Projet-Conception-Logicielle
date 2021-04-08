@@ -14,11 +14,14 @@ import java.net.UnknownHostException;
  * Class describing the behaviour of the TCP client that will be associated with each user.
  */
 public class TCPClient {
+
     private int port;
     private String host;
     private Socket clientSocket;
     private PrintStream outStream;
     private BufferedReader inStream;
+
+    public boolean isConnectedToServer;
 
     // Logging
     private final Logger log = LogManager.getLogger(TCPClient.class);
@@ -32,6 +35,7 @@ public class TCPClient {
     public TCPClient(String host, int port) {
         this.port = port;
         this.host = host;
+        isConnectedToServer = false;
     }
 
     /**
@@ -50,6 +54,7 @@ public class TCPClient {
             inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             log.info("The connection to the server was successful");
             ok = true;
+            isConnectedToServer = true;
         } catch (UnknownHostException e) {
             log.error("Unknown host", e);
         } catch (ConnectException e) {
@@ -71,6 +76,7 @@ public class TCPClient {
             outStream.close();
             inStream.close();
             clientSocket.close();
+            isConnectedToServer = false;
         } catch (Exception e) {
             log.error("Error while trying to disconnect from the server");
         }

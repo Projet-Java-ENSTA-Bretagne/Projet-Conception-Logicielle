@@ -69,9 +69,9 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
 
         // getting the group
         Group groupToChange = matchingGroups.get(0);
-        String[] membersArr = groupToChange.getMembers().split(";");
-        List<String> membersList = new ArrayList<String>(Arrays.asList(membersArr));
-        boolean removed = membersList.remove(userId);
+        String[] membersArr = groupToChange.getMembers().split(",");
+        ArrayList<String> membersList = new ArrayList<>(Arrays.asList(membersArr));
+        boolean removed = membersList.remove("\"" + userId + "\"");
 
         // if the user wasn't in the group
         if (!removed) {
@@ -80,7 +80,7 @@ public class RemoveUserFromGroupProtocol implements IProtocol {
         }
 
         // else we update the group
-        groupToChange.setMembers(String.join(";", membersList));
+        groupToChange.setMembers(String.join(",", membersList));
         groupDao.update(groupToChange);
 
         // say to the user that everything went fine
