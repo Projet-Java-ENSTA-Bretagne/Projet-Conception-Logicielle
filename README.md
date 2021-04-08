@@ -5,9 +5,10 @@ Ce projet consiste en la création d'un service de messagerie distribuée à l'i
 Le serveur est en charge de la distribution des groupes, messages et responsable de l'authentification des utilisateurs. 
 Le client permet lui à un utilisateur l'envoi de requètes via une IHM, lui permettant de communiquer avec les autres utilisateurs. 
 
-
 Membre du projet : Alexandre Froehlich, Guillaume Leinen, Jean-Noël Clink, Erwan Aubry, Ayrwan Guillermo
+
 Serveur : Alexandre, Erwan 
+
 Client : Guillaume, Jean-Noël, Ayrwan
 
 ## fonctionnalités et patterns implémentés
@@ -17,13 +18,13 @@ Le serveur est capable de :
 
 * Importer les données d'une base de donnée dans le serveur. 
 * Répondre à une requête du client (format JSON) avec une fonctionnalité d'exclusion mutuelle implémenté par une machine à états finis : en bloquant le serveur sur un état défini, on empêche la création de requêtes en doublon et on évite la saturation du serveur (SPAM ou DDOS). 
-* 
+* [à Completer]
 
 Le client peut quand à lui :
 - permettre à l'utilisateur de **s'authentifier** par un login et mdp
 - accéder aux discussions auquel l'utilisateur est inscrit
 - créer une nouvelle discussion ainsi que de modifier les paramètres d'une discussion
-- retrouver les messages précédement envoyés par soi-meme ou d'autres utilisateurs
+- retrouver les messages précédemment envoyés par soi-meme ou d'autres utilisateurs
 
 De manière commune, un **logger** permet un retour d'information clair dans le terminal exécution pour chaque application. 
 
@@ -78,9 +79,17 @@ Le suivi de projet, en mode Agile, a été effectué par l'utilitaire Zenhub.
 
 ## Développement futur
 
-Nous avons implémenté une Machine à Etats Finis sur le serveur pour le proteger contre le doublement de l'information ou le spam de requête. 
+Nous avons implémenté une Machine à Etats Finis (FSM) sur le serveur pour le proteger contre le doublement de l'information ou le spam de requête. 
 
-La machine dispose de 4 états : idle, sending, receiving, closing 
+La machine dispose de 4 états : **idle, sending, receiving, closing** 
+
+Nous avons ajouter sur le client une FSM à 3 etats : **idle, waiting, sending.** 
+
+Cependant nous n'avons pas encore implémenté la fsm dans le client. Toutefois les classes existent et sont testés donc il reste juste l'implémentation. 
+
+Il aurait été aussi souhaitable de **hashé** les messages, mais nous sommes limités en caractères pour un message et un hash en augmente trop la taille. 
+
+
 
 
 
