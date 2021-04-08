@@ -28,7 +28,7 @@ Le client peut quand à lui :
 
 De manière commune, un **logger** permet un retour d'information clair dans le terminal exécution pour chaque application. 
 
-Il est important de noter que la **sécurité** à été un point intérêt particulier au cours de ce projet. Ainsi, les mots de passes sont **hachés** et ne transite pas en clair par le réseau, et l'identifiant est lui transité par une **chaine de caractère aléatoire** créé lors de la création d'un profil. Aussi le programme est analysé par un bot hébergé sur GitHub qui renseigne sur les failles : SNYK 
+Il est important de noter que la **sécurité** à été un point d'intérêt particulier au cours de ce projet. Ainsi, les mots de passes sont **hachés** et ne transite pas en clair par le réseau, et l'identifiant est lui transité par une **chaine de caractère aléatoire** créé lors de la création d'un profil. Aussi le programme est analysé par un bot hébergé sur GitHub qui renseigne sur les failles : SNYK 
 
 ![vulnérabilité](README.assets/vulnérabilité.jpg)
 
@@ -49,7 +49,7 @@ Nous nous sommes servis de fiches CRC que nous avons complété au fur et à mes
 
 Ces cartes permettent de représenter les interactions entre les classes, voici un exemple : 
 
-![Exemple de cartes CRC](/README.assets/CRC.png)
+![Exemple de cartes CRC](README.assets/CRC.png)
 
 L'ensemble des cartes CRC est consultable dans `docs/CRC` 
 
