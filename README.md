@@ -109,6 +109,16 @@ java -jar server-binaire.jar
 
 Pensez bien à lancer le jar dans le même dossier que la BDD et le fichier config.json
 
+Pour vous connecter plusieurs utilisateurs sont a votre disposition :
+
+| Login     | Password  |
+| --------- | --------- |
+| test      | test      |
+| alexandre | alexandre |
+| guillaume | guillaume |
+
+> **Attention** : le binaire client à besoin des fichiers ressources (.fxml) pour correctement s'exécuter. Il faut donc le lancer dans le dossier `client/`.
+
 ## Développement futur
 
 Nous avons implémenté une Machine à États Finis (FSM) sur le serveur pour le protéger contre le doublement de l'information ou le spam de requête. 
