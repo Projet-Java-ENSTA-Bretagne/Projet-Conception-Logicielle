@@ -30,7 +30,7 @@ public class MainClient extends Application {
         MainController.initializeMainScenes();
         MainController.initializeFSM();
 
-        String serverIpAddress = "ieta-docs.ddns.net";
+        String serverIpAddress = "localhost";
         int serverPort = 6666;
         MainController.initializeTcpClient(serverIpAddress, serverPort);
 

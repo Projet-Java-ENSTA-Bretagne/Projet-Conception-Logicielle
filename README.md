@@ -3,7 +3,7 @@
 ## Introduction 
 Ce projet consiste en la création d'un service de messagerie distribuée à l'instar de Teams ou discord. Il s'articulera autour d'un client et d'un serveur.
 Le serveur est en charge de la distribution des groupes, messages et responsable de l'authentification des utilisateurs. 
-Le client permet lui à un utilisateur l'envoi de requètes via une IHM, lui permettant de communiquer avec les autres utilisateurs. 
+Le client permet lui à un utilisateur l'envoi de requêtes via une IHM, lui permettant de communiquer avec les autres utilisateurs. 
 
 Membre du projet : Alexandre Froehlich, Guillaume Leinen, Jean-Noël Clink, Erwan Aubry, Ayrwan Guillermo
 
@@ -11,7 +11,7 @@ Serveur : Alexandre, Erwan
 
 Client : Guillaume, Jean-Noël, Ayrwan
 
-## fonctionnalités et patterns implémentés
+## Fonctionnalités et patterns implémentés
 
 ### Fonctionnalités 
 Le serveur est capable de : 
@@ -26,12 +26,12 @@ Le client peut quand à lui :
 - permettre à l'utilisateur de **s'authentifier** par un login et mdp
 - accéder aux discussions auquel l'utilisateur est inscrit
 - créer une nouvelle discussion ainsi que de modifier les paramètres d'une discussion
-- retrouver les messages précédemment envoyés par soi-meme ou d'autres utilisateurs
+- retrouver les messages précédemment envoyés par soi-même ou d'autres utilisateurs
 - et enfin d'envoyer un message dans une discussion
 
 De manière commune, un **logger** permet un retour d'information clair dans le terminal exécution pour chaque application. 
 
-Il est important de noter que la **sécurité** à été un point d'intérêt particulier au cours de ce projet. Ainsi, les mots de passes sont **hachés** et ne transite pas en clair par le réseau, et l'identifiant est lui transité par une **chaine de caractère aléatoire** créé lors de la création d'un profil. Aussi le programme est analysé par un bot hébergé sur GitHub qui renseigne sur les failles : SNYK 
+Il est important de noter que la **sécurité** à été un point d'intérêt particulier au cours de ce projet. Ainsi, les mots de passes sont **hashés** et ne transite pas en clair par le réseau, et l'identifiant est lui transité par une chaîne de caractère aléatoire** créé lors de la création d'un profil. Aussi le programme est analysé par un bot hébergé sur GitHub qui renseigne sur les failles : SNYK 
 
 ![vulnérabilité](README.assets/vulnérabilité.jpg)
 
@@ -61,7 +61,7 @@ L'ensemble des cartes CRC est consultable dans `docs/CRC`
 
 ### Conception : Tests unitaires 
 
-Nous avons testé un certains nombre de fonctionnalités qui étaient à notre portée et clés pour le fonctionnement du projet. Nous nous sommes donc concentré sur les tests du serveur, vu que le client est essentiellement une IHM et qu'il est difficile de tester des fonctionnalités @fxml (en tout cas avec JUnit). 
+Nous avons testé un certains nombre de fonctionnalités qui étaient à notre portée et clés pour le fonctionnement du projet. Nous nous sommes donc concentrés sur les tests du serveur, vu que le client est essentiellement une IHM et qu'il est difficile de tester des fonctionnalités @fxml (en tout cas avec JUnit). 
 
 Vous pouvez retrouver les tests dans le dossier "test" de chaque projet respectif. 
 
@@ -107,19 +107,19 @@ Si le binaire à été téléchargé depuis moodle ou github il suffit de lancer
 java -jar server-binaire.jar
 ```
 
-Pensez bien à lancer le jar dans le meme dossier que la BDD et le fichier config.json
+Pensez bien à lancer le jar dans le même dossier que la BDD et le fichier config.json
 
 ## Développement futur
 
-Nous avons implémenté une Machine à Etats Finis (FSM) sur le serveur pour le proteger contre le doublement de l'information ou le spam de requête. 
+Nous avons implémenté une Machine à États Finis (FSM) sur le serveur pour le protéger contre le doublement de l'information ou le spam de requête. 
 
 La machine dispose de 4 états : **idle, sending, receiving, closing** 
 
-Nous avons ajouter sur le client une FSM à 3 etats : **idle, waiting, sending.** 
+Nous avons ajouter sur le client une FSM à 3 états : **idle, waiting, sending.** 
 
-Cependant nous n'avons pas encore implémenté la fsm dans le client. Toutefois les classes existent et sont testés donc il reste juste l'implémentation. 
+Cependant nous n'avons pas encore implémenté la FSM dans le client. Toutefois les classes existent et sont testés donc il reste juste l'implémentation. 
 
-Il aurait été aussi souhaitable de **haché** les messages, mais nous sommes limités en caractères pour un message et un hash en augmente trop la taille. 
+Il aurait été aussi souhaitable de **hasher** les messages, mais nous sommes limités en caractères pour un message et un hash en augmentant trop la taille. 
 
 
 
